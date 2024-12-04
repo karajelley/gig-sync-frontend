@@ -10,8 +10,9 @@ import LandingPage from "./pages/authentication/LandingPage.jsx";
 import LoginPage from "./pages/authentication/LoginPage.jsx";
 import Navbar from "./components/Navbar.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
-import SignupPage from './pages/authentication/SignupPage';
+import SignupPage from './pages/authentication/SignupPage.jsx';
 import ProjectsPage from './pages/ProjectsPage.jsx';
+import ClientsPage from "./pages/ClientsPage.jsx";
 
 // Styles / Assets
 import './App.css'
@@ -29,7 +30,8 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/dashboard" element={<DashboardPage />} /> 
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/projects" element={<ProjectsPage />} />
+          <Route path="/api/projectspage" element={<ProjectsPage />} />
+          <Route path="/api/clientspage" element={<ClientsPage />} />
           <Route path="/signup" element={<SignupPage />} />
       </Routes>
       <Footer />

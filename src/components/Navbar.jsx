@@ -48,7 +48,8 @@ function Navbar() {
               <NavLink to="/login" className="top-navbar-link">Login</NavLink>
             </li>
           </ul>
-        </div>
+          <Link to="/api/clientspage">Clientes</Link>
+          </div>
       </nav>
     )}
     </>
