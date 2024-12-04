@@ -1,16 +1,18 @@
 // External Libraries 
 import { Routes, Route } from "react-router-dom";
 import { useState } from "react";
-import { AppProvider } from "./AppContext.jsx";
-
+import { AppProvider } from "./context/AppContext.jsx";
 
 // Internal Libraries / Components
-import Navbar from "./components/Navbar.jsx";
-import Footer from "./components/Footer.jsx";
-import SignupPage from './pages/authentication/SignupPage';
-import NotFoundPage from "./pages/NotFoundPage.jsx";
-import LandingPage from "./pages/authentication/LandingPage.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
+import Footer from "./components/Footer.jsx";
+import LandingPage from "./pages/authentication/LandingPage.jsx";
+import LoginPage from "./pages/authentication/LoginPage.jsx";
+import Navbar from "./components/Navbar.jsx";
+import NotFoundPage from "./pages/NotFoundPage.jsx";
+import SignupPage from './pages/authentication/SignupPage';
+import ProjectsPage from './pages/ProjectsPage.jsx';
+
 // Styles / Assets
 import './App.css'
 
@@ -23,12 +25,12 @@ function App() {
       <AppProvider>
       <Navbar />
       <Routes>
-       {/* <Route path="/landingpage" element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="projectsspage" element={<ProjectsPage />} />
-        <Route path="/signup" element={<SignupPage />} />*/}
-        <Route path="/" element={<DashboardPage />} /> 
-        <Route path="*" element={<NotFoundPage />} /> 
+          <Route path="*" element={<NotFoundPage />} />  
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/api/dashboard" element={<DashboardPage />} /> 
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/api/projectspage" element={<ProjectsPage />} />
+          <Route path="/signup" element={<SignupPage />} />
       </Routes>
       <Footer />
       </AppProvider>

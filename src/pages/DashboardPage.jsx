@@ -1,5 +1,11 @@
+// External Libraries 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+
+// Internal Libraries / Components
+
+// Styles / Assets
+import './DashboardPage.css'
 
 function DashboardPage() {
     const [clients, setClients] = useState([]);
@@ -9,7 +15,7 @@ function DashboardPage() {
         const fetchClients = async () => {
             try {
                 console.log("Fetching clients data..."); // Debug: Check if fetch function is called
-                const response = await axios.get("https://gig-sync-api.vercel.app/clients");
+                const response = await axios.get("https://gig-sync-api.vercel.app/api/clients");
                 console.log("Fetched clients data:", response.data); // Debug: Log fetched data
                 setClients(response.data);
                 setLoading(false);
@@ -30,7 +36,7 @@ function DashboardPage() {
     console.log("Rendering clients data:", clients); // Debug: Log the clients data just before rendering
 
     return (
-        <div>
+        <div className="dashboard-container">
             <h1>Clients</h1>
             <ul>
                 {clients.map((client) => (

@@ -8,14 +8,14 @@ export const AppProvider = ({ children }) => {
     const [clients, setClients] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const backendUrl = "http://localhost:5005"; 
+    const backendUrl = "https://gig-sync-api.vercel.app"; 
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const [ projectsRes, clientsRes] = await Promise.all([
-                    axios.get(`${backendUrl}/projects`), 
-                    axios.get(`${backendUrl}/clients`),   
+                    axios.get(`${backendUrl}/api/projects`), 
+                    axios.get(`${backendUrl}/api/clients`),   
                 ]);
 
                 setProjects(projectsRes.data);

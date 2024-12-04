@@ -4,7 +4,7 @@
 
 // Styles / Assets
 
-function LoginPage() {
+function LandingPage() {
 
     return (
       <>
@@ -13,4 +13,4 @@ function LoginPage() {
     )
   }
   
-  export default LoginPage;
+  export default LandingPage;
