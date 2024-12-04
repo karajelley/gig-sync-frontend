@@ -4,13 +4,13 @@
 
 // Styles / Assets
 
-function LandingPage() {
+function LoginPage() {
 
-  return (
-    <>
-
-    </>
-  )
-}
-
-export default LandingPage;
+    return (
+      <>
+  
+      </>
+    )
+  }
+  
+  export default LoginPage;
