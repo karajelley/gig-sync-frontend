@@ -8,7 +8,7 @@ import axios from "axios";
 import './DashboardPage.css'
 
 function DashboardPage() {
-    const [clients, setClients] = useState([]);
+    /* const [clients, setClients] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -34,14 +34,14 @@ function DashboardPage() {
     }
 
     console.log("Rendering clients data:", clients); // Debug: Log the clients data just before rendering
-
+ */
     return (
         <div className="dashboard-container">
-            <h1>Clients</h1>
+            <h1>Dashboard</h1>
             <ul>
-                {clients.map((client) => (
+{/*                 {clients.map((client) => (
                     <li key={client._id}>{client.name}</li>
-                ))}
+                ))} */}
             </ul>
         </div>
     );

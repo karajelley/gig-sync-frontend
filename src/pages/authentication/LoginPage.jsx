@@ -6,7 +6,7 @@ import { AuthContext } from "../../context/auth.context";
 
 import "./LoginPage.css"
 
-const API_URL = "https://gig-sync-api.vercel.app";
+const API_URL = import.meta.env.VITE_API_URL;
 
 
 function LoginPage(props) {
@@ -28,11 +28,11 @@ function LoginPage(props) {
 
     axios.post (`${API_URL}/api/auth/login`, requestBody)
       .then ((response) => {
-
+        console.log(response.data);
         storeToken(response.data.authToken);
 
         authenticateUser();
-        navigate('/api/dashboard');
+        navigate('/dashboard');
       })
       .catch((error) => {
         const errorDescription = error.message;

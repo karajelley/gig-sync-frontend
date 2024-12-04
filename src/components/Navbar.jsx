@@ -20,7 +20,7 @@ function Navbar() {
         <div className="side-navbar-container">
           <ul className="side-navbar-links">
             <li>
-              <NavLink to="/" className="side-navbar-link" >Dashboard</NavLink>
+              <NavLink to="/dashboard" className="side-navbar-link" >Dashboard</NavLink>
             </li>
             <li>
               <NavLink to="/projects" className="side-navbar-link">Projects</NavLink>
