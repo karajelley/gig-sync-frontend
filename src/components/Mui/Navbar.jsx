@@ -112,7 +112,8 @@ const Navbar = () => {
 
   const handleLogout = () => {
     console.log("User logged out");
-    // Add logout logic here
+    localStorage.removeItem("authToken")
+    navigate("/login");
   };
 
   return (
