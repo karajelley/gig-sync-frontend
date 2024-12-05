@@ -97,7 +97,7 @@ const NAV_ITEMS = [
   { text: "Clients", icon: <PeopleIcon />, path: "/api/clientspage" },
 ];
 
-const Navbar = () => {
+function Navbar (){
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
@@ -145,7 +145,6 @@ const Navbar = () => {
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
             {/* Example: User Info */}
             <Typography variant="body1">Welcome, User!</Typography>
-
             {/* Example: Notifications Icon */}
             <IconButton color="inherit">
               <Badge badgeContent={4} color="error">

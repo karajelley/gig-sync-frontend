@@ -21,7 +21,6 @@ const ClientCard = ({ client }) => {
       <Card variant="outlined">
         <CardContent>
           <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
-            Client Information
           </Typography>
           <Typography variant="h5" component="div">
             {client.name}
@@ -34,9 +33,6 @@ const ClientCard = ({ client }) => {
           </Typography>
           <Typography variant="body2">
             Phone: {client.phone}
-          </Typography>
-          <Typography variant="body2">
-            User ID: {client.user}
           </Typography>
         </CardContent>
         <CardActions>

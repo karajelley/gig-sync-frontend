@@ -1,40 +1,31 @@
-// External Libraries 
-import Box from "@mui/material/Box";
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-// Internal Libraries / Components
-
-// Styles / Assets
+import React from "react";
+import { Card, CardContent, Typography, Box } from "@mui/material";
 
 function ProjectCard({ project }) {
-
-    return (
-      <Box sx={{ minWidth: 275, margin: 2 }}>
-        <Card variant="outlined">
-          <CardContent>
-            <Typography variant="h5" component="div">
-              {project.title}
-            </Typography>
-  
-            <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>
-              Budget: ${project.budget}
-            </Typography>
-          </CardContent>
-  
-          <CardActions>
-            <Button size="small" onClick={() => console.log('Edit Project:', project.id)}>
-              Edit Project
-            </Button>
-            <Button size="small" onClick={() => console.log('View Details:', project.id)}>
-              View Details
-            </Button>
-          </CardActions>
-        </Card>
-      </Box>
-    );
-  };
+  return (
+    <Card
+      sx={{
+        height: "100%", // Ensures all cards are equal height
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <CardContent>
+        <Typography variant="h6" gutterBottom>
+          {project.title}
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          {project.description || "No description available"}
+        </Typography>
+        <Box sx={{ mt: "auto" }}>
+          <Typography variant="body1">Budget: ${project.budget}</Typography>
+          <Typography variant="body2" color="primary">
+            Status: {project.status}
+          </Typography>
+        </Box>
+      </CardContent>
+    </Card>
+  );
+}
 
 export default ProjectCard;
