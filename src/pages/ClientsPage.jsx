@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import ClientCard from "../components/mui/ClientCard";
+import ClientCard from "../components/Mui/ClientCard";
 
 import { API_URL } from "../api/config";
 

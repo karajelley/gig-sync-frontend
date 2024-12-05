@@ -1,8 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
 
-import ClientCard from "../components/mui/ClientCard";
-
 import { API_URL } from "../api/config";
 
 
