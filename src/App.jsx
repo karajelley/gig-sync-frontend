@@ -6,13 +6,15 @@ import { AppProvider } from "./context/AppContext.jsx";
 // Internal Libraries / Components
 import DashboardPage from "./pages/DashboardPage.jsx";
 import Footer from "./components/Footer.jsx";
+import Navbar from "./components/Navbar.jsx";
+import Sidebar from "./components/Sidebar.jsx";
 import LandingPage from "./pages/authentication/LandingPage.jsx";
 import LoginPage from "./pages/authentication/LoginPage.jsx";
-import Navbar from "./components/Navbar.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
 import SignupPage from './pages/authentication/SignupPage.jsx';
 import ProjectsPage from './pages/ProjectsPage.jsx';
 import ClientsPage from "./pages/ClientsPage.jsx";
+
 
 // Styles / Assets
 import './App.css'
@@ -28,7 +30,7 @@ function App() {
       <Routes>
           <Route path="*" element={<NotFoundPage />} />  
           <Route path="/" element={<LandingPage />} />
-          <Route path="/dashboard" element={<DashboardPage />} /> 
+          <Route path="/api/dashboard" element={<DashboardPage />} /> 
           <Route path="/login" element={<LoginPage />} />
           <Route path="/api/projectspage" element={<ProjectsPage />} />
           <Route path="/api/clientspage" element={<ClientsPage />} />

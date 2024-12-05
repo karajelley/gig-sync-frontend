@@ -9,7 +9,7 @@ import ProjectCard from "../components/ProjectCard.jsx"
 import "../pages/ProjectsPage.css"
 
 
-const API_URL = import.meta.env.VITE_API_URL;
+import { API_URL } from "../api/config";
 
 function ProjectsPage() {
     const [projects, setProjects] = useState([]);

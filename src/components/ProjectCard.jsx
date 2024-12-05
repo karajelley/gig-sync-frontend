@@ -7,14 +7,30 @@ import './ProjectCard.css'
 
 function ProjectCard({ project }) {
 
-  return (
-    <>
-      <div className="project-card-container">
-        <h4>{project.title}</h4>
-        <p>Budget: ${project.budget}</p>
-      </div>
-    </>
-  )
-}
+    return (
+      <Box sx={{ minWidth: 275, margin: 2 }}>
+        <Card variant="outlined">
+          <CardContent>
+            <Typography variant="h5" component="div">
+              {project.title}
+            </Typography>
+  
+            <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>
+              Budget: ${project.budget}
+            </Typography>
+          </CardContent>
+  
+          <CardActions>
+            <Button size="small" onClick={() => console.log('Edit Project:', project.id)}>
+              Edit Project
+            </Button>
+            <Button size="small" onClick={() => console.log('View Details:', project.id)}>
+              View Details
+            </Button>
+          </CardActions>
+        </Card>
+      </Box>
+    );
+  };
 
 export default ProjectCard;

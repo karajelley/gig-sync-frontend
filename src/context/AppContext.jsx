@@ -3,21 +3,23 @@ import axios from "axios";
 
 import ClientCard from "../components/mui/ClientCard";
 
+import { API_URL } from "../api/config";
+
+
 export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
     const [projects, setProjects] = useState([]);
     const [clients, setClients] = useState([]);
     const [loading, setLoading] = useState(true);
-
-    const backendUrl = "https://gig-sync-api.vercel.app"; 
+ 
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const [ projectsRes, clientsRes] = await Promise.all([
-                    axios.get(`${backendUrl}/api/projects`), 
-                    axios.get(`${backendUrl}/api/clients`),   
+                    axios.get(`${API_URL}/api/projects`), 
+                    axios.get(`${API_URL}/api/clients`),   
                 ]);
 
                 setProjects(projectsRes.data);

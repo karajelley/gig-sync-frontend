@@ -1,31 +1,56 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/auth.context";
-import { AppProvider } from "../context/AppContext";
 import ClientCard from "../components/mui/ClientCard";
 
+import { API_URL } from "../api/config";
 
 function ClientsPage() {
-  // Hardcoded client data for preview
-  const sampleClient = {
-    _id: "1", // Typically the MongoDB ObjectId
-    name: "Diego",
-    email: "diego@example.com",
-    phone: "123-456-7890",
-    company: "Tech Solutions",
-    user: "605072c4922a235d1d7c9afe"
-  };
+  const [clients, setClients] = useState ([]);
+  const [errorMessage, setErrorMessage] = useState("");
+
+    function getClients() {
+
+      const storedToken = localStorage.getItem('authToken');
+
+      axios 
+      .get(`${API_URL}/api/clients`,
+        { headers: { Authorization: `Bearer ${storedToken}`} }
+      )
+      .then((response) => {
+        console.log(response.data)
+        setClients(response.data)
+      })
+      .catch((error) => {
+        if (error.response) {
+          setErrorMessage(error.response.data.message || "An unknown error occurred.");
+        } else if (error.request) {
+          setErrorMessage("No response from the server. Please try again later.");
+        } else {
+          setErrorMessage("An error occurred: " + error.message);
+        }
+      });
+}
+
+  useEffect(() => {
+    getClients();
+  }, []);
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>Clients List (Preview)</h1>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
-        {/* Rendering one hardcoded client card to see the design */}
-        <ClientCard client={sampleClient} />
-      </div>
-    </div>
-  );
-};
+    <>
+        <div className="clients-container">
+            <h1>Clients</h1>
+            {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+            <div>
+                {clients.map((client) => (
+                    <ClientCard key={client.id} client={client} />
+                ))}
+            </div>
+        </div>
+    </>
+)
+
+}
+
 
 export default ClientsPage;

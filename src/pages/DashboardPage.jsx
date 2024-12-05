@@ -1,13 +1,31 @@
 // External Libraries 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 
+
+
+
+
+
 // Internal Libraries / Components
+import { AppContext } from "../context/AppContext";
+import { AuthContext } from "../context/auth.context";
 
 // Styles / Assets
 import './DashboardPage.css'
 
+
 function DashboardPage() {
+
+    const { clients, projects, loading } = useContext(AppContext);
+    const { logOutUser } = useContext(AuthContext);
+
+    if (loading) {
+        return <p>Loading...</p>;
+    }
+
+                            /////////////////
+
     /* const [clients, setClients] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -35,16 +53,7 @@ function DashboardPage() {
 
     console.log("Rendering clients data:", clients); // Debug: Log the clients data just before rendering
  */
-    return (
-        <div className="dashboard-container">
-            <h1>Dashboard</h1>
-            <ul>
-{/*                 {clients.map((client) => (
-                    <li key={client._id}>{client.name}</li>
-                ))} */}
-            </ul>
-        </div>
-    );
+    
 }
 
 export default DashboardPage;

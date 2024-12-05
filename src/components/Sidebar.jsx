@@ -1,16 +1,9 @@
-// External Libraries 
 
-// Internal Libraries / Components
-
-// Styles / Assets
 
 function Sidebar() {
 
-  return (
-    <>
+  return 
 
-    </>
-  )
 }
 
-export default Sidebar
+export default Sidebar;

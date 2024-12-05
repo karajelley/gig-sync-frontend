@@ -10,10 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.5",
+    "@emotion/styled": "^11.13.5",
     "@fontsource/roboto": "^5.1.0",
     "@mui/icons-material": "^6.1.10",
     "@mui/material": "^6.1.10",
     "@mui/styled-engine-sc": "^6.1.10",
+    "@toolpad/studio": "^0.10.0",
+    "@toolpad/studio-components": "^0.10.0",
+    "@toolpad/studio-runtime": "^0.10.0",
+    "@toolpad/utils": "^0.10.0",
     "axios": "^1.7.9",
     "dotenv": "^16.4.7",
     "react": "^18.3.1",

@@ -6,7 +6,7 @@ import axios from "axios";
 // Internal Libraries / Components
 
 
-const API_URL = "https://gig-sync-api.vercel.app";
+const API_URL = import.meta.env.VITE_API_URL || "https://gig-sync-api.vercel.app/api";
 
 const AuthContext = React.createContext();
  

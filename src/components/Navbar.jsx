@@ -2,6 +2,8 @@
 import { React, useContext } from 'react';
 import { Link, NavLink } from 'react-router-dom';                
 import { AuthContext } from "../context/auth.context"
+import Button from "@mui/material/Button";
+
 
 // Internal Libraries / Component
 
@@ -48,7 +50,15 @@ function Navbar() {
               <NavLink to="/login" className="top-navbar-link">Login</NavLink>
             </li>
           </ul>
-          <Link to="/api/clientspage">Clientes</Link>
+          <Button
+        variant="contained"
+        color="primary"
+        onClick={toggleDrawer(true)}
+        sx={{ position: "absolute", top: "50px", left: "20px" }}
+      >
+        Open Drawer
+      </Button>
+          
           </div>
       </nav>
     )}
@@ -56,4 +66,4 @@ function Navbar() {
   )
 }
 
-export default Navbar
+export default Navbar 
