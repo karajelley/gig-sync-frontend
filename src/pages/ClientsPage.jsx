@@ -85,90 +85,90 @@ function ClientsPage() {
 
   return (
     <Box sx={{ padding: 2 }}>
-      <Typography variant="h4" gutterBottom>
-        Clients
+  <Typography variant="h4" gutterBottom>
+    Clients
+  </Typography>
+  {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+  {successMessage && <Alert severity="success">{successMessage}</Alert>}
+
+  {/* Toggle Form Button */}
+  <Button
+    variant="contained"
+    color="primary"
+    onClick={() => setShowForm((prev) => !prev)}
+    sx={{ mb: 4 }}
+  >
+    {showForm ? "Hide Form" : "Create Client"}
+  </Button>
+
+  {/* Add New Client Form */}
+  {showForm ? (
+    <Paper sx={{ padding: 3, marginBottom: 4 }}>
+      <Typography variant="h6" gutterBottom>
+        Add New Client
       </Typography>
-      {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
-      {successMessage && <Alert severity="success">{successMessage}</Alert>}
-
-      {/* Toggle Form Button */}
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => setShowForm((prev) => !prev)}
-        sx={{ mb: 4 }}
-      >
-        {showForm ? "Hide Form" : "Create Client"}
-      </Button>
-
-      {/* Add New Client Form */}
-      {showForm && (
-        <Paper sx={{ padding: 3, marginBottom: 4 }}>
-          <Typography variant="h6" gutterBottom>
-            Add New Client
-          </Typography>
-          <form onSubmit={handleFormSubmit}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Name"
-                  name="name"
-                  value={newClient.name}
-                  onChange={handleInputChange}
-                  required
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Email"
-                  name="email"
-                  type="email"
-                  value={newClient.email}
-                  onChange={handleInputChange}
-                  required
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Phone"
-                  name="phone"
-                  type="tel"
-                  value={newClient.phone}
-                  onChange={handleInputChange}
-                  required
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Company"
-                  name="company"
-                  value={newClient.company}
-                  onChange={handleInputChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Button type="submit" variant="contained" fullWidth>
-                  Add Client
-                </Button>
-              </Grid>
-            </Grid>
-          </form>
-        </Paper>
-      )}
-
-      {/* List of Clients */}
-      <Grid container spacing={2}>
-        {clients.map((client) => (
-          <Grid item xs={12} sm={6} md={4} key={client._id}>
-            <ClientCard client={client} />
+      <form onSubmit={handleFormSubmit}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="Name"
+              name="name"
+              value={newClient.name}
+              onChange={handleInputChange}
+              required
+            />
           </Grid>
-        ))}
-      </Grid>
-    </Box>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="Email"
+              name="email"
+              type="email"
+              value={newClient.email}
+              onChange={handleInputChange}
+              required
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="Phone"
+              name="phone"
+              type="tel"
+              value={newClient.phone}
+              onChange={handleInputChange}
+              required
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="Company"
+              name="company"
+              value={newClient.company}
+              onChange={handleInputChange}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Button type="submit" variant="contained" fullWidth>
+              Add Client
+            </Button>
+          </Grid>
+        </Grid>
+      </form>
+    </Paper>
+  ) : (
+    // Only show the clients list when the form is hidden
+    <Grid container spacing={2}>
+      {clients.map((client) => (
+        <Grid item xs={12} sm={6} md={4} key={client._id}>
+          <ClientCard client={client} />
+        </Grid>
+      ))}
+    </Grid>
+  )}
+</Box>
   );
 }
 
