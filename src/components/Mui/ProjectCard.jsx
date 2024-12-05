@@ -8,7 +8,6 @@ import Typography from '@mui/material/Typography';
 // Internal Libraries / Components
 
 // Styles / Assets
-import './ProjectCard.css'
 
 function ProjectCard({ project }) {
 

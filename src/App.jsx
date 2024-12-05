@@ -7,7 +7,6 @@ import { AppProvider } from "./context/AppContext.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
 import Footer from "./components/Footer.jsx";
 import Navbar from "./components/Mui/Navbar.jsx";
-import Sidebar from "./components/Sidebar.jsx";
 import LandingPage from "./pages/authentication/LandingPage.jsx";
 import LoginPage from "./pages/authentication/LoginPage.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
