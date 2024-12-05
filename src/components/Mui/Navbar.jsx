@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
@@ -23,6 +23,10 @@ import WorkIcon from "@mui/icons-material/Work";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Badge from "@mui/material/Badge";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import Avatar from "@mui/material/Avatar";
+
+import { AuthContext } from "../../context/auth.context.jsx";
+
 
 const drawerWidth = 240;
 
@@ -101,6 +105,7 @@ function Navbar (){
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
+  const { isLoggedIn, user, logOutUser } = useContext(AuthContext)
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -110,12 +115,6 @@ function Navbar (){
     setOpen(false);
   };
 
-  const handleLogout = () => {
-    console.log("User logged out");
-  localStorage.removeItem("authToken"); 
-
-  navigate("/login");
-  };
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -144,17 +143,30 @@ function Navbar (){
           {/* Additional Header Content */}
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
             {/* Example: User Info */}
-            <Typography variant="body1">Welcome, User!</Typography>
-            {/* Example: Notifications Icon */}
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+            <Typography variant="body1" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              Welcome, {user && user.name} </Typography>
+            {user && (
+              <IconButton onClick={() => navigate("/profile")} sx={{ padding: 0 }}>
+                <Avatar
+                  sx={{
+                    bgcolor: "white", // Circle background color (white)
+                    color: "primary.main", // Letter color (MUI primary blue)
+                    width: 36, // Bigger size
+                    height: 36, // Bigger size
+                    fontSize: 16, // Adjusted letter size
+                    border: "2px solid", // Optional: Add border to the avatar
+                    borderColor: "primary.main", // Border color (MUI primary blue)
+                  }}
+                >
+                  {user.name.charAt(0).toUpperCase()}
+                </Avatar>
+              </IconButton>
+            )}
 
             {/* Example: Profile Menu */}
-            <IconButton color="inherit" onClick={handleLogout}>
-              <LogoutIcon />
+            <IconButton color="inherit" onClick={logOutUser} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              {/* <LogoutIcon /> */}
+              <Typography variant="body2">Logout</Typography>
             </IconButton>
           </Box>
         </Toolbar>
@@ -207,7 +219,7 @@ function Navbar (){
                 justifyContent: open ? "initial" : "center",
                 px: 2.5,
               }}
-              onClick={handleLogout}
+              onClick={logOutUser}
             >
               <ListItemIcon
                 sx={{
