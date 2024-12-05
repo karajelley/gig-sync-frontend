@@ -14,7 +14,7 @@ function ClientsPage() {
       const storedToken = localStorage.getItem('authToken');
 
       axios 
-      .get(`${API_URL}/api/clients`,
+      .get(`${API_URL}/clients`,
         { headers: { Authorization: `Bearer ${storedToken}`} }
       )
       .then((response) => {

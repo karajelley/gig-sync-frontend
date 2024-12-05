@@ -1,12 +1,12 @@
 // External Libraries 
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { AppProvider } from "./context/AppContext.jsx";
 
 // Internal Libraries / Components
 import DashboardPage from "./pages/DashboardPage.jsx";
 import Footer from "./components/Footer.jsx";
-import Navbar from "./components/Navbar.jsx";
+import Navbar from "./components/Mui/Navbar.jsx";
 import Sidebar from "./components/Sidebar.jsx";
 import LandingPage from "./pages/authentication/LandingPage.jsx";
 import LoginPage from "./pages/authentication/LoginPage.jsx";
@@ -19,14 +19,19 @@ import ClientsPage from "./pages/ClientsPage.jsx";
 // Styles / Assets
 import './App.css'
 
+
 function App() {
 
-  
+  const location = useLocation();
+
+  // Define routes where Navbar/Sidebar should be hidden
+  const hideNavbarRoutes = ["/login", "/signup"];
+  const hideNavbar = hideNavbarRoutes.includes(location.pathname);
 
   return (
     <>
       <AppProvider>
-      <Navbar />
+      {!hideNavbar && <Navbar />}
       <Routes>
           <Route path="*" element={<NotFoundPage />} />  
           <Route path="/" element={<LandingPage />} />

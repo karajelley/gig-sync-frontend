@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import axios from 'axios';
 // Internal Libraries / Components
 
-import ProjectCard from "../components/ProjectCard.jsx"
+import ProjectCard from "../components/Mui/ProjectCard.jsx"
 // Styles / Assets
 import "../pages/ProjectsPage.css"
 
@@ -21,7 +21,7 @@ function ProjectsPage() {
         const storedToken = localStorage.getItem('authToken');
 
         axios
-        .get(`${API_URL}/api/projects`,
+        .get(`${API_URL}/projects`,
             { headers: { Authorization: `Bearer ${storedToken}`} }
         )
         .then((response) => {

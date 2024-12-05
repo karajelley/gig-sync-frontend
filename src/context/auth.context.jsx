@@ -5,8 +5,8 @@ import axios from "axios";
 
 // Internal Libraries / Components
 
+import { API_URL } from "../api/config";
 
-const API_URL = import.meta.env.VITE_API_URL || "https://gig-sync-api.vercel.app/api";
 
 const AuthContext = React.createContext();
  
@@ -29,7 +29,7 @@ function AuthProviderWrapper(props) {
     if (storedToken) {
         // We must send the JWT token in the request's "Authorization" Headers
         axios.get(
-        `${API_URL}/api/auth/verify`, 
+        `${API_URL}/auth/verify`, 
         { headers: { Authorization: `Bearer ${storedToken}`} }
     )
     .then((response) => {

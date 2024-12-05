@@ -18,8 +18,8 @@ export const AppProvider = ({ children }) => {
         const fetchData = async () => {
             try {
                 const [ projectsRes, clientsRes] = await Promise.all([
-                    axios.get(`${API_URL}/api/projects`), 
-                    axios.get(`${API_URL}/api/clients`),   
+                    axios.get(`${API_URL}/projects`), 
+                    axios.get(`${API_URL}/clients`),   
                 ]);
 
                 setProjects(projectsRes.data);
