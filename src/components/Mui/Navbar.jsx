@@ -24,7 +24,8 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import Badge from "@mui/material/Badge";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import Avatar from "@mui/material/Avatar";
-
+// Internal Libraries / Components
+import AvatarMenu from './Navigation/AvatarMenu.jsx';
 import { AuthContext } from "../../context/auth.context.jsx";
 
 
@@ -140,34 +141,10 @@ function Navbar (){
             gigSync
           </Typography>
 
-          {/* Additional Header Content */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            {/* Example: User Info */}
-            <Typography variant="body1" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              Welcome, {user && user.name} </Typography>
-            {user && (
-              <IconButton onClick={() => navigate("/profile")} sx={{ padding: 0 }}>
-                <Avatar
-                  sx={{
-                    bgcolor: "white", // Circle background color (white)
-                    color: "primary.main", // Letter color (MUI primary blue)
-                    width: 36, // Bigger size
-                    height: 36, // Bigger size
-                    fontSize: 16, // Adjusted letter size
-                    border: "2px solid", // Optional: Add border to the avatar
-                    borderColor: "primary.main", // Border color (MUI primary blue)
-                  }}
-                >
-                  {user.name.charAt(0).toUpperCase()}
-                </Avatar>
-              </IconButton>
-            )}
-
-            {/* Example: Profile Menu */}
-            <IconButton color="inherit" onClick={logOutUser} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              {/* <LogoutIcon /> */}
-              <Typography variant="body2">Logout</Typography>
-            </IconButton>
+          {/* User Greeting and Avatar */}
+          <Box sx={{ display: "flex", alignItems: "center", padding: "0 16px" }}>
+              {user && <Typography>Welcome, {user.name}</Typography>}
+              {user && <AvatarMenu user={user} onLogout={logOutUser} onNavigate={navigate} />}
           </Box>
         </Toolbar>
       </AppBar>
@@ -179,7 +156,6 @@ function Navbar (){
             {theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </DrawerHeader>
-        <Divider />
         {/* Drawer Navigation Items */}
         <List>
           {NAV_ITEMS.map((item) => (
@@ -208,34 +184,6 @@ function Navbar (){
               </ListItemButton>
             </ListItem>
           ))}
-        </List>
-        <Divider />
-        {/* Drawer Footer (Optional) */}
-        <List>
-          <ListItem disablePadding sx={{ display: "block" }}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-              onClick={logOutUser}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                <LogoutIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary="Logout"
-                sx={{ opacity: open ? 1 : 0 }}
-              />
-            </ListItemButton>
-          </ListItem>
         </List>
       </Drawer>
     </Box>
