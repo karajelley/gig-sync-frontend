@@ -1,22 +1,10 @@
-import { useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  Paper,
-  TextField,
-  Typography,
-  Alert,
-  MenuItem,
-  Grid,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle
-} from "@mui/material";
+import { useState, useEffect } from "react";
+import { Box, Button, Grid, Typography } from "@mui/material";
+import ProjectForm from "../components/Mui/ProjectForm"; // Similar to ClientForm, this should handle create/edit project form logic.
+import ConfirmationDialog from "../components/Mui/ConfirmationDialog";
+import Alerts from "../components/Mui/Alerts";
+import ProjectCard from "../components/Mui/ProjectCard";
 import axios from "axios";
-import ProjectCard from "../components/Mui/ProjectCard.jsx";
-import "../pages/ProjectsPage.css";
 import { API_URL } from "../api/config";
 
 function ProjectsPage() {
@@ -25,14 +13,14 @@ function ProjectsPage() {
     title: "",
     description: "",
     budget: "",
-    status: "In Progress", // Default value
-    client: "", // This will hold the client ID
+    status: "In Progress",
+    client: "",
   });
-
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [showForm, setShowForm] = useState(false);
-  const [clients, setClients] = useState([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [projectToEdit, setProjectToEdit] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState(null);
 
@@ -61,18 +49,9 @@ function ProjectsPage() {
       });
   }
 
-  function getClients() {
-    axios
-      .get(`${API_URL}/clients`, {
-        headers: { Authorization: `Bearer ${storedToken}` },
-      })
-      .then((response) => {
-        setClients(response.data); // Populate client dropdown
-      })
-      .catch((error) => {
-        console.error("Error fetching clients:", error);
-      });
-  }
+  useEffect(() => {
+    getProjects();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -87,35 +66,79 @@ function ProjectsPage() {
     setErrorMessage("");
     setSuccessMessage("");
 
-    axios
-      .post(`${API_URL}/projects`, newProject, {
-        headers: { Authorization: `Bearer ${storedToken}` },
-      })
-      .then((response) => {
-        setProjects((prevProjects) => [...prevProjects, response.data]);
-        setNewProject({
-          title: "",
-          description: "",
-          budget: "",
-          status: "In Progress",
-          client: "",
-        }); // Reset form
-        setSuccessMessage("Project added successfully!");
-        setShowForm(false); // Hide form after submission
-      })
-      .catch((error) => {
-        if (error.response) {
-          setErrorMessage(
-            error.response.data.message || "Failed to add the project."
+    if (isEditing && projectToEdit) {
+      axios
+        .put(`${API_URL}/projects/${projectToEdit}`, newProject, {
+          headers: { Authorization: `Bearer ${storedToken}` },
+        })
+        .then((response) => {
+          setProjects((prevProjects) =>
+            prevProjects.map((project) =>
+              project._id === projectToEdit ? response.data : project
+            )
           );
-        } else if (error.request) {
-          setErrorMessage(
-            "No response from the server. Please try again later."
-          );
-        } else {
-          setErrorMessage("An error occurred: " + error.message);
-        }
-      });
+          setSuccessMessage("Project updated successfully!");
+          setShowForm(false);
+          setIsEditing(false);
+          setProjectToEdit(null);
+        })
+        .catch((error) => {
+          if (error.response) {
+            setErrorMessage(
+              error.response.data.message || "Failed to update the project."
+            );
+          } else if (error.request) {
+            setErrorMessage(
+              "No response from the server. Please try again later."
+            );
+          } else {
+            setErrorMessage("An error occurred: " + error.message);
+          }
+        });
+    } else {
+      axios
+        .post(`${API_URL}/projects`, newProject, {
+          headers: { Authorization: `Bearer ${storedToken}` },
+        })
+        .then((response) => {
+          setProjects((prevProjects) => [...prevProjects, response.data]);
+          setSuccessMessage("Project added successfully!");
+          setShowForm(false);
+        })
+        .catch((error) => {
+          if (error.response) {
+            setErrorMessage(
+              error.response.data.message || "Failed to add the project."
+            );
+          } else if (error.request) {
+            setErrorMessage(
+              "No response from the server. Please try again later."
+            );
+          } else {
+            setErrorMessage("An error occurred: " + error.message);
+          }
+        });
+    }
+    setNewProject({
+      title: "",
+      description: "",
+      budget: "",
+      status: "In Progress",
+      client: "",
+    });
+  };
+
+  const handleEditClick = (project) => {
+    setNewProject({
+      title: project.title,
+      description: project.description,
+      budget: project.budget,
+      status: project.status,
+      client: project.client,
+    });
+    setProjectToEdit(project._id);
+    setIsEditing(true);
+    setShowForm(true);
   };
 
   const handleDeleteClick = (projectId) => {
@@ -160,148 +183,81 @@ function ProjectsPage() {
     }
   };
 
-  useEffect(() => {
-    getProjects();
-    getClients(); // Fetch clients for the dropdown
-  }, []);
-
   return (
-    <Box sx={{ padding: 2 }}>
+    <Box
+      sx={{
+        marginTop: "60px", // Adjust based on AppBar height
+        marginLeft: 8, // Adjust to fit Drawer width
+        transition: "margin-left 0.3s",
+        padding: 2.0,
+      }}
+    >
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        mb: 4,
+      }}
+      >
       <Typography variant="h4" gutterBottom>
         Projects
       </Typography>
-      {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
-      {successMessage && <Alert severity="success">{successMessage}</Alert>}
+      <Alerts errorMessage={errorMessage} successMessage={successMessage} />
 
-      {/* Toggle Form Button */}
       <Button
         variant="contained"
         color="primary"
-        onClick={() => setShowForm((prev) => !prev)}
-        sx={{ mb: 4 }}
+        onClick={() => {
+          setShowForm((prev) => !prev);
+          setIsEditing(false);
+          setProjectToEdit(null);
+          setNewProject({
+            title: "",
+            description: "",
+            budget: "",
+            status: "In Progress",
+            client: "",
+          });
+        }}
+        sx={{ mb: 4,
+          
+        }}
       >
         {showForm ? "Hide Form" : "Create Project"}
       </Button>
+        </Box>
 
-      {/* Add New Project Form */}
-      {showForm ? (
-        <Paper sx={{ padding: 3, marginBottom: 4 }}>
-          <Typography variant="h6" gutterBottom>
-            Add New Project
-          </Typography>
-          <form onSubmit={handleFormSubmit}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Title"
-                  name="title"
-                  value={newProject.title}
-                  onChange={handleInputChange}
-                  required
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Description"
-                  name="description"
-                  value={newProject.description}
-                  onChange={handleInputChange}
-                  multiline
-                  rows={3}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Budget"
-                  name="budget"
-                  type="number"
-                  value={newProject.budget}
-                  onChange={handleInputChange}
-                  required
-                  inputProps={{ min: 0 }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  select
-                  label="Status"
-                  name="status"
-                  value={newProject.status}
-                  onChange={handleInputChange}
-                >
-                  <MenuItem value="In Progress">In Progress</MenuItem>
-                  <MenuItem value="Completed">Completed</MenuItem>
-                  <MenuItem value="On Hold">On Hold</MenuItem>
-                </TextField>
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  select
-                  label="Client"
-                  name="client"
-                  value={newProject.client}
-                  onChange={handleInputChange}
-                  required
-                >
-                  {clients.map((client) => (
-                    <MenuItem key={client._id} value={client._id}>
-                      {client.name}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Grid>
-              <Grid item xs={12}>
-                <Button type="submit" variant="contained" fullWidth>
-                  Add Project
-                </Button>
-              </Grid>
-            </Grid>
-          </form>
-        </Paper>
-      ) : (
-        // Only show the projects list when the form is hidden
-        <Grid container spacing={2}>
+      {showForm && (
+        <ProjectForm
+          projectData={newProject}
+          handleInputChange={handleInputChange}
+          handleFormSubmit={handleFormSubmit}
+          buttonLabel={isEditing ? "Update Project" : "Add Project"}
+        />
+      )}
+
+      {!showForm && (
+        <Grid container spacing={0}>
           {projects.map((project) => (
             <Grid item xs={12} sm={6} md={4} key={project._id}>
-              <ProjectCard project={project} />
-              <Button
-                variant="outlined"
-                color="error"
-                onClick={() => handleDeleteClick(project._id)}
-                sx={{ mt: 2 }}
-              >
-                Delete Project
-              </Button>
+              <ProjectCard
+                project={project}
+                handleEditClick={handleEditClick}
+                handleDeleteClick={handleDeleteClick}
+              />
             </Grid>
           ))}
         </Grid>
       )}
 
-      {/* Alert Dialog for Delete Confirmation */}
-      <Dialog
+      <ConfirmationDialog
         open={openDialog}
-        onClose={handleDialogClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{"Delete Project?"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Are you sure you want to delete this project? This action cannot be undone.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose}>Cancel</Button>
-          <Button onClick={handleConfirmDelete} color="error" autoFocus>
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
+        handleClose={handleDialogClose}
+        handleConfirm={handleConfirmDelete}
+        title={"Delete Project?"}
+        description={"Are you sure you want to delete this project? This action cannot be undone."}
+      />
     </Box>
   );
 }

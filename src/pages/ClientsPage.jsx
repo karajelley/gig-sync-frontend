@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
+import { Box, Button, Grid, Typography } from "@mui/material";
+import ClientForm from "../components/Mui/ClientForm";
+import ConfirmationDialog from "../components/Mui/ConfirmationDialog";
+import Alerts from "../components/Mui/Alerts";
+import ClientCard from "../components/Mui/ClientCard";
 import axios from "axios";
-import { Box, Button, Paper, TextField, Typography, Alert } from "@mui/material";
-import { Grid } from "@mui/system";
-import ClientCard from "../components/Mui/ClientCard.jsx";
 import { API_URL } from "../api/config";
 
 function ClientsPage() {
@@ -13,10 +15,13 @@ function ClientsPage() {
     phone: "",
     company: "",
   });
-
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [showForm, setShowForm] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [clientToEdit, setClientToEdit] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [clientToDelete, setClientToDelete] = useState(null);
 
   const storedToken = localStorage.getItem("authToken");
 
@@ -43,6 +48,10 @@ function ClientsPage() {
       });
   }
 
+  useEffect(() => {
+    getClients();
+  }, []);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewClient((prevClient) => ({
@@ -56,119 +65,190 @@ function ClientsPage() {
     setErrorMessage("");
     setSuccessMessage("");
 
-    axios
-      .post(`${API_URL}/clients`, newClient, {
-        headers: { Authorization: `Bearer ${storedToken}` },
-      })
-      .then((response) => {
-        setClients((prevClients) => [...prevClients, response.data]);
-        setNewClient({ name: "", email: "", phone: "", company: "" }); // Reset form
-        setSuccessMessage("Client added successfully!");
-        setShowForm(false); // Hide form after successful submission
-      })
-      .catch((error) => {
-        if (error.response) {
-          setErrorMessage(
-            error.response.data.message || "Failed to add the client."
+    if (isEditing && clientToEdit) {
+      axios
+        .put(`${API_URL}/clients/${clientToEdit}`, newClient, {
+          headers: { Authorization: `Bearer ${storedToken}` },
+        })
+        .then((response) => {
+          setClients((prevClients) =>
+            prevClients.map((client) =>
+              client._id === clientToEdit ? response.data : client
+            )
           );
-        } else if (error.request) {
-          setErrorMessage("No response from the server. Please try again later.");
-        } else {
-          setErrorMessage("An error occurred: " + error.message);
-        }
-      });
+          setSuccessMessage("Client updated successfully!");
+          setShowForm(false);
+          setIsEditing(false);
+          setClientToEdit(null);
+        })
+        .catch((error) => {
+          if (error.response) {
+            setErrorMessage(
+              error.response.data.message || "Failed to update the client."
+            );
+          } else if (error.request) {
+            setErrorMessage(
+              "No response from the server. Please try again later."
+            );
+          } else {
+            setErrorMessage("An error occurred: " + error.message);
+          }
+        });
+    } else {
+      axios
+        .post(`${API_URL}/clients`, newClient, {
+          headers: { Authorization: `Bearer ${storedToken}` },
+        })
+        .then((response) => {
+          setClients((prevClients) => [...prevClients, response.data]);
+          setSuccessMessage("Client added successfully!");
+          setShowForm(false);
+        })
+        .catch((error) => {
+          if (error.response) {
+            setErrorMessage(
+              error.response.data.message || "Failed to add the client."
+            );
+          } else if (error.request) {
+            setErrorMessage(
+              "No response from the server. Please try again later."
+            );
+          } else {
+            setErrorMessage("An error occurred: " + error.message);
+          }
+        });
+    }
+    setNewClient({ name: "", email: "", phone: "", company: "" });
   };
 
-  useEffect(() => {
-    getClients();
-  }, []);
+  const handleEditClick = (client) => {
+    setNewClient({
+      name: client.name,
+      email: client.email,
+      phone: client.phone,
+      company: client.company,
+    });
+    setClientToEdit(client._id);
+    setIsEditing(true);
+    setShowForm(true);
+  };
+
+  const handleDeleteClick = (clientId) => {
+    setClientToDelete(clientId);
+    setOpenDialog(true);
+  };
+
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+    setClientToDelete(null);
+  };
+
+  const handleConfirmDelete = () => {
+    if (clientToDelete) {
+      axios
+        .delete(`${API_URL}/clients/${clientToDelete}`, {
+          headers: { Authorization: `Bearer ${storedToken}` },
+        })
+        .then(() => {
+          setClients((prevClients) =>
+            prevClients.filter((client) => client._id !== clientToDelete)
+          );
+          setSuccessMessage("Client deleted successfully!");
+        })
+        .catch((error) => {
+          if (error.response) {
+            setErrorMessage(
+              error.response.data.message || "Failed to delete the client."
+            );
+          } else if (error.request) {
+            setErrorMessage(
+              "No response from the server. Please try again later."
+            );
+          } else {
+            setErrorMessage("An error occurred: " + error.message);
+          }
+        })
+        .finally(() => {
+          setOpenDialog(false);
+          setClientToDelete(null);
+        });
+
+        
+    }
+  };
 
   return (
-    <Box sx={{ padding: 2 }}>
-  <Typography variant="h4" gutterBottom>
-    Clients
-  </Typography>
-  {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
-  {successMessage && <Alert severity="success">{successMessage}</Alert>}
-
-  {/* Toggle Form Button */}
-  <Button
-    variant="contained"
-    color="primary"
-    onClick={() => setShowForm((prev) => !prev)}
-    sx={{ mb: 4 }}
-  >
-    {showForm ? "Hide Form" : "Create Client"}
-  </Button>
-
-  {/* Add New Client Form */}
-  {showForm ? (
-    <Paper sx={{ padding: 3, marginBottom: 4 }}>
-      <Typography variant="h6" gutterBottom>
-        Add New Client
+    <Box
+      sx={{
+        marginTop: "60px", // Compensates for the height of the AppBar, adjust as needed
+        marginLeft: "80px", // Ensures the content is not under the Drawer, adjust as needed
+        transition: "margin-left 0.3s", // Smooth transition for the drawer movement if it's dynamic
+        padding: 2,
+      }}
+    >
+      <Box
+      sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        mb: 4,
+      }}
+      >
+      <Typography variant="h4" gutterBottom>
+        Clients
       </Typography>
-      <form onSubmit={handleFormSubmit}>
+      <Alerts errorMessage={errorMessage} successMessage={successMessage} />
+
+      {/* Toggle Form Button */}
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => {
+          setShowForm((prev) => !prev);
+          setIsEditing(false);
+          setClientToEdit(null);
+          setNewClient({ name: "", email: "", phone: "", company: "" });
+        }}
+        sx={{ mb: 4 }}
+      >
+        {showForm ? "Hide Form" : "Create Client"}
+      </Button>
+      </Box>
+
+      {/* Add or Edit Client Form */}
+      {showForm && (
+        <ClientForm
+          clientData={newClient}
+          handleInputChange={handleInputChange}
+          handleFormSubmit={handleFormSubmit}
+          buttonLabel={isEditing ? "Update Client" : "Add Client"}
+        />
+      )}
+
+      {/* Client Cards */}
+      {!showForm && (
         <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Name"
-              name="name"
-              value={newClient.name}
-              onChange={handleInputChange}
-              required
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Email"
-              name="email"
-              type="email"
-              value={newClient.email}
-              onChange={handleInputChange}
-              required
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Phone"
-              name="phone"
-              type="tel"
-              value={newClient.phone}
-              onChange={handleInputChange}
-              required
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Company"
-              name="company"
-              value={newClient.company}
-              onChange={handleInputChange}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Button type="submit" variant="contained" fullWidth>
-              Add Client
-            </Button>
-          </Grid>
+          {clients.map((client) => (
+            <Grid item xs={12} sm={6} md={4} key={client._id}>
+              <ClientCard
+                client={client}
+                handleEditClick={handleEditClick}
+                handleDeleteClick={handleDeleteClick}
+              />
+            </Grid>
+          ))}
         </Grid>
-      </form>
-    </Paper>
-  ) : (
-    // Only show the clients list when the form is hidden
-    <Grid container spacing={2}>
-      {clients.map((client) => (
-        <Grid item xs={12} sm={6} md={4} key={client._id}>
-          <ClientCard client={client} />
-        </Grid>
-      ))}
-    </Grid>
-  )}
-</Box>
+      )}
+
+      {/* Alert Dialog for Delete Confirmation */}
+      <ConfirmationDialog
+        open={openDialog}
+        handleClose={handleDialogClose}
+        handleConfirm={handleConfirmDelete}
+        title={"Delete Client?"}
+        description={"Are you sure you want to delete this client? This action cannot be undone."}
+      />
+    </Box>
   );
 }
 
