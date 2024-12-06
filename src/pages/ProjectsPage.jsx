@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Box, Button, Grid, Typography } from "@mui/material";
-import ProjectForm from "../components/Mui/ProjectForm"; // Similar to ClientForm, this should handle create/edit project form logic.
+import ProjectForm from "../components/Mui/ProjectForm"; 
 import ConfirmationDialog from "../components/Mui/ConfirmationDialog";
 import Alerts from "../components/Mui/Alerts";
 import ProjectCard from "../components/Mui/ProjectCard";
