@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { AppProvider } from "./context/AppContext.jsx";
 
+
 // Internal Libraries / Components
 import DashboardPage from "./pages/DashboardPage.jsx";
 import Footer from "./components/Footer.jsx";
@@ -31,6 +32,7 @@ function App() {
     <>
       <AppProvider>
       {!hideNavbar && <Navbar />}
+      
       <Routes>
           <Route path="*" element={<NotFoundPage />} />  
           <Route path="/" element={<LandingPage />} />
