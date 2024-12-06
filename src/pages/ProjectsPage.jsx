@@ -1,14 +1,18 @@
-import { useState, useEffect } from "react";
+// External Libraries 
+import { useContext, useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Box, Button, Grid, Typography } from "@mui/material";
-import ProjectForm from "../components/Mui/ProjectForm"; // Similar to ClientForm, this should handle create/edit project form logic.
-import ConfirmationDialog from "../components/Mui/ConfirmationDialog";
-import Alerts from "../components/Mui/Alerts";
-import ProjectCard from "../components/Mui/ProjectCard";
 import axios from "axios";
+// Internal Libraries / Components
 import { API_URL } from "../api/config";
+import { AppContext } from "../context/AppContext";
+import Alerts from "../components/Mui/Alerts";
+import ConfirmationDialog from "../components/Mui/ConfirmationDialog";
+import ProjectCard from "../components/Mui/ProjectCard";
+import ProjectForm from "../components/Mui/ProjectForm"; // Similar to ClientForm, this should handle create/edit project form logic.
 
 function ProjectsPage() {
-  const [projects, setProjects] = useState([]);
+  const { projects, loading, errorMessage, fetchData } = useContext(AppContext);
   const [newProject, setNewProject] = useState({
     title: "",
     description: "",
@@ -16,7 +20,7 @@ function ProjectsPage() {
     status: "In Progress",
     client: "",
   });
-  const [errorMessage, setErrorMessage] = useState("");
+  //const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -24,35 +28,16 @@ function ProjectsPage() {
   const [openDialog, setOpenDialog] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState(null);
 
-  const storedToken = localStorage.getItem("authToken");
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
+    console.log(projects)
 
-  function getProjects() {
-    axios
-      .get(`${API_URL}/projects`, {
-        headers: { Authorization: `Bearer ${storedToken}` },
-      })
-      .then((response) => {
-        setProjects(response.data);
-      })
-      .catch((error) => {
-        if (error.response) {
-          setErrorMessage(
-            error.response.data.message || "An unknown error occurred."
-          );
-        } else if (error.request) {
-          setErrorMessage(
-            "No response from the server. Please try again later."
-          );
-        } else {
-          setErrorMessage("An error occurred: " + error.message);
-        }
-      });
-  }
+    if (loading) return <p>Loading projects...</p>;
+    if (errorMessage) return <p>{errorMessage}</p>;
 
-  useEffect(() => {
-    getProjects();
-  }, []);
 
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewProject((prevProject) => ({
