@@ -14,6 +14,7 @@ import NotFoundPage from "./pages/NotFoundPage.jsx";
 import SignupPage from './pages/authentication/SignupPage.jsx';
 import ProjectsPage from './pages/ProjectsPage.jsx';
 import ClientsPage from "./pages/ClientsPage.jsx";
+import IsPrivate from "./components/IsPrivate.jsx";
 
 
 // Styles / Assets
@@ -38,8 +39,8 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/api/dashboard" element={<DashboardPage />} /> 
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/api/projectspage" element={<ProjectsPage />} />
-          <Route path="/api/clientspage" element={<ClientsPage />} />
+          <Route path="/api/projectspage" element={<IsPrivate><ProjectsPage /></IsPrivate>} />
+          <Route path="/api/clientspage" element={<IsPrivate><ClientsPage /></IsPrivate>} />
           <Route path="/signup" element={<SignupPage />} />
       </Routes>
       <Footer />
