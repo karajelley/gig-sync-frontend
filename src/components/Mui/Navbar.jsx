@@ -149,7 +149,6 @@ function Navbar (){
         </Toolbar>
       </AppBar>
 
-      {/* Drawer Section */}
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
