@@ -11,11 +11,11 @@ import {
 import { positions } from "@mui/system";
 import CloseIcon from "@mui/icons-material/Close";
 
-function ProjectCard({ client, project, handleEditClick, handleDeleteClick }) {
+function ProjectCard({ project, handleEditClick, handleDeleteClick }) {
   return (
     <Box sx={{ minWidth: 275, margin: 2, position: "relative" }}>
-      <Card variant="outlined" sx={{ position: "relative", borderRadius: 4 }}>
-      
+      <Card variant="outlined" sx={{ position: "relative", borderRadius: 4, }}>
+        {/* Delete Button */}
         <IconButton
           size="small"
           sx={{
@@ -24,35 +24,37 @@ function ProjectCard({ client, project, handleEditClick, handleDeleteClick }) {
             right: 5,
           }}
           onClick={() => handleDeleteClick(project._id)}
+          aria-label="Delete Project"
         >
           <CloseIcon />
         </IconButton>
 
+        {/* Card Content */}
         <CardContent>
-          <Typography
-            gutterBottom
-            sx={{ color: "text.secondary", fontSize: 14 }}
-          ></Typography>
           <Typography variant="h5" component="div">
-            {project.title}
+            {project.title || "Untitled Project"}
           </Typography>
           <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
-            Status: {project.status}
+            Status: {project.status || "Unknown"}
           </Typography>
-{/*           <Typography variant="body2">
-            Description: {project.description}
-          </Typography> */}
-          <Typography variant="body2">Budget: ${project.budget}</Typography>
+          <Typography variant="body2">Budget: ${project.budget || "N/A"}</Typography>
           <Typography variant="body2">
-            Client: {project.client || "No client assigned"}
+            Client: {project.client?.name || "No client assigned"}
           </Typography>
         </CardContent>
 
+        {/* Card Actions */}
         <CardActions>
-          <Button onClick={() => handleEditClick(project)} size="small">
+          <Button
+            onClick={() => handleEditClick(project)}
+            size="small"
+            aria-label="Edit Project"
+          >
             Edit Project
           </Button>
-          <Button size="small">View Details</Button>
+          <Button size="small" aria-label="View Details">
+            View Details
+          </Button>
         </CardActions>
       </Card>
     </Box>

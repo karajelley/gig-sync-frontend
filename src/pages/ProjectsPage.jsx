@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { Box, Button, Grid, Typography } from "@mui/material";
-import ProjectForm from "../components/Mui/ProjectForm"; // Similar to ClientForm, this should handle create/edit project form logic.
+import { Box, Button, Typography } from "@mui/material";
+import ProjectForm from "../components/Mui/ProjectForm";
 import ConfirmationDialog from "../components/Mui/ConfirmationDialog";
 import Alerts from "../components/Mui/Alerts";
-import ProjectCard from "../components/Mui/ProjectCard";
+import Kanban from "../components/Mui/Kanban";
 import axios from "axios";
 import { API_URL } from "../api/config";
 
@@ -26,7 +26,7 @@ function ProjectsPage() {
 
   const storedToken = localStorage.getItem("authToken");
 
-  function getProjects() {
+  const getProjects = () => {
     axios
       .get(`${API_URL}/projects`, {
         headers: { Authorization: `Bearer ${storedToken}` },
@@ -47,7 +47,7 @@ function ProjectsPage() {
           setErrorMessage("An error occurred: " + error.message);
         }
       });
-  }
+  };
 
   useEffect(() => {
     getProjects();
@@ -83,17 +83,9 @@ function ProjectsPage() {
           setProjectToEdit(null);
         })
         .catch((error) => {
-          if (error.response) {
-            setErrorMessage(
-              error.response.data.message || "Failed to update the project."
-            );
-          } else if (error.request) {
-            setErrorMessage(
-              "No response from the server. Please try again later."
-            );
-          } else {
-            setErrorMessage("An error occurred: " + error.message);
-          }
+          setErrorMessage(
+            error.response?.data?.message || "Failed to update the project."
+          );
         });
     } else {
       axios
@@ -106,17 +98,9 @@ function ProjectsPage() {
           setShowForm(false);
         })
         .catch((error) => {
-          if (error.response) {
-            setErrorMessage(
-              error.response.data.message || "Failed to add the project."
-            );
-          } else if (error.request) {
-            setErrorMessage(
-              "No response from the server. Please try again later."
-            );
-          } else {
-            setErrorMessage("An error occurred: " + error.message);
-          }
+          setErrorMessage(
+            error.response?.data?.message || "Failed to add the project."
+          );
         });
     }
     setNewProject({
@@ -164,17 +148,9 @@ function ProjectsPage() {
           setSuccessMessage("Project deleted successfully!");
         })
         .catch((error) => {
-          if (error.response) {
-            setErrorMessage(
-              error.response.data.message || "Failed to delete the project."
-            );
-          } else if (error.request) {
-            setErrorMessage(
-              "No response from the server. Please try again later."
-            );
-          } else {
-            setErrorMessage("An error occurred: " + error.message);
-          }
+          setErrorMessage(
+            error.response?.data?.message || "Failed to delete the project."
+          );
         })
         .finally(() => {
           setOpenDialog(false);
@@ -186,47 +162,45 @@ function ProjectsPage() {
   return (
     <Box
       sx={{
-        marginTop: "60px", // Adjust based on AppBar height
-        marginLeft: 8, // Adjust to fit Drawer width
+        marginTop: "60px",
+        marginLeft: 8,
         transition: "margin-left 0.3s",
         padding: 2.0,
       }}
     >
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        mb: 4,
-      }}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 4,
+        }}
       >
-      <Typography variant="h4" gutterBottom>
-        Projects
-      </Typography>
-      <Alerts errorMessage={errorMessage} successMessage={successMessage} />
+        <Typography variant="h4" gutterBottom>
+          Projects
+        </Typography>
+        <Alerts errorMessage={errorMessage} successMessage={successMessage} />
 
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => {
-          setShowForm((prev) => !prev);
-          setIsEditing(false);
-          setProjectToEdit(null);
-          setNewProject({
-            title: "",
-            description: "",
-            budget: "",
-            status: "In Progress",
-            client: "",
-          });
-        }}
-        sx={{ mb: 4,
-          
-        }}
-      >
-        {showForm ? "Hide Form" : "Create Project"}
-      </Button>
-        </Box>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            setShowForm((prev) => !prev);
+            setIsEditing(false);
+            setProjectToEdit(null);
+            setNewProject({
+              title: "",
+              description: "",
+              budget: "",
+              status: "In Progress",
+              client: "",
+            });
+          }}
+          sx={{ mb: 4 }}
+        >
+          {showForm ? "Hide Form" : "Create Project"}
+        </Button>
+      </Box>
 
       {showForm && (
         <ProjectForm
@@ -238,17 +212,12 @@ function ProjectsPage() {
       )}
 
       {!showForm && (
-        <Grid container spacing={0}>
-          {projects.map((project) => (
-            <Grid item xs={12} sm={6} md={4} key={project._id}>
-              <ProjectCard
-                project={project}
-                handleEditClick={handleEditClick}
-                handleDeleteClick={handleDeleteClick}
-              />
-            </Grid>
-          ))}
-        </Grid>
+        <Kanban
+          projects={projects}
+          onProjectUpdate={(updatedProjects) => setProjects(updatedProjects)}
+          handleEditClick={handleEditClick} // Pass edit handler
+          handleDeleteClick={handleDeleteClick} // Pass delete handler
+        />
       )}
 
       <ConfirmationDialog
