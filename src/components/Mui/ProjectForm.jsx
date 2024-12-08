@@ -50,9 +50,9 @@ function ProjectForm({ projectData, handleInputChange, handleFormSubmit, buttonL
               value={projectData.status}
               onChange={handleInputChange}
             >
+              <MenuItem value="To Do">To Do</MenuItem>
               <MenuItem value="In Progress">In Progress</MenuItem>
               <MenuItem value="Completed">Completed</MenuItem>
-              <MenuItem value="On Hold">On Hold</MenuItem>
             </TextField>
           </Grid>
           <Grid item xs={12}>
