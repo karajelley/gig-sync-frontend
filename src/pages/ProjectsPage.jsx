@@ -10,6 +10,7 @@ import { API_URL } from "../api/config";
 
 function ProjectsPage() {
   const [projects, setProjects] = useState([]);
+  const [clients, setClients] = useState([]); // Add state for clients
   const [newProject, setNewProject] = useState({
     title: "",
     description: "",
@@ -33,7 +34,20 @@ function ProjectsPage() {
         headers: { Authorization: `Bearer ${storedToken}` },
       })
       .then((response) => {
-        setProjects(response.data);
+        // Ensure the clients array is available before processing projects
+        if (clients && clients.length > 0) {
+          const validClients = clients.map((client) => client._id); // Get valid client IDs
+  
+          // Map through projects and clean invalid client values
+          const cleanedProjects = response.data.map((project) => ({
+            ...project,
+            client: validClients.includes(project.client) ? project.client : "", // Set client to empty if invalid
+          }));
+  
+          setProjects(cleanedProjects); // Update state with cleaned projects
+        } else {
+          setProjects(response.data); // If no clients are loaded, set projects as-is
+        }
       })
       .catch((error) => {
         if (error.response) {
@@ -47,6 +61,21 @@ function ProjectsPage() {
         } else {
           setErrorMessage("An error occurred: " + error.message);
         }
+      });
+  };
+  
+
+  const getClients = () => {
+    axios
+      .get(`${API_URL}/clients`, {
+        headers: { Authorization: `Bearer ${storedToken}` },
+      })
+      .then((response) => {
+        console.log("Fetched clients:", response.data); // Log fetched clients
+        setClients(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching clients:", error);
       });
   };
 
@@ -115,11 +144,11 @@ function ProjectsPage() {
 
   const handleEditClick = (project) => {
     setNewProject({
-      title: project.title,
-      description: project.description,
-      budget: project.budget,
-      status: project.status,
-      client: project.client,
+      title: project.title || "",
+      description: project.description || "",
+      budget: project.budget || "",
+      status: project.status || "To Do",
+      client: project.client || "",
     });
     setProjectToEdit(project._id);
     setIsEditing(true);
@@ -205,6 +234,7 @@ function ProjectsPage() {
 
       {showForm && (
         <ProjectForm
+          clients={clients}
           projectData={newProject}
           handleInputChange={handleInputChange}
           handleFormSubmit={handleFormSubmit}
