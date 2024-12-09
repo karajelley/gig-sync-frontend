@@ -7,6 +7,7 @@ import Kanban from "../components/Mui/Kanban";
 import axios from "axios";
 import { API_URL } from "../api/config";
 
+
 function ProjectsPage() {
   const [projects, setProjects] = useState([]);
   const [newProject, setNewProject] = useState({
@@ -213,10 +214,12 @@ function ProjectsPage() {
 
       {!showForm && (
         <Kanban
-          projects={projects}
-          onProjectUpdate={(updatedProjects) => setProjects(updatedProjects)}
-          handleEditClick={handleEditClick} // Pass edit handler
-          handleDeleteClick={handleDeleteClick} // Pass delete handler
+        projects={projects}
+        onProjectUpdate={(updatedProjects) => setProjects(updatedProjects)}
+        handleEditClick={handleEditClick}
+        handleDeleteClick={handleDeleteClick}
+        apiUrl={API_URL} // Pass API URL
+        storedToken={storedToken} // Pass stored token
         />
       )}
 
