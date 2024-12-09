@@ -35,9 +35,9 @@ function ProjectCard({ project, handleEditClick, handleDeleteClick }) {
     variant="h5"
     component="div"
     sx={{
-      whiteSpace: "nowrap",       // Prevent text from wrapping
-      overflow: "hidden",         // Hide overflow text
-      textOverflow: "ellipsis",   // Add ellipsis (...) for overflow
+      whiteSpace: "nowrap",       
+      overflow: "hidden",         
+      textOverflow: "ellipsis",   
     }}
   >
     {project.title || "Untitled Project"}

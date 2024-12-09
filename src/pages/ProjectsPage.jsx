@@ -94,69 +94,133 @@ function ProjectsPage() {
     }));
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
     setSuccessMessage("");
-
+  
     if (isEditing && projectToEdit) {
-      axios
-        .put(`${API_URL}/projects/${projectToEdit}`, newProject, {
-          headers: { Authorization: `Bearer ${storedToken}` },
-        })
-        .then((response) => {
-          setProjects((prevProjects) =>
-            prevProjects.map((project) =>
-              project._id === projectToEdit ? response.data : project
-            )
-          );
-          setSuccessMessage("Project updated successfully!");
-          setShowForm(false);
-          setIsEditing(false);
-          setProjectToEdit(null);
-        })
-        .catch((error) => {
-          setErrorMessage(
-            error.response?.data?.message || "Failed to update the project."
-          );
-        });
+      // Update an existing project
+      try {
+        const response = await axios.put(
+          `${API_URL}/projects/${projectToEdit}`,
+          newProject,
+          {
+            headers: { Authorization: `Bearer ${storedToken}` },
+          }
+        );
+  
+        const updatedProject = response.data;
+  
+        // Optionally fetch the full client object for the updated project
+        const fullClient =
+          typeof updatedProject.client === "string"
+            ? await axios
+                .get(`${API_URL}/clients/${updatedProject.client}`, {
+                  headers: { Authorization: `Bearer ${storedToken}` },
+                })
+                .then((res) => res.data)
+                .catch(() => null)
+            : updatedProject.client;
+  
+        setProjects((prevProjects) =>
+          prevProjects.map((project) =>
+            project._id === projectToEdit
+              ? { ...updatedProject, client: fullClient || updatedProject.client }
+              : project
+          )
+        );
+  
+        setSuccessMessage("Project updated successfully!");
+        setShowForm(false);
+        setIsEditing(false);
+        setProjectToEdit(null);
+      } catch (error) {
+        setErrorMessage(
+          error.response?.data?.message || "Failed to update the project."
+        );
+      }
     } else {
-      axios
-        .post(`${API_URL}/projects`, newProject, {
-          headers: { Authorization: `Bearer ${storedToken}` },
-        })
-        .then((response) => {
-          setProjects((prevProjects) => [...prevProjects, response.data]);
-          setSuccessMessage("Project added successfully!");
-          setShowForm(false);
-        })
-        .catch((error) => {
-          setErrorMessage(
-            error.response?.data?.message || "Failed to add the project."
-          );
-        });
+      // Add a new project
+      try {
+        const response = await axios.post(
+          `${API_URL}/projects`,
+          { ...newProject, client: newProject.client?._id || newProject.client },
+          {
+            headers: { Authorization: `Bearer ${storedToken}` },
+          }
+        );
+  
+        const newProjectData = response.data.project;
+  
+        // Optionally fetch the full client object for the new project
+        const fullClient =
+          typeof newProjectData.client === "string"
+            ? await axios
+                .get(`${API_URL}/clients/${newProjectData.client}`, {
+                  headers: { Authorization: `Bearer ${storedToken}` },
+                })
+                .then((res) => res.data)
+                .catch(() => null)
+            : newProjectData.client;
+  
+        setProjects((prevProjects) => [
+          ...prevProjects,
+          { ...newProjectData, client: fullClient || newProjectData.client },
+        ]);
+  
+        setSuccessMessage("Project added successfully!");
+        setShowForm(false);
+      } catch (error) {
+        setErrorMessage(
+          error.response?.data?.message || "Failed to add the project."
+        );
+      }
     }
+  
+    // Reset the form fields
     setNewProject({
       title: "",
       description: "",
       budget: "",
-      status: "In Progress",
+      status: "To Do",
       client: "",
     });
   };
-
+  
   const handleEditClick = (project) => {
     setNewProject({
       title: project.title || "",
       description: project.description || "",
       budget: project.budget || "",
-      status: project.status || "To Do",
-      client: project.client || "",
+      status: project.status !== undefined ? project.status : "To Do",
+      client: project.client?._id || project.client || "", // Ensure client ID is set
     });
     setProjectToEdit(project._id);
     setIsEditing(true);
     setShowForm(true);
   };
+  
+  const handleClientUpdate = (updatedClient) => {
+    // Update clients state
+    setClients((prevClients) =>
+      prevClients.map((client) =>
+        client._id === updatedClient._id ? updatedClient : client
+      )
+    );
+  
+    // Update projects where client matches
+    setProjects((prevProjects) =>
+      prevProjects.map((project) =>
+        project.client === updatedClient._id
+          ? { ...project, client: updatedClient }
+          : project
+      )
+    );
+  
+    setSuccessMessage("Client updated successfully!");
+  };
+  
 
   const handleDeleteClick = (projectId) => {
     setProjectToDelete(projectId);
