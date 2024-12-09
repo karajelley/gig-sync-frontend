@@ -1,37 +1,56 @@
-import { AppContext } from "../context/AppContext";
+import { useState, useEffect } from "react";
 import { Box, Button, Grid, Typography } from "@mui/material";
-import { useContext, useState, useEffect} from "react";
-import Alerts from "../components/Mui/Alerts";
-import axios from "axios";
-import ClientCard from "../components/Mui/ClientCard";
 import ClientForm from "../components/Mui/ClientForm";
 import ConfirmationDialog from "../components/Mui/ConfirmationDialog";
-// Internal Libraries / Components
+import Alerts from "../components/Mui/Alerts";
+import ClientCard from "../components/Mui/ClientCard";
+import axios from "axios";
 import { API_URL } from "../api/config";
 
 function ClientsPage() {
-
-  const { clients, setClients, errorMessage, setErrorMessage, fetchData } = useContext(AppContext);
-
+  const [clients, setClients] = useState([]);
   const [newClient, setNewClient] = useState({
     name: "",
     email: "",
     phone: "",
     company: "",
   });
-
-  const [clientToDelete, setClientToDelete] = useState(null);
-  const [clientToEdit, setClientToEdit] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const [openDialog, setOpenDialog] = useState(false);
-  const [showForm, setShowForm] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [showForm, setShowForm] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [clientToEdit, setClientToEdit] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [clientToDelete, setClientToDelete] = useState(null);
 
   const storedToken = localStorage.getItem("authToken");
 
+  function getClients() {
+    axios
+      .get(`${API_URL}/clients`, {
+        headers: { Authorization: `Bearer ${storedToken}` },
+      })
+      .then((response) => {
+        setClients(response.data);
+      })
+      .catch((error) => {
+        if (error.response) {
+          setErrorMessage(
+            error.response.data.message || "An unknown error occurred."
+          );
+        } else if (error.request) {
+          setErrorMessage(
+            "No response from the server. Please try again later."
+          );
+        } else {
+          setErrorMessage("An error occurred: " + error.message);
+        }
+      });
+  }
+
   useEffect(() => {
-    fetchData(); 
-  }, [fetchData]);
+    getClients();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -210,7 +229,7 @@ function ClientsPage() {
       {!showForm && (
         <Grid container spacing={2}>
           {clients.map((client) => (
-            <Grid key={client._id} item xs={12} sm={6} md={4}>
+            <Grid item xs={12} sm={6} md={4} key={client._id}>
               <ClientCard
                 client={client}
                 handleEditClick={handleEditClick}
