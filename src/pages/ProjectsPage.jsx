@@ -64,6 +64,9 @@ function ProjectsPage() {
       });
   };
   
+  useEffect(() => {
+    getClients();
+  }, []);
 
   const getClients = () => {
     axios

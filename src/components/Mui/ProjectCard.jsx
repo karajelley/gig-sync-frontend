@@ -31,17 +31,28 @@ function ProjectCard({ project, handleEditClick, handleDeleteClick }) {
 
         {/* Card Content */}
         <CardContent>
-          <Typography variant="h5" component="div">
-            {project.title || "Untitled Project"}
-          </Typography>
-          <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
-            Status: {project.status || "Unknown"}
-          </Typography>
-          <Typography variant="body2">Budget: ${project.budget || "N/A"}</Typography>
-          <Typography variant="body2">
-            Client: {project.client?.name || "No client assigned"}
-          </Typography>
-        </CardContent>
+  <Typography
+    variant="h5"
+    component="div"
+    sx={{
+      whiteSpace: "nowrap",       // Prevent text from wrapping
+      overflow: "hidden",         // Hide overflow text
+      textOverflow: "ellipsis",   // Add ellipsis (...) for overflow
+    }}
+  >
+    {project.title || "Untitled Project"}
+  </Typography>
+  <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
+    Status: {project.status || "Unknown"}
+  </Typography>
+  <Typography variant="body2">
+    Budget: ${project.budget || "N/A"}
+  </Typography>
+  <Typography variant="body2">
+    Client: {project.client?.name || "No client assigned"}
+  </Typography>
+</CardContent>
+
 
         {/* Card Actions */}
         <CardActions>
