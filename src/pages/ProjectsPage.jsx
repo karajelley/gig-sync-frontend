@@ -1,16 +1,19 @@
-import { useState, useEffect } from "react";
+import { AppContext } from "../context/AppContext";
 import { Box, Button, Typography } from "@mui/material";
-import ProjectForm from "../components/Mui/ProjectForm";
-import ConfirmationDialog from "../components/Mui/ConfirmationDialog";
+import { useContext, useState, useEffect} from "react";
 import Alerts from "../components/Mui/Alerts";
-import Kanban from "../components/Mui/Kanban";
 import axios from "axios";
+import ConfirmationDialog from "../components/Mui/ConfirmationDialog";
+import Kanban from "../components/Mui/Kanban";
+import ProjectForm from "../components/Mui/ProjectForm";
+// Internal Libraries / Components
 import { API_URL } from "../api/config";
 
 
 function ProjectsPage() {
-  const [projects, setProjects] = useState([]);
-  const [clients, setClients] = useState([]); // Add state for clients
+  
+  const { projects, setProjects, clients, errorMessage, setErrorMessage, fetchData } = useContext(AppContext);
+
   const [newProject, setNewProject] = useState({
     title: "",
     description: "",
@@ -18,73 +21,20 @@ function ProjectsPage() {
     status: "In Progress",
     client: "",
   });
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
-  const [showForm, setShowForm] = useState(false);
+  
   const [isEditing, setIsEditing] = useState(false);
-  const [projectToEdit, setProjectToEdit] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState(null);
+  const [projectToEdit, setProjectToEdit] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   const storedToken = localStorage.getItem("authToken");
 
-  const getProjects = () => {
-    axios
-      .get(`${API_URL}/projects`, {
-        headers: { Authorization: `Bearer ${storedToken}` },
-      })
-      .then((response) => {
-        // Ensure the clients array is available before processing projects
-        if (clients && clients.length > 0) {
-          const validClients = clients.map((client) => client._id); // Get valid client IDs
-  
-          // Map through projects and clean invalid client values
-          const cleanedProjects = response.data.map((project) => ({
-            ...project,
-            client: validClients.includes(project.client) ? project.client : "", // Set client to empty if invalid
-          }));
-  
-          setProjects(cleanedProjects); // Update state with cleaned projects
-        } else {
-          setProjects(response.data); // If no clients are loaded, set projects as-is
-        }
-      })
-      .catch((error) => {
-        if (error.response) {
-          setErrorMessage(
-            error.response.data.message || "An unknown error occurred."
-          );
-        } else if (error.request) {
-          setErrorMessage(
-            "No response from the server. Please try again later."
-          );
-        } else {
-          setErrorMessage("An error occurred: " + error.message);
-        }
-      });
-  };
-  
   useEffect(() => {
-    getClients();
-  }, []);
+    fetchData(); 
+  }, [fetchData]);
 
-  const getClients = () => {
-    axios
-      .get(`${API_URL}/clients`, {
-        headers: { Authorization: `Bearer ${storedToken}` },
-      })
-      .then((response) => {
-        console.log("Fetched clients:", response.data); // Log fetched clients
-        setClients(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching clients:", error);
-      });
-  };
-
-  useEffect(() => {
-    getProjects();
-  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
