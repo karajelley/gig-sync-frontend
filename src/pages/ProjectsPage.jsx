@@ -11,7 +11,6 @@ import { API_URL } from "../api/config";
 
 
 function ProjectsPage() {
-  
   const { projects, setProjects, clients, errorMessage, setErrorMessage, fetchData } = useContext(AppContext);
 
   const [newProject, setNewProject] = useState({
