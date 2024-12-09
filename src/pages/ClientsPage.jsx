@@ -1,6 +1,7 @@
 import { AppContext } from "../context/AppContext";
 import { Box, Button, Grid, Typography } from "@mui/material";
-import { useContext, useState, useEffect} from "react";
+import { useContext, useState, useEffect,} from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import Alerts from "../components/Mui/Alerts";
 import axios from "axios";
 import ClientCard from "../components/Mui/ClientCard";
@@ -28,6 +29,8 @@ function ClientsPage() {
   const [successMessage, setSuccessMessage] = useState("");
 
   const storedToken = localStorage.getItem("authToken");
+  const navigate = useNavigate(); 
+
 
   useEffect(() => {
     fetchData(); 
@@ -40,6 +43,10 @@ function ClientsPage() {
       [name]: value,
     }));
   };
+
+  const handleDetailsClick = (clientId) => {
+    navigate(`/api/clientdetails/${clientId}`);
+};
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -102,6 +109,8 @@ function ClientsPage() {
     setNewClient({ name: "", email: "", phone: "", company: "" });
   };
 
+
+
   const handleEditClick = (client) => {
     setNewClient({
       name: client.name,
@@ -161,9 +170,9 @@ function ClientsPage() {
   return (
     <Box
       sx={{
-        marginTop: "60px", // Compensates for the height of the AppBar, adjust as needed
-        marginLeft: "80px", // Ensures the content is not under the Drawer, adjust as needed
-        transition: "margin-left 0.3s", // Smooth transition for the drawer movement if it's dynamic
+        marginTop: "60px", 
+        marginLeft: "80px", 
+        transition: "margin-left 0.3s", 
         padding: 2,
       }}
     >
@@ -215,6 +224,7 @@ function ClientsPage() {
                 client={client}
                 handleEditClick={handleEditClick}
                 handleDeleteClick={handleDeleteClick}
+                onDetailsClick={handleDetailsClick} 
               />
             </Grid>
           ))}

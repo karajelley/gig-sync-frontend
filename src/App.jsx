@@ -14,6 +14,8 @@ import NotFoundPage from "./pages/NotFoundPage.jsx";
 import SignupPage from './pages/authentication/SignupPage.jsx';
 import ProjectsPage from './pages/ProjectsPage.jsx';
 import ClientsPage from "./pages/ClientsPage.jsx";
+import ProjectDetailsPage from "./pages/ProjectDetailsPage.jsx";
+import ClientDetailsPage from "./pages/ClientDetailsPage.jsx";
 import IsPrivate from "./components/IsPrivate.jsx";
 
 
@@ -40,6 +42,8 @@ function App() {
           <Route path="/api/dashboard" element={<DashboardPage />} /> 
           <Route path="/login" element={<LoginPage />} />
           <Route path="/api/projectspage" element={<IsPrivate><ProjectsPage /></IsPrivate>} />
+          <Route path="/api/projectdetails" element={<IsPrivate><ProjectDetailsPage /></IsPrivate>} />
+          <Route path="/api/clientdetails/:id" element={<IsPrivate><ClientDetailsPage/></IsPrivate>} />
           <Route path="/api/clientspage" element={<IsPrivate><ClientsPage /></IsPrivate>} />
           <Route path="/signup" element={<SignupPage />} />
       </Routes>

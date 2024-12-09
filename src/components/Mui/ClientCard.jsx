@@ -1,8 +1,11 @@
 import React from "react";
 import { Box, Card, CardContent, CardActions, Button, IconButton, Typography, } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
 
-function ClientCard ({ client, handleEditClick, handleDeleteClick }) {
+function ClientCard ({ client, handleEditClick, handleDeleteClick, onDetailsClick }) {
+
+
   return (
     <Box sx={{ minWidth: 275, margin: 2, position: "relative" }}>
       <Card variant="outlined" sx={{ position: "relative", borderRadius: 4 }}>
@@ -13,6 +16,8 @@ function ClientCard ({ client, handleEditClick, handleDeleteClick }) {
             top: 5,
             right: 5,
           }}
+          
+          
           onClick={() => handleDeleteClick(client._id)}
         >
           <CloseIcon />
@@ -35,7 +40,7 @@ function ClientCard ({ client, handleEditClick, handleDeleteClick }) {
           <Button size="small" onClick={() => handleEditClick(client)}>
             Edit Client
           </Button>
-          <Button size="small">View Details</Button>
+          <Button size="small"  onClick={() => onDetailsClick(client._id)}>View Details</Button>
         </CardActions>
       </Card>
     </Box>
