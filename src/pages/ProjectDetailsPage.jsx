@@ -1,34 +1,64 @@
-// External Libraries 
-import { useEffect, useState, useContext } from "react";
-import { useParams } from "react-router-dom"; 
-// MUI Libraries
-// Internal Libraries / Components
-import { API_URL } from "../api/config";
+import React from "react";
+import { useParams } from "react-router-dom";
+import { useContext } from "react";
 import { AppContext } from "../context/AppContext";
+import { Box, Typography } from "@mui/material";
 
 function ProjectDetailsPage() {
+    const { id } = useParams(); // Extract the project ID from the URL
+    const { projects } = useContext(AppContext); // Access projects from context
 
-    const { id } = useParams();
-    const { projects, setProjects, clients, loading, errorMessage, setErrorMessage, fetchData } = useContext(AppContext);
+    // Find the project with the matching ID
+    const project = projects.find((project) => project._id === id);
 
-    useEffect(() => {
-        fetchData(); 
-      }, [fetchData]);
+    // Handle case where project is not found
+    if (!project) {
+        return (
+            <Box
+                sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "100vh",
+                    textAlign: "center",
+                }}
+            >
+                <Typography variant="h6" color="error">
+                    Project not found.
+                </Typography>
+            </Box>
+        );
+    }
 
-    
-
-    if (loading) return <p>Loading project details...</p>;
-    if (!project) return <p>Project not found</p>;
-
+    // Render project details
     return (
-      <>
-            <div>
-                <h2>{id?.title}</h2>
-                <p>{project?.description}</p>
-                <p>Client: {project?.client?.name}</p>
-            </div>
-      </>
-    )
-  }
-  
-  export default ProjectDetailsPage;
+        <Box
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100vh", // Center content vertically
+                textAlign: "center", // Center text alignment
+            }}
+        >
+            <Typography variant="h4" gutterBottom>
+                {project.title || "Untitled Project"}
+            </Typography>
+            <Typography variant="h6" gutterBottom>
+                Description: {project.description || "No description available"}
+            </Typography>
+            <Typography variant="h6" gutterBottom>
+                Budget: ${project.budget || "N/A"}
+            </Typography>
+            <Typography variant="h6" gutterBottom>
+                Status: {project.status || "Unknown"}
+            </Typography>
+            <Typography variant="h6" gutterBottom>
+                Client: {project.client?.name || "No client assigned"}
+            </Typography>
+        </Box>
+    );
+}
+
+export default ProjectDetailsPage;

@@ -1,4 +1,6 @@
 import * as React from "react";
+import { useContext } from "react";
+import { AppContext } from "../../context/AppContext";
 import {
   Box,
   Card,
@@ -11,7 +13,9 @@ import {
 import { positions } from "@mui/system";
 import CloseIcon from "@mui/icons-material/Close";
 
-function ProjectCard({ project, handleEditClick, handleDeleteClick }) {
+function ProjectCard({ project }) {
+  const { handleEditClick, handleDeleteClick, handleDetailsClick } = useContext(AppContext);
+
   return (
     <Box sx={{ minWidth: 275, margin: 2, position: "relative" }}>
       <Card variant="outlined" sx={{ position: "relative", borderRadius: 4, }}>
@@ -63,9 +67,9 @@ function ProjectCard({ project, handleEditClick, handleDeleteClick }) {
           >
             Edit Project
           </Button>
-          <Button size="small" aria-label="View Details">
-            View Details
-          </Button>
+          <Button size="small" onClick={() => handleDetailsClick(project._id)}>
+    View Details
+</Button>
         </CardActions>
       </Card>
     </Box>

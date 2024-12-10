@@ -1,6 +1,7 @@
 import { AppContext } from "../context/AppContext";
 import { Box, Button, Typography } from "@mui/material";
 import { useContext, useState, useEffect} from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import Alerts from "../components/Mui/Alerts";
 import axios from "axios";
 import ConfirmationDialog from "../components/Mui/ConfirmationDialog";
@@ -29,6 +30,8 @@ function ProjectsPage() {
   const [successMessage, setSuccessMessage] = useState("");
 
   const storedToken = localStorage.getItem("authToken");
+  const navigate = useNavigate(); 
+
 
   useEffect(() => {
     fetchData(); 
@@ -93,6 +96,10 @@ function ProjectsPage() {
       client: "",
     });
   };
+
+  const handleDetailsClick = (project) => {
+    navigate(`/api/projectdetails/${project._id}`);
+};
 
   const handleEditClick = (project) => {
     setNewProject({
@@ -198,8 +205,6 @@ function ProjectsPage() {
         <Kanban
         projects={projects}
         onProjectUpdate={(updatedProjects) => setProjects(updatedProjects)}
-        handleEditClick={handleEditClick}
-        handleDeleteClick={handleDeleteClick}
         apiUrl={API_URL} // Pass API URL
         storedToken={storedToken} // Pass stored token
         />

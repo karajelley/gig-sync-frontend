@@ -9,6 +9,7 @@ function Kanban({
     onProjectUpdate,
     handleEditClick,
     handleDeleteClick,
+    handleDetailsClick,
     apiUrl,
     storedToken,
   }) {
@@ -109,6 +110,7 @@ function Kanban({
                               project={project}
                               handleEditClick={handleEditClick}
                               handleDeleteClick={handleDeleteClick}
+                              handleDetailsClick={handleDetailsClick} 
                             />
                           </div>
                         )}

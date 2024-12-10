@@ -33,7 +33,6 @@ function App() {
 
   return (
     <>
-      <AppProvider>
       {!hideNavbar && <Navbar />}
       
       <Routes>
@@ -42,13 +41,12 @@ function App() {
           <Route path="/api/dashboard" element={<DashboardPage />} /> 
           <Route path="/login" element={<LoginPage />} />
           <Route path="/api/projectspage" element={<IsPrivate><ProjectsPage /></IsPrivate>} />
-          <Route path="/api/projectdetails" element={<IsPrivate><ProjectDetailsPage /></IsPrivate>} />
+          <Route path="/api/projectdetails/:id" element={<IsPrivate><ProjectDetailsPage /></IsPrivate>} />
           <Route path="/api/clientdetails/:id" element={<IsPrivate><ClientDetailsPage/></IsPrivate>} />
           <Route path="/api/clientspage" element={<IsPrivate><ClientsPage /></IsPrivate>} />
           <Route path="/signup" element={<SignupPage />} />
       </Routes>
       <Footer />
-      </AppProvider>
     </>
   )
 }

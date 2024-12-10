@@ -44,10 +44,6 @@ function ClientsPage() {
     }));
   };
 
-  const handleDetailsClick = (clientId) => {
-    navigate(`/api/clientdetails/${clientId}`);
-};
-
   const handleFormSubmit = (e) => {
     e.preventDefault();
     setErrorMessage("");
@@ -109,7 +105,9 @@ function ClientsPage() {
     setNewClient({ name: "", email: "", phone: "", company: "" });
   };
 
-
+  const handleDetailsClick = (clientId) => {
+    navigate(`/api/clientdetails/${clientId}`);
+};
 
   const handleEditClick = (client) => {
     setNewClient({

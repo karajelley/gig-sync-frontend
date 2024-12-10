@@ -1,4 +1,5 @@
 import React, { createContext, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "../api/config";
 
@@ -9,6 +10,7 @@ export const AppProvider = ({ children }) => {
     const [clients, setClients] = useState([]);
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState(null);
+    const navigate = useNavigate();
 
     const formatError = (error) => {
         if (error.response) {
@@ -41,6 +43,33 @@ export const AppProvider = ({ children }) => {
             .finally(() => setLoading(false));
     }, []); 
 
+    const handleDetailsClick = (projectId) => {
+        navigate(`/api/projectdetails/${projectId}`);
+    };
+
+    const handleEditClick = (project) => {
+        navigate(`/api/projectedit/${project._id}`, { state: { project } }); // Navigate to edit page with project data
+    };
+
+    const handleDeleteClick = async (projectId) => {
+        const storedToken = localStorage.getItem("authToken");
+    
+        try {
+            await axios.delete(`${API_URL}/projects/${projectId}`, {
+                headers: { Authorization: `Bearer ${storedToken}` },
+            });
+    
+            // Update the projects in the global state
+            setProjects((prevProjects) =>
+                prevProjects.filter((project) => project._id !== projectId)
+            );
+        } catch (error) {
+            // Handle the error gracefully
+            setErrorMessage(formatError(error));
+        }
+    };
+    
+        
     return (
         <AppContext.Provider
             value={{
@@ -52,6 +81,9 @@ export const AppProvider = ({ children }) => {
                 errorMessage,
                 setErrorMessage,
                 fetchData,
+                handleDetailsClick,
+                handleEditClick, 
+                handleDeleteClick,
             }}
         >
             {children}
