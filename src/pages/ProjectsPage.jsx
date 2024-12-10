@@ -12,7 +12,7 @@ import { API_URL } from "../api/config";
 
 
 function ProjectsPage() {
-  const { projects, setProjects, clients, errorMessage, setErrorMessage, fetchData } = useContext(AppContext);
+  const { projects, setProjects, clients, setClients, errorMessage, setErrorMessage, fetchData } = useContext(AppContext);
 
   const [newProject, setNewProject] = useState({
     title: "",
@@ -52,64 +52,86 @@ function ProjectsPage() {
     setSuccessMessage("");
 
     if (isEditing && projectToEdit) {
-      axios
-        .put(`${API_URL}/projects/${projectToEdit}`, newProject, {
-          headers: { Authorization: `Bearer ${storedToken}` },
-        })
-        .then((response) => {
-          setProjects((prevProjects) =>
-            prevProjects.map((project) =>
-              project._id === projectToEdit ? response.data : project
-            )
-          );
-          setSuccessMessage("Project updated successfully!");
-          setShowForm(false);
-          setIsEditing(false);
-          setProjectToEdit(null);
-        })
-        .catch((error) => {
-          setErrorMessage(
-            error.response?.data?.message || "Failed to update the project."
-          );
-        });
-    } else {
-      axios
-        .post(`${API_URL}/projects`, newProject, {
-          headers: { Authorization: `Bearer ${storedToken}` },
-        })
-        .then((response) => {
-          setProjects((prevProjects) => [...prevProjects, response.data]);
-          setSuccessMessage("Project added successfully!");
-          setShowForm(false);
-        })
-        .catch((error) => {
-          setErrorMessage(
-            error.response?.data?.message || "Failed to add the project."
-          );
-        });
-    }
-    setNewProject({
-      title: "",
-      description: "",
-      budget: "",
-      status: "In Progress",
-      client: "",
-    });
-  };
+        // Edit Logic
+        axios
+            .put(`${API_URL}/projects/${projectToEdit}`, newProject, {
+                headers: { Authorization: `Bearer ${storedToken}` },
+            })
+            .then((response) => {
+                console.log("Response from API (Edit):", response.data);
 
-  const handleProjectEdit = (project) => {
-    console.log("Editing project:", project);
+                const updatedProject = response.data;
+                const clientObject = clients.find((client) => client._id === updatedProject.client);
+                if (clientObject) {
+                    updatedProject.client = clientObject;
+                }
+
+                setProjects((prevProjects) =>
+                    prevProjects.map((project) =>
+                        project._id === projectToEdit ? updatedProject : project
+                    )
+                );
+                setSuccessMessage("Project updated successfully!");
+                setShowForm(false);
+                setIsEditing(false);
+                setProjectToEdit(null);
+            })
+            .catch((error) => {
+                setErrorMessage(
+                    error.response?.data?.message || "Failed to update the project."
+                );
+            });
+    } else {
+        // Create Logic
+        axios
+            .post(`${API_URL}/projects`, newProject, {
+                headers: { Authorization: `Bearer ${storedToken}` },
+            })
+            .then((response) => {
+                console.log("Response from API (Create):", response.data);
+
+                const createdProject = response.data;
+                const clientObject = clients.find((client) => client._id === createdProject.client);
+                if (clientObject) {
+                    createdProject.client = clientObject;
+                }
+
+                setProjects((prevProjects) => [...prevProjects, createdProject]);
+                setSuccessMessage("Project added successfully!");
+                setShowForm(false);
+                fetchData(); // can be use optionally to get all the information but its not optimal
+            })
+            .catch((error) => {
+                setErrorMessage(
+                    error.response?.data?.message || "Failed to add the project."
+                );
+            });
+    }
+
     setNewProject({
+        title: "",
+        description: "",
+        budget: "",
+        status: "In Progress",
+        client: "",
+    });
+};
+  
+
+const handleProjectEdit = (project) => {
+  console.log("Project client:", project.client);
+  setNewProject({
       title: project.title || "",
       description: project.description || "",
       budget: project.budget || "",
       status: project.status || "To Do",
-      client: project.client || "",
-    });
-    setProjectToEdit(project._id);
-    setIsEditing(true);
-    setShowForm(true);
-  };
+      client: project.client?._id || "",
+  });
+  setProjectToEdit(project._id);
+  setIsEditing(true);
+  setShowForm(true);
+};
+
 
   const handleDetailsClick = (project) => {
     navigate(`/api/projectdetails/${project._id}`);
@@ -204,10 +226,10 @@ function ProjectsPage() {
       )}
 
       {!showForm && (
-        <Kanban
-        handleProjectEdit={handleProjectEdit} 
+        <Kanban 
         projects={projects}
         onProjectUpdate={(updatedProjects) => setProjects(updatedProjects)}
+        handleProjectEdit={handleProjectEdit} 
         apiUrl={API_URL}
         storedToken={storedToken}
         />

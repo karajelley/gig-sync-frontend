@@ -45,7 +45,7 @@ export const AppProvider = ({ children }) => {
 
     const handleDetailsClick = (projectId) => {
         navigate(`/api/projectdetails/${projectId}`);
-    }; 
+    };
     
     const handleDeleteClick = async (projectId) => {
         const storedToken = localStorage.getItem("authToken");
