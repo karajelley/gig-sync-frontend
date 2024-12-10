@@ -102,6 +102,7 @@ function ProjectsPage() {
 };
 
   const handleEditClick = (project) => {
+    console.log("Editing project:", project);
     setNewProject({
       title: project.title || "",
       description: project.description || "",
@@ -190,8 +191,8 @@ function ProjectsPage() {
           {showForm ? "Hide Form" : "Create Project"}
         </Button>
       </Box>
-
-      {showForm && (
+      {showForm && console.log("Form Props:", { projectData: newProject, clients })}
+      {showForm && ( 
         <ProjectForm
           clients={clients}
           projectData={newProject}
