@@ -1,6 +1,5 @@
 import React from "react";
 import { Box, Card, CardContent, CardActions, Button, IconButton, Typography, } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
 
 function ClientCard ({ client, handleEditClick, handleDeleteClick, onDetailsClick }) {
@@ -16,8 +15,6 @@ function ClientCard ({ client, handleEditClick, handleDeleteClick, onDetailsClic
             top: 5,
             right: 5,
           }}
-          
-          
           onClick={() => handleDeleteClick(client._id)}
         >
           <CloseIcon />

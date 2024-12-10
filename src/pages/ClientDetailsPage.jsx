@@ -40,8 +40,8 @@ function ClientDetailsPage() {
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
-                height: "100vh", // Center content vertically
-                textAlign: "center", // Center text alignment
+                height: "100vh", 
+                textAlign: "center", 
             }}
         >
             <Typography variant="h4" gutterBottom>
@@ -56,6 +56,9 @@ function ClientDetailsPage() {
             <Typography variant="h6" gutterBottom>
                 Company: {client.company || "No company specified"}
             </Typography>
+            {/* <Typography variant="h6" gutterBottom>
+                Company: {client.projects || "No company specified"}
+            </Typography> */}
         </Box>
     );
 };

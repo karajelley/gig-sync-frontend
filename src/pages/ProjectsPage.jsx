@@ -1,6 +1,6 @@
 import { AppContext } from "../context/AppContext";
 import { Box, Button, Typography } from "@mui/material";
-import { useContext, useState, useEffect} from "react";
+import { useContext, useState, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import Alerts from "../components/Mui/Alerts";
 import axios from "axios";
@@ -10,9 +10,15 @@ import ProjectForm from "../components/Mui/ProjectForm";
 // Internal Libraries / Components
 import { API_URL } from "../api/config";
 
-
 function ProjectsPage() {
-  const { projects, setProjects, clients, setClients, errorMessage, setErrorMessage, fetchData } = useContext(AppContext);
+  const {
+    projects,
+    setProjects,
+    clients,
+    errorMessage,
+    setErrorMessage,
+    fetchData,
+  } = useContext(AppContext);
 
   const [newProject, setNewProject] = useState({
     title: "",
@@ -21,7 +27,7 @@ function ProjectsPage() {
     status: "In Progress",
     client: "",
   });
-  
+
   const [isEditing, setIsEditing] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState(null);
@@ -30,13 +36,11 @@ function ProjectsPage() {
   const [successMessage, setSuccessMessage] = useState("");
 
   const storedToken = localStorage.getItem("authToken");
-  const navigate = useNavigate(); 
-
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchData(); 
+    fetchData();
   }, [fetchData]);
-
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -52,91 +56,97 @@ function ProjectsPage() {
     setSuccessMessage("");
 
     if (isEditing && projectToEdit) {
-        // Edit Logic
-        axios
-            .put(`${API_URL}/projects/${projectToEdit}`, newProject, {
-                headers: { Authorization: `Bearer ${storedToken}` },
-            })
-            .then((response) => {
-                console.log("Response from API (Edit):", response.data);
 
-                const updatedProject = response.data;
-                const clientObject = clients.find((client) => client._id === updatedProject.client);
-                if (clientObject) {
-                    updatedProject.client = clientObject;
-                }
+      // Edit Logic
+      axios
+        .put(`${API_URL}/projects/${projectToEdit}`, newProject, {
+          headers: { Authorization: `Bearer ${storedToken}` },
+        })
+        .then((response) => {
+          console.log("Response from API (Edit):", response.data);
 
-                setProjects((prevProjects) =>
-                    prevProjects.map((project) =>
-                        project._id === projectToEdit ? updatedProject : project
-                    )
-                );
-                setSuccessMessage("Project updated successfully!");
-                setShowForm(false);
-                setIsEditing(false);
-                setProjectToEdit(null);
-            })
-            .catch((error) => {
-                setErrorMessage(
-                    error.response?.data?.message || "Failed to update the project."
-                );
-            });
+          const updatedProject = response.data;
+          const clientObject = clients.find(
+            (client) => client._id === updatedProject.client
+          );
+          if (clientObject) {
+            updatedProject.client = clientObject;
+          }
+
+          setProjects((prevProjects) =>
+            prevProjects.map((project) =>
+              project._id === projectToEdit ? updatedProject : project
+            )
+          );
+          setSuccessMessage("Project updated successfully!");
+          setShowForm(false);
+          setIsEditing(false);
+          setProjectToEdit(null);
+        })
+        .catch((error) => {
+          setErrorMessage(
+            error.response?.data?.message || "Failed to update the project."
+          );
+        });
     } else {
-        // Create Logic
-        axios
-            .post(`${API_URL}/projects`, newProject, {
-                headers: { Authorization: `Bearer ${storedToken}` },
-            })
-            .then((response) => {
-                console.log("Response from API (Create):", response.data);
+      
+      // Create Logic
+      axios
+        .post(`${API_URL}/projects`, newProject, {
+          headers: { Authorization: `Bearer ${storedToken}` },
+        })
+        .then((response) => {
+          console.log("Response from API (Create):", response.data);
 
-                const createdProject = response.data;
-                const clientObject = clients.find((client) => client._id === createdProject.client);
-                if (clientObject) {
-                    createdProject.client = clientObject;
-                }
+          const createdProject = response.data;
+          const clientObject = clients.find(
+            (client) => client._id === createdProject.client
+          );
+          if (clientObject) {
+            createdProject.client = clientObject;
+          }
 
-                setProjects((prevProjects) => [...prevProjects, createdProject]);
-                setSuccessMessage("Project added successfully!");
-                setShowForm(false);
-                fetchData(); // can be use optionally to get all the information but its not optimal
-            })
-            .catch((error) => {
-                setErrorMessage(
-                    error.response?.data?.message || "Failed to add the project."
-                );
-            });
+          setProjects((prevProjects) => {
+            console.log("Previous Projects:", prevProjects);
+            return [...prevProjects, createdProject];
+          });
+          setSuccessMessage("Project added successfully!");
+          setShowForm(false);
+          //fetchData();  can be use optionally to get all the information but its not optimal
+        })
+        .catch((error) => {
+          setErrorMessage(
+            error.response?.data?.message || "Failed to add the project."
+          );
+        });
     }
 
     setNewProject({
-        title: "",
-        description: "",
-        budget: "",
-        status: "In Progress",
-        client: "",
+      title: "",
+      description: "",
+      budget: "",
+      status: "In Progress",
+      client: "",
     });
-};
-  
+  };
 
-const handleProjectEdit = (project) => {
-  console.log("Project client:", project.client);
-  setNewProject({
+  const handleProjectEdit = (project) => {
+    console.log("Project client:", project.client);
+    setNewProject({
       title: project.title || "",
       description: project.description || "",
       budget: project.budget || "",
       status: project.status || "To Do",
       client: project.client?._id || "",
-  });
-  setProjectToEdit(project._id);
-  setIsEditing(true);
-  setShowForm(true);
-};
-
+    });
+    setProjectToEdit(project._id);
+    setIsEditing(true);
+    setShowForm(true);
+  };
 
   const handleDetailsClick = (project) => {
     navigate(`/api/projectdetails/${project._id}`);
-};
-
+  };
 
   const handleDeleteClick = (projectId) => {
     setProjectToDelete(projectId);
@@ -171,6 +181,10 @@ const handleProjectEdit = (project) => {
         });
     }
   };
+
+  useEffect(() => {
+    console.log("Projects updated:", projects);
+  }, [projects]);
 
   return (
     <Box
@@ -214,8 +228,9 @@ const handleProjectEdit = (project) => {
           {showForm ? "Hide Form" : "Create Project"}
         </Button>
       </Box>
-      {showForm && console.log("Form Props:", { projectData: newProject, clients })}
-      {showForm && ( 
+      {showForm &&
+        console.log("Form Props:", { projectData: newProject, clients })}
+      {showForm && (
         <ProjectForm
           clients={clients}
           projectData={newProject}
@@ -226,12 +241,12 @@ const handleProjectEdit = (project) => {
       )}
 
       {!showForm && (
-        <Kanban 
-        projects={projects}
-        onProjectUpdate={(updatedProjects) => setProjects(updatedProjects)}
-        handleProjectEdit={handleProjectEdit} 
-        apiUrl={API_URL}
-        storedToken={storedToken}
+        <Kanban
+          projects={projects}
+          onProjectUpdate={(updatedProjects) => setProjects(updatedProjects)}
+          handleProjectEdit={handleProjectEdit}
+          apiUrl={API_URL}
+          storedToken={storedToken}
         />
       )}
 
@@ -240,7 +255,9 @@ const handleProjectEdit = (project) => {
         handleClose={handleDialogClose}
         handleConfirm={handleConfirmDelete}
         title={"Delete Project?"}
-        description={"Are you sure you want to delete this project? This action cannot be undone."}
+        description={
+          "Are you sure you want to delete this project? This action cannot be undone."
+        }
       />
     </Box>
   );

@@ -44,66 +44,49 @@ function ClientsPage() {
     }));
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
     setSuccessMessage("");
 
-    if (isEditing && clientToEdit) {
-      axios
-        .put(`${API_URL}/clients/${clientToEdit}`, newClient, {
-          headers: { Authorization: `Bearer ${storedToken}` },
-        })
-        .then((response) => {
-          setClients((prevClients) =>
-            prevClients.map((client) =>
-              client._id === clientToEdit ? response.data : client
-            )
-          );
-          setSuccessMessage("Client updated successfully!");
-          setShowForm(false);
-          setIsEditing(false);
-          setClientToEdit(null);
-        })
-        .catch((error) => {
-          if (error.response) {
+    try {
+        if (isEditing && clientToEdit) {
+            // Edit existing client
+            await axios.put(`${API_URL}/clients/${clientToEdit}`, newClient, {
+                headers: { Authorization: `Bearer ${storedToken}` },
+            });
+            await fetchData(); // Refresh global data
+            setSuccessMessage("Client updated successfully!");
+            setShowForm(false);
+            setIsEditing(false);
+            setClientToEdit(null);
+        } else {
+            // Create new client
+            await axios.post(`${API_URL}/clients`, newClient, {
+                headers: { Authorization: `Bearer ${storedToken}` },
+            });
+            await fetchData(); // Refresh global data
+            setSuccessMessage("Client added successfully!");
+            setShowForm(false);
+        }
+    } catch (error) {
+        if (error.response) {
             setErrorMessage(
-              error.response.data.message || "Failed to update the client."
+                error.response.data.message || "Failed to process the request."
             );
-          } else if (error.request) {
+        } else if (error.request) {
             setErrorMessage(
-              "No response from the server. Please try again later."
+                "No response from the server. Please try again later."
             );
-          } else {
+        } else {
             setErrorMessage("An error occurred: " + error.message);
-          }
-        });
-    } else {
-      axios
-        .post(`${API_URL}/clients`, newClient, {
-          headers: { Authorization: `Bearer ${storedToken}` },
-        })
-        .then((response) => {
-          setClients((prevClients) => [...prevClients, response.data]);
-          setSuccessMessage("Client added successfully!");
-          setShowForm(false);
-        })
-        .catch((error) => {
-          if (error.response) {
-            setErrorMessage(
-              error.response.data.message || "Failed to add the client."
-            );
-          } else if (error.request) {
-            setErrorMessage(
-              "No response from the server. Please try again later."
-            );
-          } else {
-            setErrorMessage("An error occurred: " + error.message);
-          }
-        });
+        }
     }
+
+    // Reset the form fields
     setNewClient({ name: "", email: "", phone: "", company: "" });
-  };
+};
+
 
   const handleDetailsClick = (clientId) => {
     navigate(`/api/clientdetails/${clientId}`);
@@ -187,7 +170,6 @@ function ClientsPage() {
       </Typography>
       <Alerts errorMessage={errorMessage} successMessage={successMessage} />
 
-      {/* Toggle Form Button */}
       <Button
         variant="contained"
         color="primary"
@@ -203,7 +185,6 @@ function ClientsPage() {
       </Button>
       </Box>
 
-      {/* Add or Edit Client Form */}
       {showForm && (
         <ClientForm
           clientData={newClient}
@@ -213,7 +194,6 @@ function ClientsPage() {
         />
       )}
 
-      {/* Client Cards */}
       {!showForm && (
         <Grid container spacing={2}>
           {clients.map((client) => (
@@ -229,7 +209,6 @@ function ClientsPage() {
         </Grid>
       )}
 
-      {/* Alert Dialog for Delete Confirmation */}
       <ConfirmationDialog
         open={openDialog}
         handleClose={handleDialogClose}

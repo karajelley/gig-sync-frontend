@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useContext } from "react";
 import { AppContext } from "../context/AppContext";
 import { Box, Typography } from "@mui/material";
+import ProjectCard from "../components/Mui/ProjectCard";
 
 function ProjectDetailsPage() {
     const { id } = useParams(); // Extract the project ID from the URL
@@ -57,6 +58,7 @@ function ProjectDetailsPage() {
             <Typography variant="h6" gutterBottom>
                 Client: {project.client?.name || "No client assigned"}
             </Typography>
+            
         </Box>
     );
 }
