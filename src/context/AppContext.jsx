@@ -10,6 +10,8 @@ export const AppProvider = ({ children }) => {
     const [clients, setClients] = useState([]);
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState(null);
+    const [successMessage, setSuccessMessage] = useState(null);
+
     const navigate = useNavigate();
 
     const formatError = (error) => {
@@ -21,6 +23,8 @@ export const AppProvider = ({ children }) => {
             return "An error occurred: " + error.message;
         }
     };
+
+    
 
     const fetchData = useCallback(() => {
         setLoading(true);
@@ -47,23 +51,26 @@ export const AppProvider = ({ children }) => {
         navigate(`/api/projectdetails/${projectId}`);
     };
     
-    const handleDeleteClick = async (projectId) => {
+    const handleDeleteClick = async (type, id) => {
+        console.log("Deleting item:", { type, id }); 
         const storedToken = localStorage.getItem("authToken");
-    
+        
         try {
-            await axios.delete(`${API_URL}/projects/${projectId}`, {
-                headers: { Authorization: `Bearer ${storedToken}` },
-            });
-    
-            // Update the projects in the global state
-            setProjects((prevProjects) =>
-                prevProjects.filter((project) => project._id !== projectId)
-            );
+          await axios.delete(`${API_URL}/${type}s/${id}`, {
+            headers: { Authorization: `Bearer ${storedToken}` },
+          });
+          setProjects((prev) => prev.filter((project) => project._id !== id)); 
+          setClients((prev) => prev.filter((client) => client._id !== id)); 
+          console.log(`${type} deleted successfully!`);
         } catch (error) {
-            // Handle the error gracefully
-            setErrorMessage(formatError(error));
+          console.error(`Failed to delete ${type}:`, error);
+          setErrorMessage(
+            error.response?.data?.message || `Failed to delete the ${type}.`
+          );
         }
-    };
+      };
+      
+      
     
         
     return (

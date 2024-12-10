@@ -18,6 +18,7 @@ function ProjectsPage() {
     errorMessage,
     setErrorMessage,
     fetchData,
+    handleDeleteClick,
   } = useContext(AppContext);
 
   const [newProject, setNewProject] = useState({
@@ -50,85 +51,52 @@ function ProjectsPage() {
     }));
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
     setSuccessMessage("");
-
-    if (isEditing && projectToEdit) {
-
-      // Edit Logic
-      axios
-        .put(`${API_URL}/projects/${projectToEdit}`, newProject, {
-          headers: { Authorization: `Bearer ${storedToken}` },
-        })
-        .then((response) => {
-          console.log("Response from API (Edit):", response.data);
-
-          const updatedProject = response.data;
-          const clientObject = clients.find(
-            (client) => client._id === updatedProject.client
-          );
-          if (clientObject) {
-            updatedProject.client = clientObject;
+  
+    try {
+      if (isEditing && projectToEdit) {
+        // edit project logic
+        const response = await axios.put(
+          `${API_URL}/projects/${projectToEdit}`,
+          newProject,
+          {
+            headers: { Authorization: `Bearer ${storedToken}` },
           }
-
-          setProjects((prevProjects) =>
-            prevProjects.map((project) =>
-              project._id === projectToEdit ? updatedProject : project
-            )
-          );
-          setSuccessMessage("Project updated successfully!");
-          setShowForm(false);
-          setIsEditing(false);
-          setProjectToEdit(null);
-        })
-        .catch((error) => {
-          setErrorMessage(
-            error.response?.data?.message || "Failed to update the project."
-          );
-        });
-    } else {
-      
-      // Create Logic
-      axios
-        .post(`${API_URL}/projects`, newProject, {
+        );
+  
+        setSuccessMessage("Project updated successfully!");
+      } else {
+        // create new project logic
+        await axios.post(`${API_URL}/projects`, newProject, {
           headers: { Authorization: `Bearer ${storedToken}` },
-        })
-        .then((response) => {
-          console.log("Response from API (Create):", response.data);
-
-          const createdProject = response.data;
-          const clientObject = clients.find(
-            (client) => client._id === createdProject.client
-          );
-          if (clientObject) {
-            createdProject.client = clientObject;
-          }
-
-          setProjects((prevProjects) => {
-            console.log("Previous Projects:", prevProjects);
-            return [...prevProjects, createdProject];
-          });
-          setSuccessMessage("Project added successfully!");
-          setShowForm(false);
-          //fetchData();  can be use optionally to get all the information but its not optimal
-        })
-        .catch((error) => {
-          setErrorMessage(
-            error.response?.data?.message || "Failed to add the project."
-          );
         });
+  
+        setSuccessMessage("Project added successfully!");
+      }
+  
+      await fetchData();
+  
+      setShowForm(false);
+      setIsEditing(false);
+      setProjectToEdit(null);
+      setNewProject({
+        title: "",
+        description: "",
+        budget: "",
+        status: "In Progress",
+        client: "",
+      });
+    } catch (error) {
+      setErrorMessage(
+        error.response?.data?.message || "An error occurred while saving the project."
+      );
     }
-
-    setNewProject({
-      title: "",
-      description: "",
-      budget: "",
-      status: "In Progress",
-      client: "",
-    });
   };
+  
+  
 
   const handleProjectEdit = (project) => {
     console.log("Project client:", project.client);
@@ -148,39 +116,20 @@ function ProjectsPage() {
     navigate(`/api/projectdetails/${project._id}`);
   };
 
-  const handleDeleteClick = (projectId) => {
-    setProjectToDelete(projectId);
-    setOpenDialog(true);
-  };
-
+ 
   const handleDialogClose = () => {
     setOpenDialog(false);
     setProjectToDelete(null);
   };
 
-  const handleConfirmDelete = () => {
-    if (projectToDelete) {
-      axios
-        .delete(`${API_URL}/projects/${projectToDelete}`, {
-          headers: { Authorization: `Bearer ${storedToken}` },
-        })
-        .then(() => {
-          setProjects((prevProjects) =>
-            prevProjects.filter((project) => project._id !== projectToDelete)
-          );
-          setSuccessMessage("Project deleted successfully!");
-        })
-        .catch((error) => {
-          setErrorMessage(
-            error.response?.data?.message || "Failed to delete the project."
-          );
-        })
-        .finally(() => {
-          setOpenDialog(false);
-          setProjectToDelete(null);
-        });
-    }
-  };
+const handleConfirmDelete = async () => {
+  if (projectToDelete) {
+    await handleDeleteClick("project", projectToDelete);
+    setOpenDialog(false); 
+    setProjectToDelete(null); 
+  }
+};
+
 
   useEffect(() => {
     console.log("Projects updated:", projects);

@@ -27,7 +27,7 @@ function ProjectCard({ project, handleProjectEdit}) {
             top: 5,
             right: 5,
           }}
-          onClick={() => handleDeleteClick(project._id)}
+          onClick={() => handleDeleteClick("project", project._id)} 
           aria-label="Delete Project"
         >
           <CloseIcon />
