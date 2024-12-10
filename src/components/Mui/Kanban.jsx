@@ -7,7 +7,7 @@ import axios from "axios";
 function Kanban({
     projects,
     onProjectUpdate,
-    handleEditClick,
+    handleProjectEdit,
     handleDeleteClick,
     handleDetailsClick,
     apiUrl,
@@ -108,7 +108,7 @@ function Kanban({
                           >
                             <ProjectCard
                               project={project}
-                              handleEditClick={handleEditClick}
+                              handleProjectEdit={handleProjectEdit}
                               handleDeleteClick={handleDeleteClick}
                               handleDetailsClick={handleDetailsClick} 
                             />

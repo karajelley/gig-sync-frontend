@@ -13,8 +13,8 @@ import {
 import { positions } from "@mui/system";
 import CloseIcon from "@mui/icons-material/Close";
 
-function ProjectCard({ project }) {
-  const { handleEditClick, handleDeleteClick, handleDetailsClick } = useContext(AppContext);
+function ProjectCard({ project, handleProjectEdit}) {
+  const {handleDeleteClick, handleDetailsClick } = useContext(AppContext);
 
   return (
     <Box sx={{ minWidth: 275, margin: 2, position: "relative" }}>
@@ -61,7 +61,7 @@ function ProjectCard({ project }) {
         {/* Card Actions */}
         <CardActions>
           <Button
-            onClick={() => handleEditClick(project)}
+            onClick={() => handleProjectEdit(project)}
             size="small"
             aria-label="Edit Project"
           >

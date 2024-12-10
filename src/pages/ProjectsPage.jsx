@@ -97,11 +97,7 @@ function ProjectsPage() {
     });
   };
 
-  const handleDetailsClick = (project) => {
-    navigate(`/api/projectdetails/${project._id}`);
-};
-
-  const handleEditClick = (project) => {
+  const handleProjectEdit = (project) => {
     console.log("Editing project:", project);
     setNewProject({
       title: project.title || "",
@@ -114,6 +110,11 @@ function ProjectsPage() {
     setIsEditing(true);
     setShowForm(true);
   };
+
+  const handleDetailsClick = (project) => {
+    navigate(`/api/projectdetails/${project._id}`);
+};
+
 
   const handleDeleteClick = (projectId) => {
     setProjectToDelete(projectId);
@@ -204,10 +205,11 @@ function ProjectsPage() {
 
       {!showForm && (
         <Kanban
+        handleProjectEdit={handleProjectEdit} 
         projects={projects}
         onProjectUpdate={(updatedProjects) => setProjects(updatedProjects)}
-        apiUrl={API_URL} // Pass API URL
-        storedToken={storedToken} // Pass stored token
+        apiUrl={API_URL}
+        storedToken={storedToken}
         />
       )}
 

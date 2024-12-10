@@ -45,12 +45,8 @@ export const AppProvider = ({ children }) => {
 
     const handleDetailsClick = (projectId) => {
         navigate(`/api/projectdetails/${projectId}`);
-    };
-
-    const handleEditClick = (project) => {
-        navigate(`/api/projectedit/${project._id}`, { state: { project } }); // Navigate to edit page with project data
-    };
-
+    }; 
+    
     const handleDeleteClick = async (projectId) => {
         const storedToken = localStorage.getItem("authToken");
     
@@ -82,7 +78,6 @@ export const AppProvider = ({ children }) => {
                 setErrorMessage,
                 fetchData,
                 handleDetailsClick,
-                handleEditClick, 
                 handleDeleteClick,
             }}
         >
