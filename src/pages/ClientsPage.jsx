@@ -1,13 +1,15 @@
-import { AppContext } from "../context/AppContext";
-import { Box, Button, Grid, Typography } from "@mui/material";
+// External Libraries
 import { useContext, useState, useEffect} from "react";
-import Alerts from "../components/Mui/Alerts";
 import axios from "axios";
+// MUI Libraries
+import { Box, Button, Grid, Typography } from "@mui/material";
+// Internal Libraries / Components
+import { API_URL } from "../api/config";
+import { AppContext } from "../context/AppContext";
+import Alerts from "../components/Mui/Alerts";
 import ClientCard from "../components/Mui/ClientCard";
 import ClientForm from "../components/Mui/ClientForm";
 import ConfirmationDialog from "../components/Mui/ConfirmationDialog";
-// Internal Libraries / Components
-import { API_URL } from "../api/config";
 
 function ClientsPage() {
 
