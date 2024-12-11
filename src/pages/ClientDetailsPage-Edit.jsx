@@ -147,6 +147,43 @@ function ClientDetailsPage() {
 
   return (
     <Box sx={{ padding: "100px 76px 20px 140px", overflow: "hidden" }}>
+                  {/* Conditional Rendering for Form and Client Details */}
+                  {showForm ? (
+                <UserForm
+                    handleInputChange={handleInputChange}
+                    handleFormSubmit={handleFormSubmit}
+                    buttonLabel={"Save Changes"}
+                    //handleImageChange={() => { /* image change logic */ }}
+                    handleCancel={handleCancel}
+                />
+            ) : (
+      <Box sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        width: "100%",
+        mb: 4,
+      }}>
+        <Typography variant="h4" gutterBottom>
+          {client.name}
+        </Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<EditIcon />}
+          onClick={() => setIsEditing(true)}
+          sx={{
+            position: "relative",
+            top: 0,
+            right: 0,
+            zIndex: 10,
+          }}
+        >
+          Edit
+        </Button>
+      </Box>
+
+
       {/* Alerts */}
       {successMessage && <Alert severity="success">{successMessage}</Alert>}
       {errorMessage && <Alert severity="error">{errorMessage}</Alert>}

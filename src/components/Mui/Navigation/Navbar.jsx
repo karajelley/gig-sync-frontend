@@ -157,7 +157,7 @@ function Navbar() {
 
           {/* User Greeting and Avatar */}
           <Box sx={{ display: "flex", alignItems: "center", padding: "0 16px" }}>
-            {user && <Typography>Welcome, {user.name}</Typography>}
+            {user && <Typography sx={{ fontWeight: 600}}>Welcome, {user.name}</Typography>}
             {user && <AvatarMenu user={user} onLogout={logOutUser} onNavigate={navigate} />}
           </Box>
         </Toolbar>

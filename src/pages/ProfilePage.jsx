@@ -4,13 +4,16 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 // MUI Libraries
 import { Avatar, Box, Button, Typography } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 // Internal Libraries / Components
 import { API_URL } from "../api/config"
 import { AuthContext } from "../context/auth.context.jsx";
 import ConfirmationDialog from "../components/Mui/Modals/ConfirmationDialog.jsx";
+import fileService from "../services/file-upload.service.js";
 import UserForm from "../components/Mui/Forms/UserForm.jsx";
 
-
+const { uploadImage } = fileService;
 
 function ProfilePage() {
 
@@ -90,6 +93,24 @@ function ProfilePage() {
     };
 
 
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          const formData = new FormData();
+          formData.append("imageUrl", file);
+      
+          // Call the uploadImage function
+          uploadImage(formData)
+            .then((response) => {
+              console.log("Image uploaded successfully:", response.fileUrl);
+            })
+            .catch((error) => {
+              console.error("Error uploading image:", error);
+            });
+        }
+      };
+
+
     const handleFormSubmit = (event) => {
 
         event.preventDefault();
@@ -121,14 +142,14 @@ function ProfilePage() {
 
 
     return (
-        <Box sx={{ marginTop: "100px", marginLeft: "80px", marginRight: "32px", padding: 2 }}>
+        <Box sx={{ marginTop: "100px", marginLeft: "140px", marginRight: "76px", padding: 2 }}>
             {/* Conditional Rendering for Form and Profile */}
             {showForm ? (
                 <UserForm
                     handleInputChange={handleInputChange}
                     handleFormSubmit={handleFormSubmit}
                     buttonLabel={"Save Changes"}
-                    //handleImageChange={() => { /* image change logic */ }}
+                    handleImageChange={handleImageChange}
                     handleCancel={handleCancel}
                 />
             ) : (
@@ -149,14 +170,16 @@ function ProfilePage() {
 
                             {/* Edit Button */}
                             <Button
-                                variant="outlined"
+                                variant="contained"
                                 color="primary"
+                                startIcon={<EditIcon />}
                                 onClick={() => setShowForm(true)}
                                 sx={{
                                     alignSelf: "center",
+
                                 }}
                             >
-                                Edit Profile
+                                Edit
                             </Button>
                         </Box>
 
@@ -177,9 +200,9 @@ function ProfilePage() {
                                 Delete Account
                             </Typography>
                             <Typography variant="body1" sx={{ mb: 2 }}>
-                                ⚠ This will delete your account. This action cannot be undone.
+                                ⚠️ This will delete your account. This action cannot be undone.
                             </Typography>
-                            <Button variant="outlined" color="error" onClick={() => setOpenDialog(true)}>
+                            <Button variant="outlined" color="error" startIcon={<DeleteIcon />} onClick={() => setOpenDialog(true)}>
                                 Delete Account
                             </Button>
                         </Box>
