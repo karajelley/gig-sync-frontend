@@ -60,7 +60,7 @@ function ClientsPage() {
     setIsEditing(true);
   };
 
-  const handleFormSubmit = async (e) => {
+  const handleClientForm = async (e) => {
     e.preventDefault();
     setErrorMessage("");
     setSuccessMessage("");
@@ -146,7 +146,7 @@ function ClientsPage() {
         <ClientForm
           clientData={newClient}
           handleInputChange={handleInputChange}
-          handleFormSubmit={handleFormSubmit} 
+          handleFormSubmit={handleClientForm} 
           buttonLabel={isEditing ? "Update Client" : "Add Client"}
           isEditing={isEditing} 
         />
