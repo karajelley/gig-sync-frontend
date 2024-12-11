@@ -28,6 +28,7 @@ import {
 // Internal Libraries / Components
 import { AuthContext } from "../../../context/auth.context.jsx";
 import AvatarMenu from './AvatarMenu.jsx';
+import logo from "../../../assets/gigsync_logo_combo_50px.svg";
 
 
 
@@ -144,10 +145,15 @@ function Navbar() {
             <MenuIcon />
           </IconButton>
 
-          {/* Application Title */}
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            gigSync
-          </Typography>
+          {/* Application Title/Logo */}
+          <Box sx={{ flexGrow: 1 }}>
+            <img
+              src={logo}
+              alt="GigSync Logo"
+              style={{ height: '40px' }}
+            />
+          </Box>
+
 
           {/* User Greeting and Avatar */}
           <Box sx={{ display: "flex", alignItems: "center", padding: "0 16px" }}>
