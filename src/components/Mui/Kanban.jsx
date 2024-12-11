@@ -13,6 +13,7 @@ function Kanban({
     apiUrl,
     storedToken,
   }) {
+    console.log(projects)
     const columns = {
       "To Do": projects.filter((project) => project.status === "To Do"),
       "In Progress": projects.filter((project) => project.status === "In Progress"),

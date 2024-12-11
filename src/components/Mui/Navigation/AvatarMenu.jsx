@@ -37,7 +37,7 @@ function AvatarMenu() {
       {/* Avatar Circle with First Letter */}
       <IconButton onClick={handleAvatarClick} sx={{ display: 'flex', alignItems: 'center' }}>
         <Avatar sx={{ bgcolor: 'white', color: 'primary.main', fontSize: 20 }}>
-          {user?.name[0].toUpperCase()}
+          {user?.name ? user.name[0].toUpperCase() : '🤷‍♂️'}
         </Avatar>
       </IconButton>
 
@@ -71,11 +71,5 @@ function AvatarMenu() {
   );
 }
 
-// Optional: Type-checking with PropTypes
-AvatarMenu.propTypes = {
-  user: PropTypes.object.isRequired, // Assumes user has a 'name' property
-  onLogout: PropTypes.func.isRequired,
-  onNavigate: PropTypes.func.isRequired,
-};
 
 export default AvatarMenu;

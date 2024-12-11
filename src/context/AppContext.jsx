@@ -45,9 +45,6 @@ export const AppProvider = ({ children }) => {
     ])
       .then(([projectsRes, clientsRes]) => {
 
-        console.log("Projects fetched:", projectsRes.data);
-        console.log("Clients fetched:", clientsRes.data);
-
         setProjects(projectsRes.data);
         setClients(clientsRes.data);
       })

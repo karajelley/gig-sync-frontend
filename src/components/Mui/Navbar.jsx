@@ -128,8 +128,7 @@ function Navbar() {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}
-      >
+      <AppBar position="fixed" open={open}>
         <Toolbar>
           {/* Hamburger Menu Icon */}
           <IconButton

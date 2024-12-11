@@ -3,8 +3,8 @@ import { useContext, useState, useEffect} from "react";
 import axios from "axios";
 // MUI Libraries
 import { Box, Button, Grid, Typography } from "@mui/material";
-import { useContext, useState, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
 import Alerts from "../components/Mui/Alerts";
 import ClientCard from "../components/Mui/ClientCard";
 import ClientForm from "../components/Mui/ClientForm";
