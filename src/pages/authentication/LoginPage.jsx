@@ -1,31 +1,39 @@
+// External Libraries 
 import axios from "axios";
-import { AuthContext } from "../../context/auth.context";
-import { AppContext } from "../../context/AppContext";
-import { API_URL } from "../../api/config";
 import React, { useState, useContext } from "react";
+// MUI Libraries
 import {
+  Alert,
+  Avatar,
   Box,
+  Button,
+  Grid,
   Paper,
   TextField,
-  Button,
   Typography,
-  Grid,
-  Avatar,
-  Alert,
 } from "@mui/material";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+// Internal Libraries / Components
+import { API_URL } from "../../api/config";
+import { AuthContext } from "../../context/auth.context";
 import { useNavigate } from "react-router-dom";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+
+
 
 function LoginPage() {
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(undefined);
-
+  
+  const { authenticateUser, storeToken } = useContext(AuthContext);
+  
   const navigate = useNavigate();
-  const { storeToken, authenticateUser } = useContext(AuthContext);
+  
 
   const handleEmail = (e) => setEmail(e.target.value);
   const handlePassword = (e) => setPassword(e.target.value);
+
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
@@ -46,6 +54,7 @@ function LoginPage() {
       });
   };
 
+  
   return (
     <Grid
       container
@@ -137,12 +146,13 @@ function LoginPage() {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Button href="#" variant="text" size="small">
+                {/* Forgot Password Button */}
+                {/*<Button href="#" variant="text" size="small">
                   Forgot password?
-                </Button>
+                </Button> */}
               </Grid>
               <Grid item>
-                <Button href="/#/signup" variant="text" size="small">
+                <Button href="/signup" variant="text" size="small">
                   {"Don't have an account? Sign Up"}
                 </Button>
               </Grid>

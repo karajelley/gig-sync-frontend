@@ -22,7 +22,7 @@ function AvatarMenu() {
   };
 
   const handleProfileClick = () => {
-    navigate('/profile');
+    navigate('/api/profile');
     handleCloseMenu();
   };
 
