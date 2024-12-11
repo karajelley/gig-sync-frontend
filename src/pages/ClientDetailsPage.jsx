@@ -11,11 +11,10 @@ import ProjectCard from "../components/Mui/ProjectCard";
 import { API_URL } from "../api/config";
 import axios from "axios";
 
-
 function ClientDetailsPage() {
   const { id } = useParams();
-  const { 
-    clients, 
+  const {
+    clients,
     fetchData,
     isEditing,
     setIsEditing,
@@ -23,8 +22,7 @@ function ClientDetailsPage() {
     setErrorMessage,
     successMessage,
     setSuccessMessage,
-
-   } = useContext(AppContext);
+  } = useContext(AppContext);
   const client = clients.find((client) => client._id === id);
   const navigate = useNavigate();
 
@@ -34,7 +32,7 @@ function ClientDetailsPage() {
     email: client?.email || "",
     phone: client?.phone || "",
     company: client?.company || "",
-  })
+  });
 
   const storedToken = localStorage.getItem("authToken");
 
@@ -53,9 +51,9 @@ function ClientDetailsPage() {
       });
 
       setSuccessMessage("Client deleted successfully!");
-      navigate("/api/clientspage"); 
+      navigate("/api/clientspage");
     } catch (error) {
-    console.error("Error during deletion:", error.response || error);
+      console.error("Error during deletion:", error.response || error);
       setErrorMessage(
         error.response?.data?.message || "Failed to delete the client."
       );
@@ -74,74 +72,70 @@ function ClientDetailsPage() {
   const handleEditClick = () => {
     setIsEditing(true);
     setNewClient({
-        name: client.name || "",
-        email: client.email || "",
-        phone: client.phone || "",
-        company: client.company || "",
-        project: client.project || [], 
+      name: client.name || "",
+      email: client.email || "",
+      phone: client.phone || "",
+      company: client.company || "",
+      project: client.project || [],
     });
-};
+  };
 
   const handleEditClient = async (e) => {
     e.preventDefault();
     setErrorMessage("");
     setSuccessMessage("");
     try {
-        const response = await axios.put(`${API_URL}/clients/${id}`, newClient, {
-            headers: { Authorization: `Bearer ${storedToken}` },
-        });
-        
+      const response = await axios.put(`${API_URL}/clients/${id}`, newClient, {
+        headers: { Authorization: `Bearer ${storedToken}` },
+      });
 
-        await fetchData(); 
+      await fetchData();
 
-        setSuccessMessage("Client updated successfully!");
-        setIsEditing(false);
+      setSuccessMessage("Client updated successfully!");
+      setIsEditing(false);
     } catch (error) {
-        console.error("Error during client update:", error);
+      console.error("Error during client update:", error);
 
-        if (error.response) {
-            console.error("API Error Response:", error.response.data);
-            setErrorMessage(
-                error.response.data.message || "Failed to update the client."
-            );
-        } else if (error.request) {
-            console.error("No response received from API:", error.request);
-            setErrorMessage(
-                "No response from the server. Please try again later."
-            );
-        } else {
-            console.error("Unexpected error:", error.message);
-            setErrorMessage("An error occurred: " + error.message);
-        }
+      if (error.response) {
+        console.error("API Error Response:", error.response.data);
+        setErrorMessage(
+          error.response.data.message || "Failed to update the client."
+        );
+      } else if (error.request) {
+        console.error("No response received from API:", error.request);
+        setErrorMessage("No response from the server. Please try again later.");
+      } else {
+        console.error("Unexpected error:", error.message);
+        setErrorMessage("An error occurred: " + error.message);
+      }
     }
-};
+  };
 
+  if (!client) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          textAlign: "center",
+        }}
+      >
+        <Typography variant="h6" color="error">
+          Client not found.
+        </Typography>
+      </Box>
+    );
+  }
 
-if (!client) {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        textAlign: "center",
-      }}
-    >
-      <Typography variant="h6" color="error">
-        Client not found.
-      </Typography>
-    </Box>
-  );
-}
-
-return (
-  <Box sx={{ padding: 4 }}>
+    <Box sx={{ padding: '80px 20px 20px 260px', overflow: 'hidden' }}>
     {successMessage && <Alert severity="success">{successMessage}</Alert>}
     {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
 
     {/* Header Section */}
-    <Box sx={{ display: "flex", justifyContent: "space-between", mb: 4 }}>
+    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 4 }}>
       <Box>
         <Typography variant="h4" gutterBottom>
           {client.name}
@@ -156,9 +150,9 @@ return (
         startIcon={<EditIcon />}
         onClick={handleEditClick}
         sx={{
-          position: "absolute",
-          top: "100px",
-          right: "20px",
+          position: "relative",
+          top: 0,
+          right: 0,
           zIndex: 10,
         }}
       >
@@ -166,31 +160,32 @@ return (
       </Button>
     </Box>
 
+    {/* Projects Section */}
     <Box sx={{ mb: 4 }}>
-  <Typography variant="h5" gutterBottom>
-    Projects
-  </Typography>
-  <Grid container spacing={2}>
-    {client.projects?.length > 0 ? (
-      client.projects.map((project) => (
-        <Grid item xs={12} sm={6} md={4} key={project._id}>
-          <Card variant="outlined" sx={{ borderRadius: 4 }}>
-            <CardContent>
-              <Typography variant="h6">{project.title}</Typography>
-              <Typography color="text.secondary">
-                {project.description || "No description available."}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      ))
-    ) : (
-      <Typography>No projects associated with this client.</Typography>
-    )}
-  </Grid>
-</Box>
+      <Typography variant="h5" gutterBottom>
+        Projects
+      </Typography>
+      <Grid container spacing={2}>
+        {client.projects?.length > 0 ? (
+          client.projects.map((project) => (
+            <Grid item xs={12} sm={6} md={4} key={project._id}>
+              <Card variant="outlined" sx={{ borderRadius: 4 }}>
+                <CardContent>
+                  <Typography variant="h6">{project.title}</Typography>
+                  <Typography color="text.secondary">
+                    {project.description || "No description available."}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))
+        ) : (
+          <Typography>No projects associated with this client.</Typography>
+        )}
+      </Grid>
+    </Box>
 
-
+    {/* Delete Section */}
     <Box>
       <Typography variant="h6" color="error" gutterBottom>
         Delete Client
@@ -223,12 +218,12 @@ return (
         clientData={newClient}
         handleInputChange={handleInputChange}
         handleFormSubmit={handleEditClient}
-        isEditing={isEditing} 
+        isEditing={isEditing}
         buttonLabel="Update Client"
       />
     )}
   </Box>
-);
+  );
 }
 
 export default ClientDetailsPage;
