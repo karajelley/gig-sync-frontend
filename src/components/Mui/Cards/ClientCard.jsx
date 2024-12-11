@@ -24,7 +24,7 @@ function ClientCard({ client, onDetailsClick, onEdit }) {
           <Typography variant="h5" component="div">
             {client.name}
           </Typography>
-          <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
+          <Typography sx={{ color: "secondary", mb: 1.5 }}>
             {client.company || "No Company"}
           </Typography>
           <Typography variant="body2">Email: {client.email}</Typography>

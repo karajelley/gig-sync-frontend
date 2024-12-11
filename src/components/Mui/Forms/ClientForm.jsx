@@ -1,6 +1,6 @@
 // External Libraries 
 // MUI Libraries
-import { Button, Grid, Paper, TextField, Typography } from "@mui/material";
+import { Button, Grid2, Paper, TextField, Typography } from "@mui/material";
 // Internal Libraries / Components
 
 
@@ -14,8 +14,8 @@ function ClientForm({ buttonLabel, clientData, handleFormSubmit, handleInputChan
         {buttonLabel === "Add Client" ? "Add New Client" : "Edit Client"}
       </Typography>
       <form onSubmit={handleFormSubmit}>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
+        <Grid2 container spacing={2} direction="column">
+          <Grid2 item xs={12}>
             <TextField
               fullWidth
               label="Name"
@@ -24,8 +24,8 @@ function ClientForm({ buttonLabel, clientData, handleFormSubmit, handleInputChan
               onChange={handleInputChange}
               required
             />
-          </Grid>
-          <Grid item xs={12}>
+          </Grid2>
+          <Grid2 item xs={12}>
             <TextField
               fullWidth
               label="Email"
@@ -35,8 +35,8 @@ function ClientForm({ buttonLabel, clientData, handleFormSubmit, handleInputChan
               onChange={handleInputChange}
               required
             />
-          </Grid>
-          <Grid item xs={12}>
+          </Grid2>
+          <Grid2 item xs={12}>
             <TextField
               fullWidth
               label="Phone"
@@ -46,8 +46,8 @@ function ClientForm({ buttonLabel, clientData, handleFormSubmit, handleInputChan
               onChange={handleInputChange}
               required
             />
-          </Grid>
-          <Grid item xs={12}>
+          </Grid2>
+          <Grid2 item xs={12}>
             <TextField
               fullWidth
               label="Company"
@@ -55,16 +55,17 @@ function ClientForm({ buttonLabel, clientData, handleFormSubmit, handleInputChan
               value={clientData.company}
               onChange={handleInputChange}
             />
-          </Grid>
-          <Grid item xs={12}>
+          </Grid2>
+          <Grid2 item xs={12}>
             <Button type="submit" variant="contained" fullWidth>
               {buttonLabel}
             </Button>
-          </Grid>
-        </Grid>
+          </Grid2>
+        </Grid2>
       </form>
     </Paper>
   );
-}
-
-export default ClientForm;
+  }
+  
+  export default ClientForm;
+  

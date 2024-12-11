@@ -1,6 +1,6 @@
 // External Libraries
 import axios from "axios";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
 // MUI Libraries
 import { Box, Button, Grid, Typography } from "@mui/material";

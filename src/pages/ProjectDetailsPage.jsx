@@ -25,10 +25,12 @@ function ProjectDetailsPage() {
         clients,
         projects,
         isEditing,
-        setIsEditing,
+        showForm,
         errorMessage,
-        setErrorMessage,
         successMessage,
+        setShowForm,
+        setIsEditing,
+        setErrorMessage,
         setSuccessMessage,
         fetchData,
         handleDeleteClick,
@@ -136,62 +138,74 @@ function ProjectDetailsPage() {
             {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
 
             {isEditing ? (
-                <ProjectForm
-                    projectData={newProject}
-                    handleInputChange={handleInputChange}
-                    handleFormSubmit={handleEditProject}
-                    buttonLabel="Update Project"
-                    clients={clients}
-                />
-            ) : (
-                <>
-                    <Box
-                        sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            mb: 4,
-                        }}
-                    >
-                        <Box>
-                            <Typography variant="h4" gutterBottom>
-                                {project.title || "Untitled Project"}
-                            </Typography>
-                            <Typography variant="subtitle1" color="text.secondary">
-                                Description: {project.description || "No description available."}
-                            </Typography>
-                            <Typography variant="subtitle1" color="text.secondary">
-                                Budget: ${project.budget || "N/A"}
-                            </Typography>
-                            <Typography variant="subtitle1" color="text.secondary">
-                                Status: {project.status || "Unknown"}
-                            </Typography>
-                            <Typography variant="subtitle1" color="text.secondary">
-                                Client: {project.client?.name || "No client assigned"}
-                            </Typography>
-                        </Box>
-                        <Box>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                startIcon={<EditIcon />}
-                                onClick={() => setIsEditing(true)} // Toggle edit mode
-                            >
-                                Edit
-                            </Button>
-                            <Button
-                                variant="outlined"
-                                color="error"
-                                startIcon={<DeleteIcon />}
-                                onClick={() => setOpenDialog(true)}
-                                sx={{ ml: 2 }}
-                            >
-                                Delete
-                            </Button>
-                        </Box>
-                    </Box>
-                </>
-            )}
+    <>
+        <Button
+            variant="contained"
+            color="primary"
+            onClick={() => setIsEditing(false)}
+            sx={{ mb: 2 }}
+        >
+            Hide Form
+        </Button>
+        <ProjectForm
+            projectData={newProject}
+            handleInputChange={handleInputChange}
+            handleFormSubmit={handleEditProject}
+            buttonLabel="Update Project"
+            clients={clients}
+        />
+    </>
+) : (
+    <>
+        <Box
+            sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                mb: 4,
+            }}
+        >
+            <Box>
+                <Typography variant="h4" gutterBottom>
+                    {project.title || "Untitled Project"}
+                </Typography>
+                <Typography variant="subtitle1" color="text.secondary">
+                    Description: {project.description || "No description available."}
+                </Typography>
+                <Typography variant="subtitle1" color="text.secondary">
+                    Budget: ${project.budget || "N/A"}
+                </Typography>
+                <Typography variant="subtitle1" color="text.secondary">
+                    Status: {project.status || "Unknown"}
+                </Typography>
+                <Typography variant="subtitle1" color="text.secondary">
+                    Client: {project.client?.name || "No client assigned"}
+                </Typography>
+            </Box>
+            <Box>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={<EditIcon />}
+                    onClick={() => setIsEditing(true)}
+                >
+                    Edit
+                </Button>
+                <Button
+                    variant="outlined"
+                    color="error"
+                    startIcon={<DeleteIcon />}
+                    onClick={() => setOpenDialog(true)}
+                    sx={{ ml: 2 }}
+                >
+                    Delete
+                </Button>
+            </Box>
+        </Box>
+    </>
+)}
+
+        
 
             <ConfirmationDialog
                 open={openDialog}

@@ -146,11 +146,32 @@ function ClientDetailsPage() {
   }
 
   return (
-    <Box sx={{ padding: '100px 20px 20px 140px', overflow: 'hidden' }}>
+    <Box sx={{ padding: "100px 20px 20px 140px", overflow: "hidden" }}>
+      {/* Alerts */}
       {successMessage && <Alert severity="success">{successMessage}</Alert>}
       {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
 
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 4 }}>
+      {/* Form Toggle Button */}
+      {isEditing && (
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => setIsEditing(false)}
+          sx={{ mb: 2 }}
+        >
+          Hide Form
+        </Button>
+      )}
+
+      {/* Client Details */}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 4,
+        }}
+      >
         <Box>
           <Typography variant="h4" gutterBottom>
             {client.name}
@@ -161,15 +182,12 @@ function ClientDetailsPage() {
           <Typography variant="subtitle1" color="text.secondary">
             Phone: {client.phone}
           </Typography>
-          {/* <Typography variant="subtitle1" color="text.secondary">
-          {client.projects?.length || 0} Projects
-        </Typography> */}
         </Box>
         <Button
           variant="contained"
           color="primary"
           startIcon={<EditIcon />}
-          onClick={handleEditClick}
+          onClick={() => setIsEditing(true)}
           sx={{
             position: "relative",
             top: 0,
@@ -181,39 +199,13 @@ function ClientDetailsPage() {
         </Button>
       </Box>
 
-      {/* Projects Section
-    <Box sx={{ mb: 4 }}>
-      <Typography variant="h5" gutterBottom>
-        Projects
-      </Typography>
-      <Grid container spacing={2}>
-        {client.projects?.length > 0 ? (
-          client.projects.map((project) => (
-            <Grid item xs={12} sm={6} md={4} key={project._id}>
-              <Card variant="outlined" sx={{ borderRadius: 4 }}>
-                <CardContent>
-                  <Typography variant="h6">{project.title}</Typography>
-                  <Typography color="text.secondary">
-                    {project.description || "No description available."}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))
-        ) : (
-          <Typography>No projects associated with this client.</Typography>
-        )}
-      </Grid>
-    </Box> */}
-
       {/* Delete Section */}
-      <Box>
+      <Box sx={{ mt: 4 }}>
         <Typography variant="h6" color="error" gutterBottom>
           Delete Client
         </Typography>
         <Typography variant="body2" color="text.secondary" gutterBottom>
-          ⚠️ *This will delete this client and all projects associated with them.
-          This action cannot be undone.
+          ⚠️ This will delete the client and all projects associated with them. This action cannot be undone.
         </Typography>
         <Button
           variant="outlined"
@@ -225,6 +217,7 @@ function ClientDetailsPage() {
         </Button>
       </Box>
 
+      {/* Confirmation Dialog */}
       <ConfirmationDialog
         open={openDialog}
         handleClose={handleDialogClose}
@@ -239,10 +232,11 @@ function ClientDetailsPage() {
           clientData={newClient}
           handleInputChange={handleInputChange}
           handleFormSubmit={handleEditClient}
-          isEditing={isEditing}
           buttonLabel="Update Client"
         />
       )}
     </Box>
   );
-}; export default ClientDetailsPage;
+};
+
+export default ClientDetailsPage;

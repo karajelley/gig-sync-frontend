@@ -15,7 +15,6 @@ import ProjectsPage from './pages/ProjectsPage.jsx';
 import SignupPage from './pages/authentication/SignupPage.jsx';
 
 
-
 // Wrapper Layout for routes with Navbar
 function Layout({ children }) {
   return (

@@ -29,7 +29,7 @@ function Kanban({
   const onDragEnd = (result) => {
     const { source, destination } = result;
 
-    // If dropped outside a valid destination, do nothing
+    // If dropped outside a valid destination dont do anytghing
     if (!destination) return;
 
     const sourceColumn = columns[source.droppableId];
@@ -38,11 +38,10 @@ function Kanban({
     const destItems = Array.from(destColumn);
     const [movedItem] = sourceItems.splice(source.index, 1);
 
-    // Update the status only if the project is moved to a different column
+    // update the status only if the project is moved to a different column
     if (source.droppableId !== destination.droppableId) {
       movedItem.status = destination.droppableId;
 
-      // Optimistic UI update
       destItems.splice(destination.index, 0, movedItem);
       onProjectUpdate(
         projects.map((project) =>
@@ -61,7 +60,6 @@ function Kanban({
         .catch((error) => {
           console.error("Error updating project status:", error);
 
-          // Rollback UI change if the API call fails
           sourceItems.splice(source.index, 0, movedItem);
           destItems.splice(destination.index, 1);
           onProjectUpdate(

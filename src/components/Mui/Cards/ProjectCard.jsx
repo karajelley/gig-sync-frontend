@@ -38,15 +38,15 @@ function ProjectCard({ project, handleProjectEdit }) {
           <CloseIcon />
         </IconButton>
 
-        {/* Card Content */}
+        {/* display the content */}
         <CardContent>
           <Typography
             variant="h5"
             component="div"
             sx={{
-              whiteSpace: "nowrap",       // Prevent text from wrapping
-              overflow: "hidden",         // Hide overflow text
-              textOverflow: "ellipsis",   // Add ellipsis (...) for overflow
+              whiteSpace: "nowrap",       
+              overflow: "hidden",         
+              textOverflow: "ellipsis",   
             }}
           >
             {project.title || "Untitled Project"}
@@ -63,7 +63,7 @@ function ProjectCard({ project, handleProjectEdit }) {
         </CardContent>
 
 
-        {/* Card Actions */}
+        {/* call functions to perform on click */}
         <CardActions>
           <Button
             onClick={() => handleProjectEdit(project)}
