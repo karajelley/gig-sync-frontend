@@ -24,6 +24,8 @@ function ClientDetailsPage() {
     setSuccessMessage,
   } = useContext(AppContext);
   const client = clients.find((client) => client._id === id);
+  console.log("Client fetched:", client);
+
   const navigate = useNavigate();
 
   const [openDialog, setOpenDialog] = useState(false);
@@ -130,19 +132,24 @@ function ClientDetailsPage() {
   }
 
   return (
-    <Box sx={{ padding: '80px 20px 20px 260px', overflow: 'hidden' }}>
+    <Box sx={{ padding: '100px 20px 20px 140px', overflow: 'hidden' }}>
     {successMessage && <Alert severity="success">{successMessage}</Alert>}
     {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
 
-    {/* Header Section */}
     <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 4 }}>
       <Box>
         <Typography variant="h4" gutterBottom>
           {client.name}
         </Typography>
         <Typography variant="subtitle1" color="text.secondary">
-          {client.projects?.length || 0} Projects
+          Email: {client.email}
         </Typography>
+        <Typography variant="subtitle1" color="text.secondary">
+          Phone: {client.phone}
+        </Typography>
+        {/* <Typography variant="subtitle1" color="text.secondary">
+          {client.projects?.length || 0} Projects
+        </Typography> */}
       </Box>
       <Button
         variant="contained"
@@ -160,7 +167,7 @@ function ClientDetailsPage() {
       </Button>
     </Box>
 
-    {/* Projects Section */}
+    {/* Projects Section
     <Box sx={{ mb: 4 }}>
       <Typography variant="h5" gutterBottom>
         Projects
@@ -183,7 +190,7 @@ function ClientDetailsPage() {
           <Typography>No projects associated with this client.</Typography>
         )}
       </Grid>
-    </Box>
+    </Box> */}
 
     {/* Delete Section */}
     <Box>
