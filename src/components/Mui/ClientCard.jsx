@@ -1,47 +1,50 @@
-import React from "react";
-import { Box, Card, CardContent, CardActions, Button, IconButton, Typography, } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
+import * as React from "react";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardActions,
+  IconButton,
+  Typography,
+} from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 
-function ClientCard ({ client, handleEditClick, handleDeleteClick, onDetailsClick }) {
-
-
+function ClientCard({ client, onEdit, onDetailsClick }) {
   return (
-    <Box sx={{ minWidth: 275, margin: 2, position: "relative" }}>
-      <Card variant="outlined" sx={{ position: "relative", borderRadius: 4 }}>
-        <IconButton
-          size="small"
-          sx={{
-            position: "absolute",
-            top: 5,
-            right: 5,
-          }}
-          onClick={() => handleDeleteClick(client._id)}
-        >
-          <CloseIcon />
-        </IconButton>
+    <Box sx={{ minWidth: 350, margin: 2 }}>
+      <Card variant="outlined" sx={{ borderRadius: 4 }}>
         <CardContent>
-          <Typography
-            gutterBottom
-            sx={{ color: "text.secondary", fontSize: 14 }}
-          ></Typography>
           <Typography variant="h5" component="div">
             {client.name}
           </Typography>
           <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
-            Company: {client.company || "No company specified"}
+            {client.company || "No Company"}
           </Typography>
           <Typography variant="body2">Email: {client.email}</Typography>
           <Typography variant="body2">Phone: {client.phone}</Typography>
         </CardContent>
         <CardActions>
-          <Button size="small" onClick={() => handleEditClick(client)}>
-            Edit Client
+          <IconButton onClick={() => onEdit(client)}
+            sx={{
+              position: "relative",
+              bottom: 140,
+              left: 360,
+            }}
+           >
+          <EditIcon />
+          </IconButton>
+          <Button
+            size="small"
+            onClick={() => onDetailsClick(client._id)}
+            aria-label="View Details"
+          >
+            View Details
           </Button>
-          <Button size="small"  onClick={() => onDetailsClick(client._id)}>View Details</Button>
         </CardActions>
       </Card>
     </Box>
   );
-};
+}
 
 export default ClientCard;
