@@ -1,33 +1,41 @@
 // External Libraries 
 import { useState, useContext } from 'react';
-import { useNavigate,} from 'react-router-dom';
-import { Menu, MenuItem, IconButton, Avatar } from '@mui/material';
+import { useNavigate, } from 'react-router-dom';
+// MUI Libraries
+import { Avatar, IconButton, Menu, MenuItem } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
-import PropTypes from 'prop-types';
 // Internal Libraries / Components
-import { AuthContext } from '../../../context/auth.context'; 
+import { AuthContext } from '../../../context/auth.context';
+
+
 
 function AvatarMenu() {
-  const [anchorEl, setAnchorEl] = useState(null); //open/close the menu
-  const navigate = useNavigate();
+
+  const [anchorEl, setAnchorEl] = useState(null);
+
   const { user, logOutUser } = useContext(AuthContext);
+
+  const navigate = useNavigate();
+
 
   const handleAvatarClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
+
   const handleCloseMenu = () => {
     setAnchorEl(null);
   };
 
-  const handleProfileClick = () => {
-    navigate('/api/profile');
-    handleCloseMenu();
-  };
 
   const handleLogoutClick = () => {
     logOutUser();
+    handleCloseMenu();
+  };
+
+  const handleProfileClick = () => {
+    navigate('/api/profile');
     handleCloseMenu();
   };
 
@@ -69,7 +77,4 @@ function AvatarMenu() {
       </Menu>
     </div>
   );
-}
-
-
-export default AvatarMenu;
+}; export default AvatarMenu;

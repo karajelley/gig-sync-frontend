@@ -1,26 +1,27 @@
 // External Libraries
-import { useContext, useState, useEffect} from "react";
 import axios from "axios";
+import { Navigate, useNavigate } from "react-router-dom";
+import { useContext, useState, useEffect } from "react";
 // MUI Libraries
 import { Box, Button, Grid, Typography } from "@mui/material";
-import { Navigate, useNavigate } from "react-router-dom";
+// Internal Libraries / Components
 import { AppContext } from "../context/AppContext";
-import Alerts from "../components/Mui/Alerts";
-import ClientCard from "../components/Mui/ClientCard";
-import ClientForm from "../components/Mui/ClientForm";
-import ConfirmationDialog from "../components/Mui/ConfirmationDialog";
+import Alerts from "../components/Mui/Modals/Alerts";
+import ClientCard from "../components/Mui/Cards/ClientCard";
+import ClientForm from "../components/Mui/Forms/ClientForm";
+
+
 
 function ClientsPage() {
   const {
     clients,
-    setClients,
+    showForm,
+    setShowForm,
+    isEditing,
+    setIsEditing,
     errorMessage,
     setErrorMessage,
     fetchData,
-    isEditing,
-    setIsEditing,
-    showForm,
-    setShowForm
   } = useContext(AppContext);
 
   const [newClient, setNewClient] = useState({
@@ -33,12 +34,15 @@ function ClientsPage() {
   const [clientToEdit, setClientToEdit] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
 
-  const storedToken = localStorage.getItem("authToken");
   const navigate = useNavigate();
+
+  const storedToken = localStorage.getItem("authToken");
+
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -49,14 +53,14 @@ function ClientsPage() {
   };
 
   const handleEditClick = (client) => {
-    setClientToEdit(client); 
+    setClientToEdit(client);
     setNewClient({
       name: client.name || "",
       email: client.email || "",
       phone: client.phone || "",
       company: client.company || "",
-    }); 
-    setShowForm(true); 
+    });
+    setShowForm(true);
     setIsEditing(true);
   };
 
@@ -66,45 +70,47 @@ function ClientsPage() {
     setSuccessMessage("");
 
     try {
-        if (clientToEdit) {
-            // Edit logic
-            console.log("Editing client:", clientToEdit);
-            const response = await axios.put(
-                `${API_URL}/clients/${clientToEdit._id}`,
-                newClient,
-                {
-                    headers: { Authorization: `Bearer ${storedToken}` },
-                }
-            );
-            console.log("API Response for Edit:", response.data);
-            setSuccessMessage("Client updated successfully!");
-        } else {
-            // Create logic
-            console.log("Creating new client:", newClient);
-            const response = await axios.post(`${API_URL}/clients/`, newClient, {
-                headers: { Authorization: `Bearer ${storedToken}` },
-            });
-            console.log("API Response for Create:", response.data);
-            setSuccessMessage("Client added successfully!");
-        }
-
-        await fetchData(); 
-        setShowForm(false);
-        setClientToEdit(null);
-        setIsEditing(false); 
-    } catch (error) {
-        console.error("Error during form submission:", error.response || error);
-        setErrorMessage(
-            error.response?.data?.message || "Failed to save the client."
+      if (clientToEdit) {
+        // Edit logic
+        console.log("Editing client:", clientToEdit);
+        const response = await axios.put(
+          `${API_URL}/clients/${clientToEdit._id}`,
+          newClient,
+          {
+            headers: { Authorization: `Bearer ${storedToken}` },
+          }
         );
+        console.log("API Response for Edit:", response.data);
+        setSuccessMessage("Client updated successfully!");
+      } else {
+        // Create logic
+        console.log("Creating new client:", newClient);
+        const response = await axios.post(`${API_URL}/clients/`, newClient, {
+          headers: { Authorization: `Bearer ${storedToken}` },
+        });
+        console.log("API Response for Create:", response.data);
+        setSuccessMessage("Client added successfully!");
+      }
+
+      await fetchData();
+      setShowForm(false);
+      setClientToEdit(null);
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Error during form submission:", error.response || error);
+      setErrorMessage(
+        error.response?.data?.message || "Failed to save the client."
+      );
     }
 
     setNewClient({ name: "", email: "", phone: "", company: "" });
-};
+  };
 
   const handleDetailsClick = (clientId) => {
     navigate(`/api/clientdetails/${clientId}`);
   };
+
+
   return (
     <Box
       sx={{
@@ -146,9 +152,9 @@ function ClientsPage() {
         <ClientForm
           clientData={newClient}
           handleInputChange={handleInputChange}
-          handleFormSubmit={handleClientForm} 
+          handleFormSubmit={handleClientForm}
           buttonLabel={isEditing ? "Update Client" : "Add Client"}
-          isEditing={isEditing} 
+          isEditing={isEditing}
         />
       )}
 
@@ -156,9 +162,9 @@ function ClientsPage() {
         <Grid container spacing={2}>
           {clients.map((client) => (
             <Grid key={client._id} item xs={12} sm={6} md={4}>
-              <ClientCard client={client} 
-              onDetailsClick={handleDetailsClick} 
-              onEdit={handleEditClick} 
+              <ClientCard client={client}
+                onDetailsClick={handleDetailsClick}
+                onEdit={handleEditClick}
 
               />
             </Grid>
@@ -167,6 +173,4 @@ function ClientsPage() {
       )}
     </Box>
   );
-}
-
-export default ClientsPage;
+}; export default ClientsPage;

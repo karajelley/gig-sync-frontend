@@ -1,15 +1,20 @@
+// External Libraries 
 import { AppContext } from "../context/AppContext";
 import { Box, Button, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
-import Alerts from "../components/Mui/Alerts";
 import axios from "axios";
+// MUI Libraries
+import Alerts from "../components/Mui/Modals/Alerts";
 import Kanban from "../components/Mui/Kanban";
-import ProjectForm from "../components/Mui/ProjectForm";
+import ProjectForm from "../components/Mui/Forms/ProjectForm";
 // Internal Libraries / Components
 import { API_URL } from "../api/config";
 
+
+
 function ProjectsPage() {
+
   const {
     projects,
     clients,
@@ -32,15 +37,17 @@ function ProjectsPage() {
   });
 
   const [isEditing, setIsEditing] = useState(false);
-  const [openDialog, setOpenDialog] = useState(false);
   const [projectToEdit, setProjectToEdit] = useState(null);
 
-  const storedToken = localStorage.getItem("authToken");
   const navigate = useNavigate();
+
+  const storedToken = localStorage.getItem("authToken");
+
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -50,11 +57,12 @@ function ProjectsPage() {
     }));
   };
 
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
     setSuccessMessage("");
-  
+
     try {
       if (isEditing && projectToEdit) {
         // edit project logic
@@ -65,19 +73,19 @@ function ProjectsPage() {
             headers: { Authorization: `Bearer ${storedToken}` },
           }
         );
-  
+
         setSuccessMessage("Project updated successfully!");
       } else {
         // create new project logic
         await axios.post(`${API_URL}/projects`, newProject, {
           headers: { Authorization: `Bearer ${storedToken}` },
         });
-  
+
         setSuccessMessage("Project added successfully!");
       }
-  
+
       await fetchData();
-  
+
       setShowForm(false);
       setIsEditing(false);
       setProjectToEdit(null);
@@ -94,7 +102,8 @@ function ProjectsPage() {
       );
     }
   };
-  
+
+
   const handleProjectEdit = (project) => {
     setNewProject({
       title: project.title || "",
@@ -108,12 +117,15 @@ function ProjectsPage() {
     setShowForm(true);
   };
 
+
   const handleDetailsClick = (project) => {
     navigate(`/api/projectdetails/${project._id}`);
   };
 
+
   useEffect(() => {
   }, [projects]);
+
 
   return (
     <Box
@@ -180,6 +192,4 @@ function ProjectsPage() {
       )}
     </Box>
   );
-}
-
-export default ProjectsPage;
+}; export default ProjectsPage;

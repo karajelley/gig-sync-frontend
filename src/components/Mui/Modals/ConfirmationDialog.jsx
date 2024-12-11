@@ -1,6 +1,13 @@
+// External Libraries 
+// MUI Libraries
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from "@mui/material";
+// Internal Libraries / Components
 
-function ConfirmationDialog({ open, handleClose, handleConfirm, title, description }) {
+
+
+function ConfirmationDialog({ description, handleClose, handleConfirm, open, title }) {
+
+
   return (
     <Dialog
       open={open}

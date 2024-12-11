@@ -7,8 +7,9 @@ import { Avatar, Box, Button, Typography } from "@mui/material";
 // Internal Libraries / Components
 import { API_URL } from "../api/config"
 import { AuthContext } from "../context/auth.context.jsx";
-import ConfirmationDialog from "../components/Mui/ConfirmationDialog";
-import UserForm from "../components/Mui/UserForm";
+import ConfirmationDialog from "../components/Mui/Modals/ConfirmationDialog.jsx";
+import UserForm from "../components/Mui/Forms/UserForm.jsx";
+
 
 
 function ProfilePage() {
@@ -197,6 +198,4 @@ function ProfilePage() {
     );
 
 
-}
-
-export default ProfilePage;
+}; export default ProfilePage;

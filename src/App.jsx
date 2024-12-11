@@ -1,20 +1,20 @@
 // External Libraries 
 import { Routes, Route, useLocation } from "react-router-dom";
-import { useState } from "react";
-import { AppProvider } from "./context/AppContext.jsx";
+// MUI Libraries
 // Internal Libraries / Components
-import DashboardPage from "./pages/DashboardPage.jsx";
-import Footer from "./components/Footer.jsx";
-import Navbar from "./components/Mui/Navbar.jsx";
-import LoginPage from "./pages/authentication/LoginPage.jsx";
-import NotFoundPage from "./pages/NotFoundPage.jsx";
-import SignupPage from './pages/authentication/SignupPage.jsx';
-import ProjectsPage from './pages/ProjectsPage.jsx';
-import ProfilePage from './pages/ProfilePage.jsx';
-import ClientsPage from "./pages/ClientsPage.jsx";
-import ProjectDetailsPage from "./pages/ProjectDetailsPage.jsx";
 import ClientDetailsPage from "./pages/ClientDetailsPage.jsx";
+import ClientsPage from "./pages/ClientsPage.jsx";
+import DashboardPage from "./pages/DashboardPage.jsx";
 import IsPrivate from "./components/IsPrivate.jsx";
+import LoginPage from "./pages/authentication/LoginPage.jsx";
+import Navbar from "./components/Mui/Navigation/Navbar.jsx";
+import NotFoundPage from "./pages/NotFoundPage.jsx";
+import ProfilePage from './pages/ProfilePage.jsx';
+import ProjectDetailsPage from "./pages/ProjectDetailsPage.jsx";
+import ProjectsPage from './pages/ProjectsPage.jsx';
+import SignupPage from './pages/authentication/SignupPage.jsx';
+
+
 
 // Wrapper Layout for routes with Navbar
 function Layout({ children }) {
@@ -25,6 +25,7 @@ function Layout({ children }) {
     </>
   );
 }
+
 
 function App() {
   return (
@@ -97,6 +98,4 @@ function App() {
       />
     </Routes>
   );
-}
-
-export default App;
+}; export default App;

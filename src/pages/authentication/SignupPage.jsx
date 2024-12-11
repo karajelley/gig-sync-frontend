@@ -1,17 +1,17 @@
 // External Libraries 
-import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 // MUI Libraries
 import {
+  Alert,
+  Avatar,
   Box,
+  Button,
+  Grid,
   Paper,
   TextField,
-  Button,
   Typography,
-  Grid,
-  Avatar,
-  Alert,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 // Internal Libraries / Components
@@ -19,18 +19,19 @@ import { API_URL } from "../../api/config";
 
 
 
-
 function SignupPage() {
+
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
   const [errorMessage, setErrorMessage] = useState(undefined);
 
   const navigate = useNavigate();
 
+  const handleName = (e) => setName(e.target.value);
   const handleEmail = (e) => setEmail(e.target.value);
   const handlePassword = (e) => setPassword(e.target.value);
-  const handleName = (e) => setName(e.target.value);
+
 
   const handleSignupSubmit = (e) => {
     e.preventDefault();
@@ -46,6 +47,7 @@ function SignupPage() {
         setErrorMessage(errorDescription);
       });
   };
+
 
   return (
     <Grid

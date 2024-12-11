@@ -26,8 +26,8 @@ import {
   Work as WorkIcon,
 } from "@mui/icons-material";
 // Internal Libraries / Components
-import { AuthContext } from "../../context/auth.context.jsx";
-import AvatarMenu from './Navigation/AvatarMenu.jsx';
+import { AuthContext } from "../../../context/auth.context.jsx";
+import AvatarMenu from './AvatarMenu.jsx';
 
 
 

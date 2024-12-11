@@ -1,6 +1,13 @@
-import { Grid, TextField, Button, Paper, Typography } from "@mui/material";
+// External Libraries 
+// MUI Libraries
+import { Button, Grid, Paper, TextField, Typography } from "@mui/material";
+// Internal Libraries / Components
 
-function ClientForm({ clientData, handleInputChange, handleFormSubmit, buttonLabel }) {
+
+
+function ClientForm({ buttonLabel, clientData, handleFormSubmit, handleInputChange }) {
+
+
   return (
     <Paper sx={{ padding: 3, marginBottom: 4 }}>
       <Typography variant="h6" gutterBottom>

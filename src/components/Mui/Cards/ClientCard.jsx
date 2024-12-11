@@ -1,4 +1,6 @@
+// External Libraries 
 import * as React from "react";
+// MUI Libraries
 import {
   Box,
   Button,
@@ -9,8 +11,12 @@ import {
   Typography,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
+// Internal Libraries / Components
 
-function ClientCard({ client, onEdit, onDetailsClick }) {
+
+
+function ClientCard({ client, onDetailsClick, onEdit }) {
+
   return (
     <Box sx={{ minWidth: 350, margin: 2 }}>
       <Card variant="outlined" sx={{ borderRadius: 4 }}>
@@ -31,8 +37,8 @@ function ClientCard({ client, onEdit, onDetailsClick }) {
               bottom: 140,
               left: 360,
             }}
-           >
-          <EditIcon />
+          >
+            <EditIcon />
           </IconButton>
           <Button
             size="small"

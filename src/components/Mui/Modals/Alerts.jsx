@@ -1,9 +1,16 @@
+// External Libraries 
 import { useState, useEffect } from "react";
+// MUI Libraries
+// Internal Libraries / Components
 import { Alert } from "@mui/material";
 
+
+
 function Alerts({ errorMessage, successMessage }) {
+
   const [showError, setShowError] = useState(!!errorMessage);
   const [showSuccess, setShowSuccess] = useState(!!successMessage);
+
 
   useEffect(() => {
     if (errorMessage) {
@@ -13,6 +20,7 @@ function Alerts({ errorMessage, successMessage }) {
     }
   }, [errorMessage]);
 
+
   useEffect(() => {
     if (successMessage) {
       setShowSuccess(true);
@@ -20,6 +28,7 @@ function Alerts({ errorMessage, successMessage }) {
       return () => clearTimeout(timer);
     }
   }, [successMessage]);
+
 
   return (
     <>

@@ -3,14 +3,14 @@ import { useContext } from "react";
 // MUI Libraries
 import { Avatar, Box, Button, Grid, Paper, TextField, Typography } from "@mui/material";
 // Internal Libraries
-import { AuthContext } from "../../context/auth.context.jsx";
+import { AuthContext } from "../../../context/auth.context.jsx";
 
 
-function UserForm({ handleInputChange, handleFormSubmit, buttonLabel, handleCancel, handleImageChange }) {
+function UserForm({ buttonLabel, handleCancel, handleFormSubmit, handleImageChange, handleInputChange }) {
 
   const { user } = useContext(AuthContext)
 
-  
+
   return (
     <Grid
       sx={{ height: "100vh", backgroundColor: "#f5f5f5" }}

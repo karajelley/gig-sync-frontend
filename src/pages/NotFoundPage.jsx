@@ -12,7 +12,7 @@ import { AuthContext } from "../context/auth.context";
 function NotFoundPage() {
 
   const { isLoggedIn } = useContext(AuthContext);
-  
+
   const navigate = useNavigate();
 
 

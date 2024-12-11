@@ -25,11 +25,11 @@ function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(undefined);
-  
+
   const { authenticateUser, storeToken } = useContext(AuthContext);
-  
+
   const navigate = useNavigate();
-  
+
 
   const handleEmail = (e) => setEmail(e.target.value);
   const handlePassword = (e) => setPassword(e.target.value);
@@ -54,7 +54,7 @@ function LoginPage() {
       });
   };
 
-  
+
   return (
     <Grid
       container
