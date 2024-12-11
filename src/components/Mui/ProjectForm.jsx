@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, TextField, MenuItem, Button } from "@mui/material";
+import { Box, Button, MenuItem, Paper, TextField } from "@mui/material";
 
 function ProjectForm({
   projectData,
@@ -9,6 +9,7 @@ function ProjectForm({
   clients,
 }) {
   return (
+    <Paper sx={{ padding: 3, marginBottom: 4 }}>
     <form onSubmit={handleFormSubmit}>
       <Box sx={{ mb: 2 }}>
         <TextField
@@ -83,6 +84,7 @@ function ProjectForm({
         {buttonLabel}
       </Button>
     </form>
+    </Paper>
   );
 }
 

@@ -4,7 +4,6 @@ import { useContext, useState, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import Alerts from "../components/Mui/Alerts";
 import axios from "axios";
-import ConfirmationDialog from "../components/Mui/ConfirmationDialog";
 import Kanban from "../components/Mui/Kanban";
 import ProjectForm from "../components/Mui/ProjectForm";
 // Internal Libraries / Components
@@ -13,12 +12,15 @@ import { API_URL } from "../api/config";
 function ProjectsPage() {
   const {
     projects,
-    setProjects,
     clients,
     errorMessage,
-    setErrorMessage,
+    successMessage,
     fetchData,
-    handleDeleteClick,
+    showForm,
+    setProjects,
+    setShowForm,
+    setSuccessMessage,
+    setErrorMessage
   } = useContext(AppContext);
 
   const [newProject, setNewProject] = useState({
@@ -31,10 +33,7 @@ function ProjectsPage() {
 
   const [isEditing, setIsEditing] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
-  const [projectToDelete, setProjectToDelete] = useState(null);
   const [projectToEdit, setProjectToEdit] = useState(null);
-  const [showForm, setShowForm] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
 
   const storedToken = localStorage.getItem("authToken");
   const navigate = useNavigate();
@@ -86,7 +85,7 @@ function ProjectsPage() {
         title: "",
         description: "",
         budget: "",
-        status: "In Progress",
+        status: "To Do",
         client: "",
       });
     } catch (error) {
@@ -96,10 +95,7 @@ function ProjectsPage() {
     }
   };
   
-  
-
   const handleProjectEdit = (project) => {
-    console.log("Project client:", project.client);
     setNewProject({
       title: project.title || "",
       description: project.description || "",
@@ -116,23 +112,7 @@ function ProjectsPage() {
     navigate(`/api/projectdetails/${project._id}`);
   };
 
- 
-  const handleDialogClose = () => {
-    setOpenDialog(false);
-    setProjectToDelete(null);
-  };
-
-const handleConfirmDelete = async () => {
-  if (projectToDelete) {
-    await handleDeleteClick("project", projectToDelete);
-    setOpenDialog(false); 
-    setProjectToDelete(null); 
-  }
-};
-
-
   useEffect(() => {
-    console.log("Projects updated:", projects);
   }, [projects]);
 
   return (
@@ -198,16 +178,6 @@ const handleConfirmDelete = async () => {
           storedToken={storedToken}
         />
       )}
-
-      <ConfirmationDialog
-        open={openDialog}
-        handleClose={handleDialogClose}
-        handleConfirm={handleConfirmDelete}
-        title={"Delete Project?"}
-        description={
-          "Are you sure you want to delete this project? This action cannot be undone."
-        }
-      />
     </Box>
   );
 }

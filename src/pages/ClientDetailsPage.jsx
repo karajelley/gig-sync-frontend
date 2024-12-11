@@ -7,13 +7,14 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ConfirmationDialog from "../components/Mui/ConfirmationDialog";
 import Alert from "../components/Mui/Alerts";
 import ClientForm from "../components/Mui/ClientForm";
-import ProjectCard from "../components/Mui/ProjectCard";
+// import ProjectCard from "../components/Mui/ProjectCard";
 import { API_URL } from "../api/config";
 import axios from "axios";
 
 function ClientDetailsPage() {
   const { id } = useParams();
   const {
+    projects,
     clients,
     fetchData,
     isEditing,
@@ -28,6 +29,8 @@ function ClientDetailsPage() {
 
   const navigate = useNavigate();
 
+  const storedToken = localStorage.getItem("authToken");
+
   const [openDialog, setOpenDialog] = useState(false);
   const [newClient, setNewClient] = useState({
     name: client?.name || "",
@@ -36,7 +39,6 @@ function ClientDetailsPage() {
     company: client?.company || "",
   });
 
-  const storedToken = localStorage.getItem("authToken");
 
   const handleDeleteClick = () => {
     setOpenDialog(true);
