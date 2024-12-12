@@ -1,5 +1,5 @@
 // External Libraries
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import React, { useState } from "react";
@@ -20,8 +20,6 @@ function ProjectDetailsPage() {
   const [openDialog, setOpenDialog] = useState(false);
   const [showExpenseForm, setShowExpenseForm] = useState(false);
   const [expenses, setExpenses] = useState([]);
-
-  
 
   const {
     clients,
@@ -51,6 +49,17 @@ function ProjectDetailsPage() {
     status: project?.status || "To Do",
     client: project?.client?._id || "",
   });
+
+  const fetchProjectDetails = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/projects/${id}`, {
+        headers: { Authorization: `Bearer ${storedToken}` },
+      });
+      setExpenses(response.data.expenses || []); 
+    } catch (error) {
+      console.error("Error fetching project details:", error);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -122,7 +131,8 @@ function ProjectDetailsPage() {
         { ...project, expenses: updatedExpenses },
         { headers: { Authorization: `Bearer ${storedToken}` } }
       );
-      setExpenses(updatedExpenses);
+      fetchProjectDetails();
+      setExpenses(response.data.expenses);
       setShowExpenseForm(false);
     } catch (error) {
       console.error("Error adding expense:", error);
@@ -131,7 +141,15 @@ function ProjectDetailsPage() {
 
   if (!project) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", textAlign: "center" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          textAlign: "center",
+        }}
+      >
         <Typography variant="h6" color="error">
           Loading project details...
         </Typography>
@@ -156,6 +174,11 @@ function ProjectDetailsPage() {
       </Box>
     );
   }
+
+  useEffect(() => {
+    fetchProjectDetails();
+  }, [id]); 
+  
 
   return (
     <Box sx={{ padding: "100px 20px 20px 140px" }}>

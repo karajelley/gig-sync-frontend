@@ -2,11 +2,16 @@ import { useEffect, useContext, useState } from "react";
 import { Box, Grid, Card, CardContent, Typography, Button } from "@mui/material";
 import { AppContext } from "../context/AppContext";
 import { PieChart, Pie, Cell, Legend, Tooltip } from "recharts";
+import { API_URL } from "../api/config";
+import { BarChart } from '@mui/x-charts/BarChart';
+
 
 
 function Dashboard() {
   const { projects, clients, fetchData } = useContext(AppContext);
   const [loading, setLoading] = useState(true);
+  const [budgetExpensesData, setBudgetExpensesData] = useState({ totalBudget: 0, totalExpenses: 0 });
+
   const projectStatusData = [
     { name: "To Do", value: projects.filter((p) => p.status === "To Do").length },
     { name: "In Progress", value: projects.filter((p) => p.status === "In Progress").length },
@@ -15,16 +20,29 @@ function Dashboard() {
 
   useEffect(() => {
     const loadData = async () => {
-        try {
-            await fetchData(); 
-            setLoading(false);
-        } catch (error) {
-            console.error("Error loading data:", error);
-        }
+      try {
+        await fetchData(); // Fetch existing projects and clients
+  
+        // Calculate total budgets and expenses dynamically
+        const totalBudget = projects.reduce((sum, project) => sum + project.budget, 0);
+        const totalExpenses = projects.reduce(
+          (sum, project) => sum + project.expenses.reduce((expenseSum, expense) => expenseSum + expense.amount, 0),
+          0
+        );
+  
+        // Update the state with calculated totals
+        setBudgetExpensesData({ totalBudget, totalExpenses });
+  
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching or calculating data:", error);
+        setLoading(false);
+      }
     };
-
+  
     loadData();
-}, [fetchData]);
+  }, [fetchData]);
+  
 
 if (loading) {
     return <Typography>Loading...</Typography>;
@@ -99,8 +117,6 @@ if (loading) {
       </Card>
     </Grid>
 
-    
-
     {/* Recent Activity */}
     <Grid item xs={12} md={6}>
       <Card>
@@ -117,6 +133,30 @@ if (loading) {
       </Card>
     </Grid>
   </Grid>
+  <Box>
+  <Box>
+      <Typography variant="h6" gutterBottom>
+        Budget vs. Expenses
+      </Typography>
+      <BarChart
+  xAxis={[{ scaleType: "band", data: ["Finance",] }]}
+  series={[
+    {
+      data: [budgetExpensesData.totalBudget], // Budget data
+      label: "Total Budget",
+      color: "#4CAF50", // Green
+    },
+    {
+      data: [budgetExpensesData.totalExpenses], // Expenses data
+      label: "Total Expenses",
+      color: "#F44336", // Red
+    },
+  ]}
+  width={500}
+  height={300}
+/>
+    </Box>
+  </Box>
 </Box>  );
 }
 
