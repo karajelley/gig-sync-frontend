@@ -1,7 +1,7 @@
 // External Libraries
 import { useContext } from "react";
 // MUI Libraries
-import { Avatar, Box, Button, Grid, Paper, TextField, Typography } from "@mui/material";
+import { Avatar, Box, Button, Grid2, Paper, TextField, Typography } from "@mui/material";
 // Internal Libraries
 import { AuthContext } from "../../../context/auth.context.jsx";
 
@@ -12,114 +12,131 @@ function UserForm({ buttonLabel, handleCancel, handleFormSubmit, handleImageChan
 
 
   return (
-    <Grid
-      sx={{ height: "100vh", backgroundColor: "#f5f5f5" }}
-      alignItems="center"
-      container
-      justifyContent="center"
+    <Grid2
+  container
+  alignItems="center"
+  justifyContent="center"
+  sx={{
+    height: "100vh",
+    backgroundColor: "#f5f5f5", 
+  }}
+>
+  <Grid2 item xs={12} sm={10} md={8} lg={6}>
+    <Paper
+      sx={{
+        padding: "48px", 
+        borderRadius: "16px",
+        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)", 
+        textAlign: "center", 
+      }}
     >
-      <Grid item xs={12} sm={8} md={6}>
-        <Paper sx={{ padding: 3, marginBottom: 4 }}>
-          <Typography variant="h6" gutterBottom>
-            {buttonLabel === "Save Changes" ? "Edit Profile" : "Create Profile"}
-          </Typography>
-          <form onSubmit={handleFormSubmit}>
-            <Grid container spacing={2}>
-              {/* Avatar */}
-              <Grid item xs={12} sx={{ textAlign: "center" }}>
-                {user && (
-                  <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
-                    <Avatar
-                      sx={{
-                        bgcolor: "primary.main",
-                        color: "white",
-                        fontSize: 60,
-                        width: 120,
-                        height: 120,
-                      }}
-                      alt="User Avatar"
-                      src={user.avatar ? user.avatar : ""}
-                    >
-                      {!user.avatar && user.name ? user.name[0].toUpperCase() : ""}
-                    </Avatar>
-                  </Box>
-                )}
-                <Button variant="text" component="label" sx={{ marginTop: 0, marginBottom: 1 }}>
-                  + Upload Image
-                  <input
-                    type="file"
-                    hidden
-                    accept="image/*"
-                    onChange={handleImageChange}
-                  />
-                </Button>
-              </Grid>
+      {/* Title */}
+      <Typography
+        variant="h5"
+        sx={{ fontWeight: "bold", marginBottom: "32px" }}
+      >
+        {buttonLabel === "Save Changes" ? "Edit Profile" : "Create Profile"}
+      </Typography>
 
-              {/* Name */}
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Name"
-                  name="name"
-                  value={user.name}
-                  onChange={handleInputChange}
-                  required
-                />
-              </Grid>
+      {/* Avatar */}
+      {user && (
+        <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
+          <Avatar
+            sx={{
+              bgcolor: "primary.main",
+              color: "white",
+              fontSize: "80px", 
+              width: "150px",
+              height: "150px",
+            }}
+            alt="User Avatar"
+            src={user.avatar ? user.avatar : ""}
+          >
+            {!user.avatar && user.name ? user.name[0].toUpperCase() : ""}
+          </Avatar>
+        </Box>
+      )}
+      <Button variant="text" component="label" sx={{ marginBottom: "24px" }}>
+        + Upload Image
+        <input
+          type="file"
+          hidden
+          accept="image/*"
+          onChange={handleImageChange}
+        />
+      </Button>
 
-              {/* Email */}
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Email"
-                  name="email"
-                  type="email"
-                  value={user.email}
-                  onChange={handleInputChange}
-                  required
-                />
-              </Grid>
+      {/* Form here */}
+      <form onSubmit={handleFormSubmit}>
+        <Grid2 container spacing={2}>
+          {/* Name text field */}
+          <Grid2 item xs={12}>
+            <TextField
+              fullWidth
+              label="Name"
+              name="name"
+              value={user.name}
+              onChange={handleInputChange}
+              required
+            />
+          </Grid2>
 
-              {/* Buttons */}
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  width: "100%",
-                  mt: 2,
-                }}
-              >
-                {/* Cancel Button */}
-                <Button
-                  onClick={handleCancel}
-                  variant="text"
-                  sx={{
-                    color: "primary",
-                    borderColor: "gray",
-                    mr: 2,
-                  }}
-                >
-                  Cancel
-                </Button>
+          {/* Email text field */}
+          <Grid2 item xs={12}>
+            <TextField
+              fullWidth
+              label="Email"
+              name="email"
+              type="email"
+              value={user.email}
+              onChange={handleInputChange}
+              required
+            />
+          </Grid2>
+        </Grid2>
 
-                {/* Save Changes Button */}
-                <Button
-                  sx={{
-                    backgroundColor: "primary.main",
-                    width: "auto",
-                    px: 3,
-                  }}
-                  onClick={handleFormSubmit}
-                  variant="contained"
-                >
-                  Save Changes
-                </Button>
-              </Box>
-            </Grid>
-          </form>
-        </Paper>
-      </Grid>
-    </Grid>
+        {/* Buttons */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between", 
+            marginTop: "32px",
+          }}
+        >
+          {/* Cancel Button */}
+          <Button
+            onClick={handleCancel}
+            variant="text"
+            sx={{
+              color: "gray",
+            }}
+          >
+            Cancel
+          </Button>
+
+          {/* button for saving changes */}
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{
+              backgroundColor: "primary.main",
+              color: "white",
+              padding: "10px 32px", 
+              "&:hover": {
+                backgroundColor: "primary.dark",
+              },
+            }}
+          >
+            Save Changes
+          </Button>
+        </Box>
+      </form>
+    </Paper>
+  </Grid2>
+</Grid2>
+
+
+
   );
 }
 

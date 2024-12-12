@@ -190,6 +190,9 @@ function ClientDetailsPage() {
             <Typography variant="subtitle1" color="text.secondary">
               Phone: {client.phone}
             </Typography>
+            <Typography variant="subtitle1" color="text.secondary">
+              Company: {client.company}
+            </Typography>
           </Box>
           <Button
             variant="contained"

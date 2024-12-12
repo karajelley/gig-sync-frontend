@@ -40,10 +40,9 @@ function ProjectsPage() {
   const [projectToEdit, setProjectToEdit] = useState(null);
 
   const navigate = useNavigate();
-
   const storedToken = localStorage.getItem("authToken");
-
-
+  
+  
   useEffect(() => {
     fetchData();
   }, [fetchData]);

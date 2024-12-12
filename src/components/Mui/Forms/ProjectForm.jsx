@@ -1,7 +1,7 @@
 // External Libraries 
 import React from "react";
 // MUI Libraries
-import { Button, Grid2, MenuItem, Paper, TextField } from "@mui/material";
+import { Button, Grid2, MenuItem, TextField } from "@mui/material";
 // Internal Libraries / Components
 
 
@@ -16,7 +16,7 @@ function ProjectForm({
 
 
   return (
-    <Paper sx={{ padding: 3, marginBottom: 4 }}>
+    <Box sx={{ padding: 3, marginBottom: 4 }}>
       <form onSubmit={handleFormSubmit}>
         <Grid2 container spacing={2} direction="column">
           <Grid2 item xs={12}>
@@ -95,7 +95,7 @@ function ProjectForm({
           </Grid2>
         </Grid2>
       </form>
-    </Paper>
+      </Box>
   );
   }
   

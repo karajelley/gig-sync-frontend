@@ -1,6 +1,6 @@
 // External Libraries
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
 // MUI Libraries
 import { Box, Button, Grid, Typography } from "@mui/material";
@@ -115,9 +115,8 @@ function ClientsPage() {
   return (
     <Box
       sx={{
-        marginTop: "100px",
-        marginLeft: "140px",
-        marginRight: "76px",
+        marginTop: "60px",
+        marginLeft: "80px",
         transition: "margin-left 0.3s",
         padding: 2,
       }}
@@ -130,13 +129,13 @@ function ClientsPage() {
           mb: 4,
         }}
       >
-        <Typography variant="h3" gutterBottom>
+        <Typography variant="h4" gutterBottom>
           Clients
         </Typography>
         <Alerts errorMessage={errorMessage} successMessage={successMessage} />
 
         <Button
-          variant={showForm ? 'outlined' : 'contained'}
+          variant="contained"
           color="primary"
           onClick={() => {
             setShowForm((prev) => !prev);
@@ -146,7 +145,7 @@ function ClientsPage() {
           }}
           sx={{ mb: 4 }}
         >
-          {showForm ? "Cancel" : "Create Client"}
+          {showForm ? "Hide Form" : "Create Client"}
         </Button>
       </Box>
 
@@ -161,7 +160,7 @@ function ClientsPage() {
       )}
 
       {!showForm && (
-        <Grid container spacing={4}>
+        <Grid container spacing={2}>
           {clients.map((client) => (
             <Grid key={client._id} item xs={12} sm={6} md={4}>
               <ClientCard client={client}

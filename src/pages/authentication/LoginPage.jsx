@@ -71,7 +71,6 @@ function LoginPage() {
         background: "linear-gradient(to bottom, #1EA6CC, #390ED4)",
       }}
     >
-      {/* Left-hand side with gradient and new content */}
       <Grid
         item
         xs={false}
@@ -87,7 +86,7 @@ function LoginPage() {
           px: 4,
         }}
       >
-        {/* Logo */}
+        {/* field for logo */}
         <Box
           component="img"
           src={LogoVertical}
@@ -97,7 +96,7 @@ function LoginPage() {
         <Typography variant="h5">
         Streamline Your Gigs, Simplify Your Life
         </Typography>
-        {/* Graphic of worker */}
+        {/* add image in this field */}
         <Box
           component="img"
           src={OrganizingProjectsGraphic}
@@ -108,7 +107,7 @@ function LoginPage() {
         <Typography variant="body2" gutterBottom>
           Developed by:
         </Typography>
-        {/* Developer 1 */}
+        {/* Developed by Kara */}
         <Typography variant="body2" sx={{ display: "flex", alignItems: "center" }}>
           Kara Jelley: 
           <Link href="https://github.com/karajelley" target="_blank" color="inherit" sx={{ ml: 1 }}>
@@ -118,7 +117,7 @@ function LoginPage() {
             <LinkedInIcon />
           </Link>
         </Typography>
-        {/* Developer 2 */}
+        {/* Developer by Diego */}
         <Typography variant="body2" sx={{ display: "flex", alignItems: "center" }}>
           Diego Cisneros: 
           <Link href="https://github.com/Kasper1-2" target="_blank" color="inherit" sx={{ ml: 1 }}>
@@ -130,7 +129,7 @@ function LoginPage() {
         </Typography>
       </Grid>
 
-      {/* Right-hand side with login form */}
+      {/* Right-hand side with form */}
       <Grid
         item
         xs={12}
@@ -199,12 +198,6 @@ function LoginPage() {
               Sign In
             </Button>
             <Grid container>
-              <Grid item xs>
-                {/* Forgot Password Button */}
-                {/*<Button href="#" variant="text" size="small">
-                  Forgot password?
-                </Button> */}
-              </Grid>
               <Grid item>
                 <Button onClick={handleSignUpClick} variant="text" size="small">
                   {"Don't have an account? Sign Up"}
@@ -215,6 +208,8 @@ function LoginPage() {
         </Box>
       </Grid>
     </Grid>
+
+
   );
 }
 

@@ -7,17 +7,10 @@ import {
   Card,
   CardContent,
   CardActions,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemSecondaryAction,
   Typography,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 // Internal Libraries / Componentsimport * as React from "react";
 import { AppContext } from "../../../context/AppContext";
-
 
 
 function ProjectCard({ project, handleProjectEdit }) {
@@ -26,7 +19,7 @@ function ProjectCard({ project, handleProjectEdit }) {
     "In Progress": "#0E1BD4",
     "Completed": "#2D9B6F", 
   };
-  const { handleDeleteClick, handleDetailsClick } = useContext(AppContext);
+  const { handleDetailsClick } = useContext(AppContext);
 
 
   return (
