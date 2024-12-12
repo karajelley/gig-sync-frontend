@@ -1,65 +1,81 @@
-import { useState } from "react";
-import { TextField, Button, MenuItem, Box } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Button, TextField, Typography, MenuItem } from "@mui/material";
 
-function ExpenseForm({ onAddExpense }) {
-    const [expenseData, setExpenseData] = useState({
-        description: "",
-        amount: "",
-        category: "",
-    });
+function ExpenseForm({ onAddExpense, onCancel }) {
+  const [expenseData, setExpenseData] = useState({
+    description: "",
+    amount: "",
+    category: "",
+  });
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setExpenseData((prev) => ({ ...prev, [name]: value }));
-    };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setExpenseData((prev) => ({ ...prev, [name]: value }));
+  };
 
-    const handleExpenseSubmit = (e) => {
-        e.preventDefault();
-        onAddExpense(expenseData);
-        setExpenseData({ description: "", amount: "", category: "" });
-    };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onAddExpense(expenseData);
+    setExpenseData({ description: "", amount: "", category: "" });
+  };
 
-    return (
-        <Box component="form" onSubmit={handleExpenseSubmit} sx={{ mt: 2 }}>
-            <TextField
-                label="Description"
-                name="description"
-                value={expenseData.description}
-                onChange={handleChange}
-                fullWidth
-                required
-                sx={{ mb: 2 }}
-            />
-            <TextField
-                label="Amount"
-                name="amount"
-                type="number"
-                value={expenseData.amount}
-                onChange={handleChange}
-                fullWidth
-                required
-                sx={{ mb: 2 }}
-            />
-            <TextField
-                label="Category"
-                name="category"
-                select
-                value={expenseData.category}
-                onChange={handleChange}
-                fullWidth
-                required
-                sx={{ mb: 2 }}
-            >
-                <MenuItem value="Travel">Travel</MenuItem>
-                <MenuItem value="Food">Food</MenuItem>
-                <MenuItem value="Office Supplies">Office Supplies</MenuItem>
-                <MenuItem value="Miscellaneous">Miscellaneous</MenuItem>
-            </TextField>
-            <Button variant="contained" type="submit">
-                Add Expense
-            </Button>
+  return (
+    <Box
+      sx={{
+        border: "1px solid #ccc",
+        borderRadius: 2,
+        padding: 2,
+        marginBottom: 2,
+      }}
+    >
+      <Typography variant="h6">Add Expense</Typography>
+      <form onSubmit={handleSubmit}>
+        <TextField
+          fullWidth
+          label="Description"
+          name="description"
+          value={expenseData.description}
+          onChange={handleInputChange}
+          sx={{ mb: 2 }}
+          required
+        />
+        <TextField
+          fullWidth
+          type="number"
+          label="Amount"
+          name="amount"
+          value={expenseData.amount}
+          onChange={handleInputChange}
+          sx={{ mb: 2 }}
+          required
+        />
+        <TextField
+          fullWidth
+          select
+          label="Category"
+          name="category"
+          value={expenseData.category}
+          onChange={handleInputChange}
+          sx={{ mb: 2 }}
+          required
+        >
+          <MenuItem value="Travel">Travel</MenuItem>
+          <MenuItem value="Food">Food</MenuItem>
+          <MenuItem value="Leisure">Leisure</MenuItem>
+          <MenuItem value="Transport">Transport</MenuItem>
+          <MenuItem value="Miscellaneous">Miscellaneous</MenuItem>
+        </TextField>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Button type="submit" variant="contained" color="primary">
+            Add Expense
+          </Button>
+          <Button onClick={onCancel} variant="outlined" color="secondary">
+            Cancel
+          </Button>
         </Box>
-    );
+      </form>
+    </Box>
+  );
 }
 
 export default ExpenseForm;

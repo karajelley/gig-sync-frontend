@@ -19,6 +19,9 @@ function ProjectDetailsPage() {
   const { id } = useParams();
   const [openDialog, setOpenDialog] = useState(false);
   const [showExpenseForm, setShowExpenseForm] = useState(false);
+  const [expenses, setExpenses] = useState([]);
+
+  
 
   const {
     clients,
@@ -48,22 +51,6 @@ function ProjectDetailsPage() {
     status: project?.status || "To Do",
     client: project?.client?._id || "",
   });
-
-  const [expenses, setExpenses] = useState(project?.expenses || []);
-
-  const handleAddExpense = async (expenseData) => {
-    try {
-        const response = await axios.post(
-            `${API_URL}/expenses`,
-            { ...expenseData, project: id }, // Ensure `id` matches the current project ID
-            { headers: { Authorization: `Bearer ${storedToken}` } }
-        );
-
-        setExpenses((prev) => [...prev, response.data.expense]); // Update state
-    } catch (error) {
-        console.error("Error adding expense:", error.response?.data || error.message);
-    }
-};
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -125,6 +112,32 @@ function ProjectDetailsPage() {
       }
     }
   };
+
+  // handle for expenses
+  const handleAddExpense = async (newExpense) => {
+    try {
+      const updatedExpenses = [...project.expenses, newExpense];
+      const response = await axios.put(
+        `${API_URL}/projects/${project._id}`,
+        { ...project, expenses: updatedExpenses },
+        { headers: { Authorization: `Bearer ${storedToken}` } }
+      );
+      setExpenses(updatedExpenses);
+      setShowExpenseForm(false);
+    } catch (error) {
+      console.error("Error adding expense:", error);
+    }
+  };
+
+  if (!project) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", textAlign: "center" }}>
+        <Typography variant="h6" color="error">
+          Loading project details...
+        </Typography>
+      </Box>
+    );
+  }
 
   if (!project) {
     return (
@@ -223,58 +236,54 @@ function ProjectDetailsPage() {
                 Delete
               </Button>
             </Box>
-          </Box>
-
-          {/* Expenses Section */}
-          <Box>
-            <Typography variant="h5" sx={{ mt: 3 }}>
-              Expenses
-            </Typography>
-            {expenses.length > 0 ? (
-              expenses.map((expense) => (
-                <Box
-                  key={expense._id}
-                  sx={{
-                    mb: 2,
-                    padding: 2,
-                    border: "1px solid #ccc",
-                    borderRadius: 2,
-                  }}
-                >
-                  <Typography variant="subtitle1">
-                    {expense.description}
-                  </Typography>
-                  <Typography variant="body2">
-                    Amount: ${expense.amount}
-                  </Typography>
-                  <Typography variant="body2">
-                    Category: {expense.category}
-                  </Typography>
-                </Box>
-              ))
-            ) : (
-              <Typography
-                variant="body2"
-                sx={{ mt: 2, color: "text.secondary" }}
-              >
-                No expenses available for this project.
+            <Box sx={{ marginTop: 4 }}>
+              <Typography variant="h5" gutterBottom>
+                Expenses
               </Typography>
-            )}
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{ mt: 2 }}
-              onClick={() => setShowExpenseForm((prev) => !prev)}
-            >
-              {showExpenseForm ? "Hide Expense Form" : "Add Expense"}
-            </Button>
-            {showExpenseForm && (
-              <ExpenseForm
-                onAddExpense={handleAddExpense} 
-                handleFormSubmit={handleAddExpense}
-                buttonLabel="Add Expense"
-              />
-            )}
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => setShowExpenseForm((prev) => !prev)}
+                sx={{ mb: 2 }}
+              >
+                {showExpenseForm ? "Hide Expense Form" : "Add Expense"}
+              </Button>
+
+              {showExpenseForm && (
+                <ExpenseForm
+                  onAddExpense={handleAddExpense}
+                  onCancel={() => setShowExpenseForm(false)}
+                />
+              )}
+
+              {expenses.length > 0 ? (
+                expenses.map((expense) => (
+                  <Box
+                    key={expense._id}
+                    sx={{
+                      mb: 2,
+                      padding: 1,
+                      border: "1px solid #ccc",
+                      borderRadius: 2,
+                    }}
+                  >
+                    <Typography variant="subtitle1">
+                      Description: {expense.description}
+                    </Typography>
+                    <Typography variant="body2">
+                      Amount: ${expense.amount}
+                    </Typography>
+                    <Typography variant="body2">
+                      Category: {expense.category}
+                    </Typography>
+                  </Box>
+                ))
+              ) : (
+                <Typography variant="body2" color="text.secondary">
+                  No expenses available for this project.
+                </Typography>
+              )}
+            </Box>
           </Box>
         </>
       )}
