@@ -203,12 +203,11 @@ function ProjectDetailsPage() {
       {isEditing ? (
         <>
           <Button
-            variant="contained"
+            variant="outlined"
             color="primary"
             onClick={() => setIsEditing(false)}
             sx={{ mb: 2 }}
-          >
-            Hide Form
+          >Cancel          
           </Button>
           <ProjectForm
             projectData={newProject}
