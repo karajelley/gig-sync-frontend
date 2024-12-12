@@ -9,6 +9,7 @@ import { BarChart } from "@mui/x-charts/BarChart";
 function Dashboard() {
   const { projects, clients, fetchData } = useContext(AppContext);
   const [loading, setLoading] = useState(true);
+  const [isFetched, setIsFetched] = useState(false);
   const [budgetExpensesData, setBudgetExpensesData] = useState({
     totalBudget: 0,
     totalExpenses: 0,
@@ -29,38 +30,48 @@ function Dashboard() {
     },
   ];
 
-  useEffect(() => {
-    const loadData = async () => {
+   // Fetch data only once
+   useEffect(() => {
+    const fetchInitialData = async () => {
+      setLoading(true);
       try {
-        await fetchData(); // Fetch existing projects and clients
-
-        // Calculate total budgets and expenses dynamically
-        const totalBudget = projects.reduce(
-          (sum, project) => sum + project.budget,
-          0
-        );
-        const totalExpenses = projects.reduce(
-          (sum, project) =>
-            sum +
-            project.expenses.reduce(
-              (expenseSum, expense) => expenseSum + expense.amount,
-              0
-            ),
-          0
-        );
-
-        // Update the state with calculated totals
-        setBudgetExpensesData({ totalBudget, totalExpenses });
-
-        setLoading(false);
+        await fetchData();
+        setIsFetched(true); // Indicate data has been fetched
       } catch (error) {
-        console.error("Error fetching or calculating data:", error);
+        console.error("Error fetching data:", error);
+      } finally {
         setLoading(false);
       }
     };
 
-    loadData();
-  }, [fetchData]);
+    if (!isFetched) {
+      fetchInitialData();
+    }
+  }, [fetchData, isFetched]);
+
+  // Calculate budget and expenses after `projects` updates
+  useEffect(() => {
+    if (projects.length > 0) {
+      const totalBudget = projects.reduce(
+        (sum, project) => sum + (project.budget || 0),
+        0
+      );
+
+      const totalExpenses = projects.reduce(
+        (sum, project) =>
+          sum +
+          (project.expenses
+            ? project.expenses.reduce(
+                (expenseSum, expense) => expenseSum + (expense.amount || 0),
+                0
+              )
+            : 0),
+        0
+      );
+
+      setBudgetExpensesData({ totalBudget, totalExpenses });
+    }
+  }, [projects]);
 
   if (loading) {
     return <Typography>Loading...</Typography>;
