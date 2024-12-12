@@ -142,7 +142,12 @@ function ProfilePage() {
 
 
     return (
-        <Box sx={{ marginTop: "100px", marginLeft: "140px", marginRight: "76px", padding: 2 }}>
+        <Box sx={{       
+            marginTop: "100px",
+            marginLeft: "140px",
+            marginRight: "76px",
+            transition: "margin-left 0.3s",
+            padding: 2, }}>
             {/* Conditional Rendering for Form and Profile */}
             {showForm ? (
                 <UserForm

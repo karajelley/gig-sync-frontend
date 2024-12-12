@@ -124,10 +124,11 @@ function ProjectsPage() {
   return (
     <Box
       sx={{
-        marginTop: "60px",
-        marginLeft: 8,
+        marginTop: "100px",
+        marginLeft: "140px",
+        marginRight: "76px",
         transition: "margin-left 0.3s",
-        padding: 2.0,
+        padding: 2,
       }}
     >
       <Box
@@ -138,7 +139,7 @@ function ProjectsPage() {
           mb: 4,
         }}
       >
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h3" gutterBottom>
           Projects
         </Typography>
         <Alerts errorMessage={errorMessage} successMessage={successMessage} />

@@ -8,28 +8,25 @@ import { Button, Box, Grid, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 // Internal Libraries / Components
-import { API_URL } from "../api/config";
-import Alerts from "../components/Mui/Modals/Alerts";
+import Alert from "../components/Mui/Modals/Alerts";
 import ClientForm from "../components/Mui/Forms/ClientForm";
 import ConfirmationDialog from "../components/Mui/Modals/ConfirmationDialog";
-// import ProjectCard from "../components/Mui/ProjectCard";
+
 
 
 
 function ClientDetailsPage() {
   const { id } = useParams();
   const {
+    API_URL,
     clients,
-    showForm,
-    setShowForm,
     isEditing,
     setIsEditing,
-    errorMessage,
-    setErrorMessage,
-    successMessage,
-    setSuccessMessage,
     fetchData,
   } = useContext(AppContext);
+
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const client = clients.find((client) => client._id === id);
 
@@ -45,17 +42,6 @@ function ClientDetailsPage() {
     company: client?.company || "",
   });
 
-
-  const handleEditClick = () => {
-    setIsEditing(true);
-    setNewClient({
-      name: client.name || "",
-      email: client.email || "",
-      phone: client.phone || "",
-      company: client.company || "",
-      project: client.project || [],
-    });
-  };
 
 
   const handleEditClient = async (e) => {
@@ -146,113 +132,101 @@ function ClientDetailsPage() {
     );
   }
 
-
-
-
-
-
-
-
-
   return (
-    <Box
-      sx={{
-        marginTop: "100px",
-        marginLeft: "140px",
-        marginRight: "76px",
-        transition: "margin-left 0.3s",
-        padding: 2,
-      }}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          mb: 4,
-        }}
-      >
-        <Typography variant="h3" gutterBottom>
-          Clients
-        </Typography>
-        <Alerts errorMessage={errorMessage} successMessage={successMessage} />
+    <Box sx={{ padding: "100px 76px 20px 140px", overflow: "hidden" }}>
+    {/* Alerts */}
+    {successMessage && <Alert severity="success">{successMessage}</Alert>}
+    {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
 
-        <Button
-          variant={showForm ? 'outlined' : 'contained'}
-          color="primary"
-          onClick={() => {
-            setShowForm((prev) => !prev);
-            setIsEditing(false);
-          }}
-          sx={{ mb: 4 }}
-        >
-          {showForm ? "Cancel" : "Edit Client"}
-        </Button>
-      </Box>
-
-      {showForm && (
-        <ClientForm
-          handleInputChange={handleInputChange}
-          handleFormSubmit={handleEditClient}
-          buttonLabel={isEditing ? "Update Client" : "Update Client"}
-          isEditing={isEditing}
-          clientData={newClient}
-        />
-      )}
-      
-      
-      
-      
-  
-      {/* Client Details */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          mb: 4,
-        }}
-      >
-        <Box>
-          <Typography variant="h4" gutterBottom>
-            {client.name}
-          </Typography>
-          <Typography variant="subtitle1" color="text.secondary">
-            Email: {client.email}
-          </Typography>
-          <Typography variant="subtitle1" color="text.secondary">
-            Phone: {client.phone}
-          </Typography>
-        </Box>
-      </Box>
-
-      {/* Delete Section */}
-      <Box sx={{ mt: 4 }}>
-        <Typography variant="h6" gutterBottom>
-          Delete Client
-        </Typography>
-        <Typography variant="body2" sx={{ mb: 2 }} gutterBottom>
-          ⚠️ This will delete the client and all projects associated with them. This action cannot be undone.
-        </Typography>
+    {/* Conditional rendering for the form */}
+    {isEditing ? (
+      <>
         <Button
           variant="outlined"
-          color="error"
-          startIcon={<DeleteIcon />}
-          onClick={handleDeleteClick}
+          color="primary"
+          onClick={() => setIsEditing(false)}
+          sx={{ mb: "32px" }}
         >
-          Delete
+          Cancel
         </Button>
-      </Box>
+        <ClientForm
+          clientData={newClient}
+          handleInputChange={handleInputChange}
+          handleFormSubmit={handleEditClient}
+          buttonLabel="Update Client"
+        />
+      </>
+    ) : (
+      <>
+        {/* Client Details */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: 4,
+          }}
+        >
+          <Box>
+            <Typography variant="h4" gutterBottom>
+              {client.name}
+            </Typography>
+            <Typography variant="subtitle1" color="text.secondary">
+              Email: {client.email}
+            </Typography>
+            <Typography variant="subtitle1" color="text.secondary">
+              Phone: {client.phone}
+            </Typography>
+            <Typography variant="subtitle1" color="text.secondary">
+              Company: {client.company}
+            </Typography>
+          </Box>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<EditIcon />}
+            onClick={() => setIsEditing(true)}
+            sx={{
+              position: "relative",
+              top: 0,
+              right: 0,
+              zIndex: 10,
+            }}
+          >
+            Edit
+          </Button>
+        </Box>
 
-      {/* Confirmation Dialog */}
-      <ConfirmationDialog
-        open={openDialog}
-        handleClose={handleDialogClose}
-        handleConfirm={handleConfirmDelete}
-        title="Delete Client?"
-        description="Are you sure you want to delete this client? This action cannot be undone."
-      />
+        {/* Delete Section */}
+        <Box sx={{ mt: 4 }}>
+          <Typography variant="h6" gutterBottom>
+            Delete Client
+          </Typography>
+          <Typography variant="body2" sx={{ mb: 2 }} gutterBottom>
+            ⚠️ This will delete the client and all projects associated with them. This action cannot be undone.
+          </Typography>
+          <Button
+            variant="outlined"
+            color="error"
+            startIcon={<DeleteIcon />}
+            onClick={handleDeleteClick}
+          >
+            Delete
+          </Button>
+        </Box>
 
-    </Box>
+        {/* Confirmation Dialog */}
+        <ConfirmationDialog
+          open={openDialog}
+          handleClose={handleDialogClose}
+          handleConfirm={handleConfirmDelete}
+          title="Delete Client?"
+          description="Are you sure you want to delete this client? This action cannot be undone."
+        />
+      </>
+    )}
+  </Box>
   );
-}; export default ClientDetailsPage;
+};
+
+export default ClientDetailsPage;
