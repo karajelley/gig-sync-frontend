@@ -116,13 +116,7 @@ function ProjectsPage() {
     setIsEditing(true);
     setShowForm(true);
   };
-
-
-  const handleDetailsClick = (project) => {
-    navigate(`/api/projectdetails/${project._id}`);
-  };
-
-
+  
   useEffect(() => {
   }, [projects]);
 
