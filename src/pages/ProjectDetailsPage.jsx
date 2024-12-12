@@ -5,7 +5,17 @@ import axios from "axios";
 import React, { useState } from "react";
 // MUI Libraries
 import { AppContext } from "../context/AppContext";
-import { Box, Button, Paper, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemSecondaryAction,
+  Paper,
+  Typography,
+} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 // Internal Libraries / Components
@@ -55,7 +65,7 @@ function ProjectDetailsPage() {
       const response = await axios.get(`${API_URL}/projects/${id}`, {
         headers: { Authorization: `Bearer ${storedToken}` },
       });
-      setExpenses(response.data.expenses || []); 
+      setExpenses(response.data.expenses || []);
     } catch (error) {
       console.error("Error fetching project details:", error);
     }
@@ -139,6 +149,31 @@ function ProjectDetailsPage() {
     }
   };
 
+  // handle deleteing expenses
+
+  const handleDeleteExpense = async (expenseId) => {
+    try {
+      // Filter out the deleted expense from the local state
+      const updatedExpenses = expenses.filter(
+        (expense) => expense._id !== expenseId
+      );
+
+      // Update the project with the new expenses array
+      const response = await axios.put(
+        `${API_URL}/projects/${project._id}`,
+        { ...project, expenses: updatedExpenses },
+        { headers: { Authorization: `Bearer ${storedToken}` } }
+      );
+
+      // Update the state with the filtered expenses
+      setExpenses(updatedExpenses);
+
+      console.log("Expense deleted successfully:", response.data);
+    } catch (error) {
+      console.error("Error deleting expense:", error);
+    }
+  };
+
   if (!project) {
     return (
       <Box
@@ -177,8 +212,7 @@ function ProjectDetailsPage() {
 
   useEffect(() => {
     fetchProjectDetails();
-  }, [id]); 
-  
+  }, [id]);
 
   return (
     <Box sx={{ padding: "100px 20px 20px 140px" }}>
@@ -280,27 +314,33 @@ function ProjectDetailsPage() {
               )}
 
               {expenses.length > 0 ? (
-                expenses.map((expense) => (
-                  <Box
-                    key={expense._id}
-                    sx={{
-                      mb: 2,
-                      padding: 1,
-                      border: "1px solid #ccc",
-                      borderRadius: 2,
-                    }}
-                  >
-                    <Typography variant="subtitle1">
-                      Description: {expense.description}
-                    </Typography>
-                    <Typography variant="body2">
-                      Amount: ${expense.amount}
-                    </Typography>
-                    <Typography variant="body2">
-                      Category: {expense.category}
-                    </Typography>
-                  </Box>
-                ))
+                <List>
+                  {expenses.map((expense) => (
+                    <ListItem
+                      key={expense._id}
+                      sx={{
+                        border: "1px solid #ccc",
+                        borderRadius: 2,
+                        marginBottom: 1,
+                        padding: 1,
+                      }}
+                    >
+                      <ListItemText
+                        primary={`Description: ${expense.description}`}
+                        secondary={`Amount: $${expense.amount} | Category: ${expense.category}`}
+                      />
+                      <ListItemSecondaryAction>
+                        <IconButton
+                          edge="end"
+                          aria-label="delete"
+                          onClick={() => handleDeleteExpense(expense._id)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </ListItemSecondaryAction>
+                    </ListItem>
+                  ))}
+                </List>
               ) : (
                 <Typography variant="body2" color="text.secondary">
                   No expenses available for this project.
