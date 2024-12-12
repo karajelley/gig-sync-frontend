@@ -1,6 +1,6 @@
 // External Libraries 
 // MUI Libraries
-import { Button, Grid2, Paper, TextField, Typography } from "@mui/material";
+import { Box, Button, Grid2, TextField, Typography } from "@mui/material";
 // Internal Libraries / Components
 
 
@@ -9,7 +9,7 @@ function ClientForm({ buttonLabel, clientData, handleFormSubmit, handleInputChan
 
 
   return (
-    <Paper sx={{ padding: 3, marginBottom: 4 }}>
+    <Box sx={{ marginBottom: "64px" }}>
       <Typography variant="h6" gutterBottom>
         {buttonLabel === "Add Client" ? "Add New Client" : "Edit Client"}
       </Typography>
@@ -56,14 +56,16 @@ function ClientForm({ buttonLabel, clientData, handleFormSubmit, handleInputChan
               onChange={handleInputChange}
             />
           </Grid2>
-          <Grid2 item xs={12}>
-            <Button type="submit" variant="contained" fullWidth>
-              {buttonLabel}
-            </Button>
+          <Grid2 item xs={12 }>
+            <Box display="flex" justifyContent="flex-end">
+              <Button type="submit" variant="contained">
+                {buttonLabel}
+              </Button>
+            </Box>
           </Grid2>
         </Grid2>
       </form>
-    </Paper>
+    </Box>
   );
   }
   

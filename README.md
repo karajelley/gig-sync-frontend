@@ -52,7 +52,7 @@ GigSync is a Service Project Management CMS platform designed to help freelancer
    ```
 
 5. **Access the application at**:  
-   `http://localhost:3000`
+   `http://localhost:5173`
 
 ---
 
@@ -77,6 +77,29 @@ The application follows a modular structure:
 
 - `src/components`: Reusable UI components.
 - `src/pages`: Main application pages.
+
+---
+
+### Frontend Routes
+
+| Route                        | Component         | Purpose                                              |
+| ---------------------------- | ----------------- | ---------------------------------------------------- |
+| `/login`                     | `Login`           | Initial login page for user authentication.          |
+| `/signup`                    | `Signup`          | Registration page for new users.                     |
+| `/api/dashboard`             | `Dashboard`       | Overview of user’s projects and clients.             |
+| `/api/projects`              | `ProjectsList`    | Displays a list of all projects.                     |
+| `/api/projectdetails/:id`    | `ProjectDetails`  | Displays details of a specific project.              |
+| `/api/clients`               | `ClientsList`     | Displays a list of all clients.                      |
+| `/api/clientdetails/:id`     | `ClientDetails`   | Displays details of a specific client.               |
+| `/api/profile`               | `Profile`         | Allows users to adjust account settings.             |
+
+
+---
+
+## Documentation
+
+- [**Confluence**](https://karajelley.atlassian.net/wiki/spaces/GigSync/overview): Comprehensive project documentation.
+- [**Jira**](https://karajelley.atlassian.net/jira/software/projects/PROJ/boards/1?selectedIssue=PROJ-37): Task and issue tracking for the Gig Sync development team.
 
 ---
 

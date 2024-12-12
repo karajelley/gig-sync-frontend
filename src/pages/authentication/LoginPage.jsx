@@ -44,8 +44,11 @@ function LoginPage() {
       .then((response) => {
         console.log("Login successful:", response.data);
         storeToken(response.data.authToken);
-        authenticateUser();
+        return authenticateUser();
+      })
+      .then(()=>{
         navigate("/api/dashboard");
+
       })
       .catch((error) => {
         console.error("Login error:", error);

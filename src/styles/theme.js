@@ -3,20 +3,20 @@ import { createTheme } from "@mui/material/styles";
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#342ED2", // Replace with your desired primary color
-      light: "#63a4ff", // Optional: lighter shade of primary
-      dark: "#004ba0",  // Optional: darker shade of primary
-      contrastText: "#fff", // Optional: text color for primary buttons
+      main: "#342ED2", // Primary color
+      light: "#646AF0", // Lighter shade of primary
+      dark: "#1F1BA1",  // Darker shade of primary
+      contrastText: "#ffffff", // Text color for primary buttons
     },
     secondary: {
-      main: "#1EA6CC", // Replace with your desired secondary color
-      light: "#ff6090", // Optional: lighter shade of secondary
-      dark: "#b0003a",  // Optional: darker shade of secondary
-      contrastText: "#fff", // Optional: text color for secondary buttons
+      main: "#1EA6CC", // Secondary color
+      light: "#61C3E0", // Lighter shade of secondary
+      dark: "#137A99",  // Darker shade of secondary
+      contrastText: "#ffffff", // Text color for secondary buttons
     },
   },
   typography: {
-    fontFamily: "Roboto, Arial, sans-serif", // Customize typography if needed
+    fontFamily: "Roboto, Arial, sans-serif", // Default font family
   },
 });
 

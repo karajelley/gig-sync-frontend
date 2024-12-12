@@ -17,138 +17,138 @@ import ConfirmationDialog from "../components/Mui/Modals/ConfirmationDialog";
 
 
 function ClientDetailsPage() {
-  const { id } = useParams();
-  const {
-    projects,
-    clients,
-    isEditing,
-    setIsEditing,
-    errorMessage,
-    setErrorMessage,
-    successMessage,
-    setSuccessMessage,
-    fetchData,
-  } = useContext(AppContext);
+    const { id } = useParams();
+    const {
+        projects,
+        clients,
+        isEditing,
+        setIsEditing,
+        errorMessage,
+        setErrorMessage,
+        successMessage,
+        setSuccessMessage,
+        fetchData,
+    } = useContext(AppContext);
 
-  const client = clients.find((client) => client._id === id);
+    const client = clients.find((client) => client._id === id);
 
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const storedToken = localStorage.getItem("authToken");
+    const storedToken = localStorage.getItem("authToken");
 
-  const [openDialog, setOpenDialog] = useState(false);
-  const [newClient, setNewClient] = useState({
-    name: client?.name || "",
-    email: client?.email || "",
-    phone: client?.phone || "",
-    company: client?.company || "",
-  });
-
-
-  const handleEditClick = () => {
-    setIsEditing(true);
-    setNewClient({
-      name: client.name || "",
-      email: client.email || "",
-      phone: client.phone || "",
-      company: client.company || "",
-      project: client.project || [],
+    const [openDialog, setOpenDialog] = useState(false);
+    const [newClient, setNewClient] = useState({
+        name: client?.name || "",
+        email: client?.email || "",
+        phone: client?.phone || "",
+        company: client?.company || "",
     });
-  };
 
 
-  const handleEditClient = async (e) => {
-    e.preventDefault();
-    setErrorMessage("");
-    setSuccessMessage("");
-    try {
-      const response = await axios.put(`${API_URL}/clients/${id}`, newClient, {
-        headers: { Authorization: `Bearer ${storedToken}` },
-      });
+    const handleEditClick = () => {
+        setIsEditing(true);
+        setNewClient({
+            name: client.name || "",
+            email: client.email || "",
+            phone: client.phone || "",
+            company: client.company || "",
+            project: client.project || [],
+        });
+    };
 
-      await fetchData();
 
-      setSuccessMessage("Client updated successfully!");
-      setIsEditing(false);
-    } catch (error) {
-      console.error("Error during client update:", error);
+    const handleEditClient = async (e) => {
+        e.preventDefault();
+        setErrorMessage("");
+        setSuccessMessage("");
+        try {
+            const response = await axios.put(`${API_URL}/clients/${id}`, newClient, {
+                headers: { Authorization: `Bearer ${storedToken}` },
+            });
 
-      if (error.response) {
-        console.error("API Error Response:", error.response.data);
-        setErrorMessage(
-          error.response.data.message || "Failed to update the client."
+            await fetchData();
+
+            setSuccessMessage("Client updated successfully!");
+            setIsEditing(false);
+        } catch (error) {
+            console.error("Error during client update:", error);
+
+            if (error.response) {
+                console.error("API Error Response:", error.response.data);
+                setErrorMessage(
+                    error.response.data.message || "Failed to update the client."
+                );
+            } else if (error.request) {
+                console.error("No response received from API:", error.request);
+                setErrorMessage("No response from the server. Please try again later.");
+            } else {
+                console.error("Unexpected error:", error.message);
+                setErrorMessage("An error occurred: " + error.message);
+            }
+        }
+    };
+
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewClient((prevClient) => ({
+            ...prevClient,
+            [name]: value,
+        }));
+    };
+
+
+    const handleDeleteClick = () => {
+        setOpenDialog(true);
+    };
+
+
+    const handleDialogClose = () => {
+        setOpenDialog(false);
+    };
+
+
+    const handleConfirmDelete = async () => {
+        try {
+            await axios.delete(`${API_URL}/clients/${id}`, {
+                headers: { Authorization: `Bearer ${storedToken}` },
+            });
+
+            setSuccessMessage("Client deleted successfully!");
+            navigate("/api/clientspage");
+        } catch (error) {
+            console.error("Error during deletion:", error.response || error);
+            setErrorMessage(
+                error.response?.data?.message || "Failed to delete the client."
+            );
+        } finally {
+            setOpenDialog(false);
+        }
+    };
+
+
+    if (!client) {
+        return (
+            <Box
+                sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "100vh",
+                    textAlign: "center",
+                }}
+            >
+                <Typography variant="h6" color="error">
+                    Client not found.
+                </Typography>
+            </Box>
         );
-      } else if (error.request) {
-        console.error("No response received from API:", error.request);
-        setErrorMessage("No response from the server. Please try again later.");
-      } else {
-        console.error("Unexpected error:", error.message);
-        setErrorMessage("An error occurred: " + error.message);
-      }
     }
-  };
 
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewClient((prevClient) => ({
-      ...prevClient,
-      [name]: value,
-    }));
-  };
-
-
-  const handleDeleteClick = () => {
-    setOpenDialog(true);
-  };
-
-
-  const handleDialogClose = () => {
-    setOpenDialog(false);
-  };
-
-
-  const handleConfirmDelete = async () => {
-    try {
-      await axios.delete(`${API_URL}/clients/${id}`, {
-        headers: { Authorization: `Bearer ${storedToken}` },
-      });
-
-      setSuccessMessage("Client deleted successfully!");
-      navigate("/api/clientspage");
-    } catch (error) {
-      console.error("Error during deletion:", error.response || error);
-      setErrorMessage(
-        error.response?.data?.message || "Failed to delete the client."
-      );
-    } finally {
-      setOpenDialog(false);
-    }
-  };
-
-
-  if (!client) {
     return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          textAlign: "center",
-        }}
-      >
-        <Typography variant="h6" color="error">
-          Client not found.
-        </Typography>
-      </Box>
-    );
-  }
-
-  return (
-    <Box sx={{ padding: "100px 76px 20px 140px", overflow: "hidden" }}>
-                  {/* Conditional Rendering for Form and Client Details */}
-                  {showForm ? (
+        <Box sx={{ padding: "100px 76px 20px 140px", overflow: "hidden" }}>
+            {/* Conditional Rendering for Form and Client Details */}
+            {showForm ? (
                 <UserForm
                     handleInputChange={handleInputChange}
                     handleFormSubmit={handleFormSubmit}
@@ -157,123 +157,123 @@ function ClientDetailsPage() {
                     handleCancel={handleCancel}
                 />
             ) : (
-      <Box sx={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        width: "100%",
-        mb: 4,
-      }}>
-        <Typography variant="h4" gutterBottom>
-          {client.name}
-        </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<EditIcon />}
-          onClick={() => setIsEditing(true)}
-          sx={{
-            position: "relative",
-            top: 0,
-            right: 0,
-            zIndex: 10,
-          }}
-        >
-          Edit
-        </Button>
-      </Box>
+                <Box sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    width: "100%",
+                    mb: 4,
+                }}>
+                    <Typography variant="h4" gutterBottom>
+                        {client.name}
+                    </Typography>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        startIcon={<EditIcon />}
+                        onClick={() => setIsEditing(true)}
+                        sx={{
+                            position: "relative",
+                            top: 0,
+                            right: 0,
+                            zIndex: 10,
+                        }}
+                    >
+                        Edit
+                    </Button>
+                </Box>
 
 
       {/* Alerts */}
-      {successMessage && <Alert severity="success">{successMessage}</Alert>}
-      {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+            {successMessage && <Alert severity="success">{successMessage}</Alert>}
+            {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
 
-      {/* Form Toggle Button */}
-      {isEditing && (
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => setIsEditing(false)}
-          sx={{ mb: 2 }}
-        >
-          Hide Form
-        </Button>
-      )}
+            {/* Form Toggle Button */}
+            {isEditing && (
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => setIsEditing(false)}
+                    sx={{ mb: 2 }}
+                >
+                    Hide Form
+                </Button>
+            )}
 
-      {/* Client Details */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          mb: 4,
-        }}
-      >
-        <Box>
-          <Typography variant="h4" gutterBottom>
-            {client.name}
-          </Typography>
-          <Typography variant="subtitle1" color="text.secondary">
-            Email: {client.email}
-          </Typography>
-          <Typography variant="subtitle1" color="text.secondary">
-            Phone: {client.phone}
-          </Typography>
+            {/* Client Details */}
+            <Box
+                sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    mb: 4,
+                }}
+            >
+                <Box>
+                    <Typography variant="h4" gutterBottom>
+                        {client.name}
+                    </Typography>
+                    <Typography variant="subtitle1" color="text.secondary">
+                        Email: {client.email}
+                    </Typography>
+                    <Typography variant="subtitle1" color="text.secondary">
+                        Phone: {client.phone}
+                    </Typography>
+                </Box>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={<EditIcon />}
+                    onClick={() => setIsEditing(true)}
+                    sx={{
+                        position: "relative",
+                        top: 0,
+                        right: 0,
+                        zIndex: 10,
+                    }}
+                >
+                    Edit
+                </Button>
+            </Box>
+
+            {/* Delete Section */}
+            <Box sx={{ mt: 4 }}>
+                <Typography variant="h6" gutterBottom>
+                    Delete Client
+                </Typography>
+                <Typography variant="body2" sx={{ mb: 2 }} gutterBottom>
+                    ⚠️ This will delete the client and all projects associated with them. This action cannot be undone.
+                </Typography>
+                <Button
+                    variant="outlined"
+                    color="error"
+                    startIcon={<DeleteIcon />}
+                    onClick={handleDeleteClick}
+                >
+                    Delete
+                </Button>
+            </Box>
+
+            {/* Confirmation Dialog */}
+            <ConfirmationDialog
+                open={openDialog}
+                handleClose={handleDialogClose}
+                handleConfirm={handleConfirmDelete}
+                title="Delete Client?"
+                description="Are you sure you want to delete this client? This action cannot be undone."
+            />
+
+            {/* Edit Form */}
+            {isEditing && (
+                <ClientForm
+                    clientData={newClient}
+                    handleInputChange={handleInputChange}
+                    handleFormSubmit={handleEditClient}
+                    buttonLabel="Update Client"
+                />
+            )}
         </Box>
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<EditIcon />}
-          onClick={() => setIsEditing(true)}
-          sx={{
-            position: "relative",
-            top: 0,
-            right: 0,
-            zIndex: 10,
-          }}
-        >
-          Edit
-        </Button>
-      </Box>
-
-      {/* Delete Section */}
-      <Box sx={{ mt: 4 }}>
-        <Typography variant="h6" gutterBottom>
-          Delete Client
-        </Typography>
-        <Typography variant="body2" sx={{ mb: 2 }} gutterBottom>
-          ⚠️ This will delete the client and all projects associated with them. This action cannot be undone.
-        </Typography>
-        <Button
-          variant="outlined"
-          color="error"
-          startIcon={<DeleteIcon />}
-          onClick={handleDeleteClick}
-        >
-          Delete
-        </Button>
-      </Box>
-
-      {/* Confirmation Dialog */}
-      <ConfirmationDialog
-        open={openDialog}
-        handleClose={handleDialogClose}
-        handleConfirm={handleConfirmDelete}
-        title="Delete Client?"
-        description="Are you sure you want to delete this client? This action cannot be undone."
-      />
-
-      {/* Edit Form */}
-      {isEditing && (
-        <ClientForm
-          clientData={newClient}
-          handleInputChange={handleInputChange}
-          handleFormSubmit={handleEditClient}
-          buttonLabel="Update Client"
-        />
-      )}
-    </Box>
-  );
+    );
 };
 
 export default ClientDetailsPage;

@@ -152,15 +152,23 @@ function ClientDetailsPage() {
       {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
 
       {/* Form Toggle Button */}
+      <Box>
+
+
+
+      </Box>
       {isEditing && (
+        <Box>
+
         <Button
-          variant="contained"
-          color="secondary"
+          variant="outlined"
+          color="primary"
           onClick={() => setIsEditing(false)}
-          sx={{ mb: 2 }}
+          sx={{ mb: "32px" }}
         >
-          Hide Form
+          Cancel
         </Button>
+        </Box>
       )}
 
       {/* Client Details */}

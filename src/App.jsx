@@ -30,6 +30,7 @@ function App() {
   return (
     <Routes>
       {/* Routes without Navbar */}
+      <Route path="/" element={<LoginPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
       <Route path="*" element={<NotFoundPage />} />
