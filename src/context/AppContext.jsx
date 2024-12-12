@@ -17,8 +17,8 @@ export const AppProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const [showForm, setShowForm] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
-    const [errorMessage, setErrorMessage] = useState(null);
-    const [successMessage, setSuccessMessage] = useState(null);
+    const [successMessage, setSuccessMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     const navigate = useNavigate();
 
@@ -64,7 +64,6 @@ export const AppProvider = ({ children }) => {
 
 
     const handleDeleteClick = async (type, id) => {
-        console.log("Deleting item:", { type, id });
         const storedToken = localStorage.getItem("authToken");
 
         try {
@@ -73,7 +72,6 @@ export const AppProvider = ({ children }) => {
             });
             setProjects((prev) => prev.filter((project) => project._id !== id));
             setClients((prev) => prev.filter((client) => client._id !== id));
-            console.log(`${type} deleted successfully!`);
         } catch (error) {
             console.error(`Failed to delete ${type}:`, error);
             setErrorMessage(
@@ -101,6 +99,7 @@ export const AppProvider = ({ children }) => {
     return (
         <AppContext.Provider
             value={{
+                API_URL,
                 clients,
                 setClients,
                 projects,
@@ -111,10 +110,6 @@ export const AppProvider = ({ children }) => {
                 setShowForm,
                 isEditing,
                 setIsEditing,
-                errorMessage,
-                setErrorMessage,
-                successMessage,
-                setSuccessMessage,
                 fetchData,
                 handleDetailsClick,
                 handleDeleteClick,

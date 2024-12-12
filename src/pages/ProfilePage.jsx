@@ -7,7 +7,6 @@ import { Avatar, Box, Button, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 // Internal Libraries / Components
-import { API_URL } from "../api/config"
 import { AuthContext } from "../context/auth.context.jsx";
 import ConfirmationDialog from "../components/Mui/Modals/ConfirmationDialog.jsx";
 import fileService from "../services/file-upload.service.js";
@@ -26,7 +25,7 @@ function ProfilePage() {
     const [openDialog, setOpenDialog] = useState(false);
     const [showForm, setShowForm] = useState(false);
 
-    const { user, setUser, storeToken, logOutUser } = useContext(AuthContext);
+    const { API_URL, user, setUser, storeToken, logOutUser } = useContext(AuthContext);
 
     const navigate = useNavigate();
 

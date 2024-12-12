@@ -9,25 +9,31 @@ import Alerts from "../components/Mui/Modals/Alerts";
 import Kanban from "../components/Mui/Kanban";
 import ProjectForm from "../components/Mui/Forms/ProjectForm";
 // Internal Libraries / Components
-import { API_URL } from "../api/config";
 
 
 
 function ProjectsPage() {
 
   const {
+    API_URL,
     projects,
     clients,
-    errorMessage,
-    successMessage,
     fetchData,
     showForm,
     setProjects,
     setShowForm,
-    setSuccessMessage,
-    setErrorMessage
+  
   } = useContext(AppContext);
 
+  
+  const [isEditing, setIsEditing] = useState(false);
+  const [projectToEdit, setProjectToEdit] = useState(null);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  
+  const navigate = useNavigate();
+  const storedToken = localStorage.getItem("authToken");
+  
   const [newProject, setNewProject] = useState({
     title: "",
     description: "",
@@ -35,13 +41,6 @@ function ProjectsPage() {
     status: "In Progress",
     client: "",
   });
-
-  const [isEditing, setIsEditing] = useState(false);
-  const [projectToEdit, setProjectToEdit] = useState(null);
-
-  const navigate = useNavigate();
-  const storedToken = localStorage.getItem("authToken");
-  
   
   useEffect(() => {
     fetchData();
@@ -162,8 +161,6 @@ function ProjectsPage() {
           {showForm ? "Hide Form" : "Create Project"}
         </Button>
       </Box>
-      {showForm &&
-        console.log("Form Props:", { projectData: newProject, clients })}
       {showForm && (
         <ProjectForm
           clients={clients}

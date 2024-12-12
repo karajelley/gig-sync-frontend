@@ -8,7 +8,6 @@ import { Button, Box, Grid, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 // Internal Libraries / Components
-import { API_URL } from "../api/config";
 import Alert from "../components/Mui/Modals/Alerts";
 import ClientForm from "../components/Mui/Forms/ClientForm";
 import ConfirmationDialog from "../components/Mui/Modals/ConfirmationDialog";
@@ -19,16 +18,15 @@ import ConfirmationDialog from "../components/Mui/Modals/ConfirmationDialog";
 function ClientDetailsPage() {
   const { id } = useParams();
   const {
-    projects,
+    API_URL,
     clients,
     isEditing,
     setIsEditing,
-    errorMessage,
-    setErrorMessage,
-    successMessage,
-    setSuccessMessage,
     fetchData,
   } = useContext(AppContext);
+
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const client = clients.find((client) => client._id === id);
 
@@ -44,17 +42,6 @@ function ClientDetailsPage() {
     company: client?.company || "",
   });
 
-
-  const handleEditClick = () => {
-    setIsEditing(true);
-    setNewClient({
-      name: client.name || "",
-      email: client.email || "",
-      phone: client.phone || "",
-      company: client.company || "",
-      project: client.project || [],
-    });
-  };
 
 
   const handleEditClient = async (e) => {

@@ -11,16 +11,14 @@ import {
   IconButton,
   List,
   ListItem,
-  ListItemText,
   ListItemSecondaryAction,
-  Paper,
+  ListItemText,
   Typography,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 // Internal Libraries / Components
-import { API_URL } from "../api/config";
-import Alert from "../components/Mui/Modals/Alerts";
+import Alerts from "../components/Mui/Modals/Alerts";
 import ConfirmationDialog from "../components/Mui/Modals/ConfirmationDialog";
 import ProjectForm from "../components/Mui/Forms/ProjectForm";
 import ExpenseForm from "../components/Mui/Forms/ExpenseForm";
@@ -32,16 +30,11 @@ function ProjectDetailsPage() {
   const [expenses, setExpenses] = useState([]);
 
   const {
+    API_URL,
     clients,
     projects,
     isEditing,
-    showForm,
-    errorMessage,
-    successMessage,
-    setShowForm,
     setIsEditing,
-    setErrorMessage,
-    setSuccessMessage,
     fetchData,
     handleDeleteClick,
   } = useContext(AppContext);
@@ -49,8 +42,10 @@ function ProjectDetailsPage() {
   const navigate = useNavigate();
 
   const storedToken = localStorage.getItem("authToken");
-
   const project = projects.find((project) => project._id === id);
+
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [newProject, setNewProject] = useState({
     title: project?.title || "",
@@ -69,14 +64,6 @@ function ProjectDetailsPage() {
     } catch (error) {
       console.error("Error fetching project details:", error);
     }
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewProject((prevProject) => ({
-      ...prevProject,
-      [name]: value,
-    }));
   };
 
   const handleDialogClose = () => {
@@ -109,7 +96,6 @@ function ProjectDetailsPage() {
         }
       );
 
-      console.log("Project updated successfully:", response.data);
       await fetchData();
 
       setSuccessMessage("Project updated successfully!");
@@ -153,22 +139,17 @@ function ProjectDetailsPage() {
 
   const handleDeleteExpense = async (expenseId) => {
     try {
-      // Filter out the deleted expense from the local state
       const updatedExpenses = expenses.filter(
         (expense) => expense._id !== expenseId
       );
 
-      // Update the project with the new expenses array
       const response = await axios.put(
         `${API_URL}/projects/${project._id}`,
         { ...project, expenses: updatedExpenses },
         { headers: { Authorization: `Bearer ${storedToken}` } }
       );
 
-      // Update the state with the filtered expenses
       setExpenses(updatedExpenses);
-
-      console.log("Expense deleted successfully:", response.data);
     } catch (error) {
       console.error("Error deleting expense:", error);
     }
@@ -216,8 +197,8 @@ function ProjectDetailsPage() {
 
   return (
     <Box sx={{ padding: "100px 20px 20px 140px" }}>
-      {successMessage && <Alert severity="success">{successMessage}</Alert>}
-      {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+      {successMessage && <Alerts severity="success">{successMessage}</Alerts>}
+      {errorMessage && <Alerts severity="error">{errorMessage}</Alerts>}
 
       {isEditing ? (
         <>
@@ -248,14 +229,16 @@ function ProjectDetailsPage() {
         </>
       ) : (
         <>
+          {/* Main content */}
           <Box
             sx={{
               display: "flex",
               justifyContent: "space-between",
-              alignItems: "center",
+              alignItems: "flex-start",
               mb: 4,
             }}
           >
+            {/* Project details */}
             <Box>
               <Typography variant="h4" gutterBottom>
                 {project.title || "Untitled Project"}
@@ -274,6 +257,8 @@ function ProjectDetailsPage() {
                 Client: {project.client?.name || "No client assigned"}
               </Typography>
             </Box>
+
+            {/* Edit and Delete buttons */}
             <Box>
               <Button
                 variant="contained"
@@ -293,60 +278,73 @@ function ProjectDetailsPage() {
                 Delete
               </Button>
             </Box>
-            <Box sx={{ marginTop: 4 }}>
-              <Typography variant="h5" gutterBottom>
-                Expenses
-              </Typography>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => setShowExpenseForm((prev) => !prev)}
-                sx={{ mb: 2 }}
-              >
-                {showExpenseForm ? "Hide Expense Form" : "Add Expense"}
-              </Button>
+          </Box>
 
-              {showExpenseForm && (
+          {/* Expenses section */}
+          <Box sx={{ marginTop: 4 }}>
+            <Typography variant="h5" gutterBottom>
+              Expenses
+            </Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setShowExpenseForm((prev) => !prev)}
+              sx={{ mb: 2 }}
+            >
+              {showExpenseForm ? "Hide Expense Form" : "Add Expense"}
+            </Button>
+
+            {showExpenseForm && (
+              <Box
+                sx={{
+                  width: "400px",
+                  marginLeft: 0,
+                  padding: 2,
+                  border: "1px solid #ccc",
+                  borderRadius: 2, // Rounded corners
+                  boxShadow: 3, // Add a subtle shadow
+                }}
+              >
                 <ExpenseForm
                   onAddExpense={handleAddExpense}
                   onCancel={() => setShowExpenseForm(false)}
                 />
-              )}
+              </Box>
+            )}
 
-              {expenses.length > 0 ? (
-                <List>
-                  {expenses.map((expense) => (
-                    <ListItem
-                      key={expense._id}
-                      sx={{
-                        border: "1px solid #ccc",
-                        borderRadius: 2,
-                        marginBottom: 1,
-                        padding: 1,
-                      }}
-                    >
-                      <ListItemText
-                        primary={`Description: ${expense.description}`}
-                        secondary={`Amount: $${expense.amount} | Category: ${expense.category}`}
-                      />
-                      <ListItemSecondaryAction>
-                        <IconButton
-                          edge="end"
-                          aria-label="delete"
-                          onClick={() => handleDeleteExpense(expense._id)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </ListItemSecondaryAction>
-                    </ListItem>
-                  ))}
-                </List>
-              ) : (
-                <Typography variant="body2" color="text.secondary">
-                  No expenses available for this project.
-                </Typography>
-              )}
-            </Box>
+            {expenses.length > 0 ? (
+              <List sx={{ maxWidth: "400px" }}>
+                {expenses.map((expense) => (
+                  <ListItem
+                    key={expense._id}
+                    sx={{
+                      border: "1px solid #ccc",
+                      borderRadius: 2,
+                      marginBottom: 1,
+                      padding: 1,
+                    }}
+                  >
+                    <ListItemText
+                      primary={`Description: ${expense.description}`}
+                      secondary={`Amount: $${expense.amount} | Category: ${expense.category}`}
+                    />
+                    <ListItemSecondaryAction>
+                      <IconButton
+                        edge="end"
+                        aria-label="delete"
+                        onClick={() => handleDeleteExpense(expense._id)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
+            ) : (
+              <Typography variant="body2" color="text.secondary">
+                No expenses available for this project.
+              </Typography>
+            )}
           </Box>
         </>
       )}

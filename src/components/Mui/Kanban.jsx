@@ -55,7 +55,6 @@ function Kanban({
           headers: { Authorization: `Bearer ${storedToken}` },
         })
         .then(() => {
-          console.log(`Project ${movedItem._id} status updated to ${movedItem.status}`);
         })
         .catch((error) => {
           console.error("Error updating project status:", error);

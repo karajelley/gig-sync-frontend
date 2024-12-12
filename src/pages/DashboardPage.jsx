@@ -3,7 +3,6 @@ import { Accordion, AccordionSummary, AccordionDetails, Box, Card, CardContent, 
 import { ExpandMore } from "@mui/icons-material";
 import { AppContext } from "../context/AppContext";
 import { PieChart, Pie, Cell, Legend, Tooltip } from "recharts";
-import { API_URL } from "../api/config";
 import { BarChart } from "@mui/x-charts/BarChart";
 
 function Dashboard() {
@@ -30,7 +29,6 @@ function Dashboard() {
     },
   ];
 
-   // Fetch data only once
    useEffect(() => {
     const fetchInitialData = async () => {
       setLoading(true);
