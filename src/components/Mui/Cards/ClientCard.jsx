@@ -18,7 +18,7 @@ import EditIcon from "@mui/icons-material/Edit";
 function ClientCard({ client, onDetailsClick, onEdit }) {
 
   return (
-    <Box sx={{ minWidth: 350, margin: 2 }}>
+    <Box sx={{ minWidth: 350, margin: 0 }}>
       <Card variant="outlined" sx={{ borderRadius: 4 }}>
         <CardContent>
           <Typography variant="h5" component="div">
@@ -31,15 +31,13 @@ function ClientCard({ client, onDetailsClick, onEdit }) {
           <Typography variant="body2">Phone: {client.phone}</Typography>
         </CardContent>
         <CardActions>
-          <IconButton onClick={() => onEdit(client)}
-            sx={{
-              position: "relative",
-              bottom: 140,
-              left: 360,
-            }}
+        <Button
+            onClick={() => onEdit(client)}
+            size="small"
+            aria-label="Edit Client"
           >
-            <EditIcon />
-          </IconButton>
+            Edit Client
+          </Button>
           <Button
             size="small"
             onClick={() => onDetailsClick(client._id)}
