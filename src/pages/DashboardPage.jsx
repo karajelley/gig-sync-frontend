@@ -1,11 +1,6 @@
 import { useEffect, useContext, useState } from "react";
-import {
-  Box,
-  Grid,
-  Card,
-  CardContent,
-  Typography,
-} from "@mui/material";
+import { Accordion, AccordionSummary, AccordionDetails, Box, Card, CardContent, Chip, Grid, List, ListItem, Typography } from "@mui/material";
+import { ExpandMore } from "@mui/icons-material";
 import { AppContext } from "../context/AppContext";
 import { PieChart, Pie, Cell, Legend, Tooltip } from "recharts";
 import { API_URL } from "../api/config";
@@ -71,31 +66,70 @@ function Dashboard() {
     return <Typography>Loading...</Typography>;
   }
 
-  const COLORS = ["#FF8042", "#0088FE", "#00C49F"];
+  const COLORS = ["#D40ED4", "#0E1BD4", "#2D9B6F"];
 
   return (
     <Box sx={{ padding: "100px 20px 20px 140px" }}>
       <Grid container spacing={3}>
         {/* Summary Cards */}
         <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
+          <Card
+            sx={{
+              borderRadius: 3,
+              boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+              padding: 2,
+            }}
+          >
+            <CardContent
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center", 
+              textAlign: "center",
+            }}>
               <Typography variant="h6">Total Projects</Typography>
               <Typography variant="h4">{projects.length}</Typography>
             </CardContent>
           </Card>
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
+          <Card
+            sx={{
+              borderRadius: 3,
+              boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+              padding: 2,
+            }}
+          >
+            <CardContent
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center", 
+              textAlign: "center", 
+            }}>
               <Typography variant="h6">Total Clients</Typography>
               <Typography variant="h4">{clients.length}</Typography>
             </CardContent>
           </Card>
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
+          <Card
+            sx={{
+              borderRadius: 3,
+              boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+              padding: 2,
+            }}
+          >
+            <CardContent
+               sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center", 
+                textAlign: "center", 
+              }}>
               <Typography variant="h6">Completed Projects</Typography>
               <Typography variant="h4">
                 {projects.filter((p) => p.status === "Completed").length}
@@ -104,8 +138,21 @@ function Dashboard() {
           </Card>
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
+          <Card
+            sx={{
+              borderRadius: 3,
+              boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+              padding: 2,
+            }}
+          >
+            <CardContent
+               sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center", 
+                textAlign: "center", 
+              }}>
               <Typography variant="h6">Most Recent Client</Typography>
               <Typography variant="h4">
                 {clients.length > 0 ? clients[clients.length - 1].name : "N/A"}
@@ -114,9 +161,22 @@ function Dashboard() {
           </Card>
         </Grid>
 
-        {/* Pie Chart */}
+        {/* Pie Chart - Projects by Status */}
         <Grid item xs={12} md={6}>
-          <Card>
+          <Card
+            sx={{
+              borderRadius: 3,
+              boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+              padding: 2,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center", 
+              textAlign: "center", 
+              height: "100%", 
+              borderRadius: 3,
+            }}
+          >
             <CardContent>
               <Typography variant="h6">Projects by Status</Typography>
               <PieChart width={400} height={300}>
@@ -143,46 +203,109 @@ function Dashboard() {
           </Card>
         </Grid>
 
-        {/* Recent Activity */}
+        {/* Budget vs. Expenses */}
         <Grid item xs={12} md={6}>
-          <Card>
+          <Card
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center", 
+              textAlign: "center", 
+              height: "100%", 
+              borderRadius: 3,
+              boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+              padding: 2,
+            }}
+          >
             <CardContent>
-              <Typography variant="h6">Recent Activity</Typography>
-              <ul>
-                {projects.slice(0, 5).map((project) => (
-                  <li key={project._id}>
-                    {project.title} - {project.status}
-                  </li>
-                ))}
-              </ul>
+              <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
+                Budget vs. Expenses
+              </Typography>
+              <BarChart
+                xAxis={[{ scaleType: "band", data: ["Finance"] }]}
+                series={[
+                  {
+                    data: [budgetExpensesData.totalBudget],
+                    label: "Total Budget",
+                    color: "#6A4FF2",
+                  },
+                  {
+                    data: [budgetExpensesData.totalExpenses],
+                    label: "Total Expenses",
+                    color: "#1EA6CC",
+                  },
+                ]}
+                width={400}
+                height={285}
+              />
             </CardContent>
           </Card>
         </Grid>
+
+   {/* Recent Activity - Accordion */}
+<Grid item xs={12} md={6}>
+  <Accordion
+    sx={{
+      borderRadius: "16px",
+      boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+      overflow: "hidden",
+    }}
+  >
+    <AccordionSummary
+      expandIcon={<ExpandMore />}
+      sx={{
+        backgroundColor: "#f5f5f5",
+        fontWeight: "bold",
+      }}
+    >
+      <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+        Recent Activity
+      </Typography>
+    </AccordionSummary>
+    <AccordionDetails>
+      <List
+        sx={{
+          maxHeight: "200px",
+          overflowY: "auto",
+        }}
+      >
+        {projects.slice(0, 5).map((project) => (
+          <ListItem
+            key={project._id}
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              borderBottom: "1px solid #e0e0e0",
+              padding: "8px 0",
+            }}
+          >
+            <Typography variant="body1" sx={{ fontWeight: 500 }}>
+              {project.title}
+            </Typography>
+            <Chip
+              label={project.status}
+              sx={{
+                backgroundColor:
+                project.status === "Completed"
+                ? "#2D9B6F" 
+                : project.status === "In Progress"
+                ? "#0E1BD4" 
+                : project.status === "To Do"
+                ? "#D40ED4" 
+                : "#F44336",
+                color: "white",
+                fontWeight: "bold",
+              }}
+            />
+          </ListItem>
+        ))}
+      </List>
+    </AccordionDetails>
+  </Accordion>
+</Grid>
+
       </Grid>
-      <Box>
-        <Box>
-          <Typography variant="h6" gutterBottom>
-            Budget vs. Expenses
-          </Typography>
-          <BarChart
-            xAxis={[{ scaleType: "band", data: ["Finance"] }]}
-            series={[
-              {
-                data: [budgetExpensesData.totalBudget], // Budget data
-                label: "Total Budget",
-                color: "#4CAF50", // Green
-              },
-              {
-                data: [budgetExpensesData.totalExpenses], // Expenses data
-                label: "Total Expenses",
-                color: "#F44336", // Red
-              },
-            ]}
-            width={500}
-            height={300}
-          />
-        </Box>
-      </Box>
     </Box>
   );
 }

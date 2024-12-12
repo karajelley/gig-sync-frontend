@@ -22,9 +22,9 @@ import { AppContext } from "../../../context/AppContext";
 
 function ProjectCard({ project, handleProjectEdit }) {
   const statusColors = {
-    "To Do": "#FF8042", // Orange
-    "In Progress": "#0088FE", // Blue
-    "Completed": "#00C49F", // Green
+    "To Do": "#D40ED4",  
+    "In Progress": "#0E1BD4",
+    "Completed": "#2D9B6F", 
   };
   const { handleDeleteClick, handleDetailsClick } = useContext(AppContext);
 
