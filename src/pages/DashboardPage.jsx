@@ -2,7 +2,6 @@ import { useEffect, useContext, useState } from "react";
 import { Box, Grid, Card, CardContent, Typography, Button } from "@mui/material";
 import { AppContext } from "../context/AppContext";
 import { PieChart, Pie, Cell, Legend, Tooltip } from "recharts";
-import Slider from "react-slick";
 
 
 function Dashboard() {
