@@ -66,7 +66,6 @@ function ProfilePage() {
 
     const handleConfirmDelete = () => {
         const storedToken = localStorage.getItem("authToken");
-        console.log("Stored Token:", storedToken);
         axios
             .delete(`${API_URL}/auth/delete`, {
                 headers: { Authorization: `Bearer ${storedToken}` },
@@ -101,10 +100,8 @@ function ProfilePage() {
           // Call the uploadImage function
           uploadImage(formData)
             .then((response) => {
-              console.log("Image uploaded successfully:", response.fileUrl);
             })
             .catch((error) => {
-              console.error("Error uploading image:", error);
             });
         }
       };

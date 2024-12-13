@@ -65,6 +65,7 @@ function ProjectDetailsPage() {
             setExpenses(response.data.expenses || []);
         } catch (error) {
             console.error("Error fetching project details:", error);
+            setErrorMessage("Failed to fetch project details.");
         }
     };
 
@@ -75,8 +76,10 @@ function ProjectDetailsPage() {
     const handleConfirmDelete = async () => {
         try {
             await handleDeleteClick("project", id);
+            console.log("Delete type:", type, "ID:", id); // Debugging log
             setSuccessMessage("Project deleted successfully!");
             setOpenDialog(false);
+            setIsDeleted(true); // Mark project as deleted
             fetchData();
             navigate("/api/projectspage");
         } catch (error) {
@@ -84,6 +87,7 @@ function ProjectDetailsPage() {
             setErrorMessage("Failed to delete the project.");
         }
     };
+
     const handleEditProject = async (e) => {
         e.preventDefault();
         setErrorMessage("");
@@ -157,14 +161,18 @@ function ProjectDetailsPage() {
         }
     };
 
-    useEffect(() => {
-        return () => {
-            setIsEditing(false); // Reset editing state
-            setShowForm(false); // Reset form visibility
-            setSuccessMessage(""); // Clear success messages
-            setErrorMessage(""); // Clear error messages
-        };
-    }, [setIsEditing, setShowForm]);
+  useEffect(() => {
+    return () => {
+        setIsEditing(false);
+        setShowForm(false);
+        setSuccessMessage("");
+        setErrorMessage("");
+    };
+}, []);
+    
+useEffect(() => {
+  fetchProjectDetails();
+}, [id]);
 
     if (!project) {
         return (
@@ -202,9 +210,6 @@ function ProjectDetailsPage() {
         );
     }
 
-    useEffect(() => {
-        fetchProjectDetails();
-    }, [id]);
 
     return (
         <Box sx={{ padding: "100px 20px 20px 140px" }}>
@@ -250,7 +255,6 @@ function ProjectDetailsPage() {
                 </>
             ) : (
                 <>
-                    {/* Main content */}
                     <Box
                         sx={{
                             display: "flex",
@@ -259,7 +263,6 @@ function ProjectDetailsPage() {
                             mb: 4,
                         }}
                     >
-                        {/* Project details */}
                         <Box>
                             <Typography variant="h4" gutterBottom>
                                 {project.title || "Untitled Project"}
@@ -360,7 +363,7 @@ function ProjectDetailsPage() {
                         <Box sx={{ mt: 4 }}>
 
                             <Typography variant="h6" gutterBottom>
-                                Delete Client
+                                Delete Project
                             </Typography>
                             <Typography variant="body2" sx={{ mb: 2 }} gutterBottom>
                                 ⚠️ This will delete the client and all projects associated with them. This action cannot be undone.
@@ -369,7 +372,7 @@ function ProjectDetailsPage() {
                                 variant="outlined"
                                 color="error"
                                 startIcon={<DeleteIcon />}
-                                onClick={handleDeleteClick}
+                                onClick={() => handleDeleteClick("project", project._id)}
                             >
                                 Delete
                             </Button>

@@ -73,7 +73,6 @@ function ClientsPage() {
     try {
       if (clientToEdit) {
         // Edit logic
-        console.log("Editing client:", clientToEdit);
         const response = await axios.put(
           `${API_URL}/clients/${clientToEdit._id}`,
           newClient,
@@ -81,15 +80,12 @@ function ClientsPage() {
             headers: { Authorization: `Bearer ${storedToken}` },
           }
         );
-        console.log("API Response for Edit:", response.data);
         setSuccessMessage("Client updated successfully!");
       } else {
         // Create logic
-        console.log("Creating new client:", newClient);
         const response = await axios.post(`${API_URL}/clients/`, newClient, {
           headers: { Authorization: `Bearer ${storedToken}` },
         });
-        console.log("API Response for Create:", response.data);
         setSuccessMessage("Client added successfully!");
       }
 

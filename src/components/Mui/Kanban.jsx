@@ -29,7 +29,7 @@ function Kanban({
   const onDragEnd = (result) => {
     const { source, destination } = result;
 
-    // If dropped outside a valid destination dont do anytghing
+    // If dropped outside a droppable area dont do anytghing
     if (!destination) return;
 
     const sourceColumn = columns[source.droppableId];
@@ -38,7 +38,7 @@ function Kanban({
     const destItems = Array.from(destColumn);
     const [movedItem] = sourceItems.splice(source.index, 1);
 
-    // update the status only if the project is moved to a different column
+    // update the status of the project ONLY  if the project is moved to a different column
     if (source.droppableId !== destination.droppableId) {
       movedItem.status = destination.droppableId;
 

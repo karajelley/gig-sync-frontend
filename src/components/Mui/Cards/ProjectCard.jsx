@@ -37,7 +37,6 @@ function ProjectCard({ project, handleProjectEdit }) {
       position: "relative",
     }}
   >
-    {/* Status Indicator */}
     <Box
       sx={{
         width: 12,
