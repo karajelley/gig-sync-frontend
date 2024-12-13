@@ -184,7 +184,7 @@ function ProfilePage() {
 
                         {/* Avatar and User Information */}
                         <Avatar sx={{ bgcolor: "primary.main", color: "white", fontSize: 60, width: 120, height: 120, mb: 3 }}>
-                            {user.name[0].toUpperCase()}
+                        {user?.name ? user.name[0].toUpperCase() : "U"}
                         </Avatar>
                         <Typography variant="h6" sx={{ mb: 1 }}>
                             Name: {user?.name}
