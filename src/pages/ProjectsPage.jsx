@@ -155,17 +155,15 @@ function ProjectsPage() {
           {showForm ? "Cancel" : "Create Project"}
         </Button>
       </Box>
-      {showForm &&
-        console.log("Form Props:", { projectData: newProject, clients })}
       {showForm && (
-        <ProjectForm
-          clients={clients}
-          projectData={newProject}
-          handleInputChange={handleInputChange}
-          handleFormSubmit={handleFormSubmit}
-          buttonLabel={isEditing ? "Update Project" : "Add Project"}
-        />
-      )}
+  <ProjectForm
+    clients={clients}
+    projectData={newProject}
+    handleInputChange={handleInputChange}
+    handleFormSubmit={handleFormSubmit}
+    buttonLabel={isEditing ? "Update Project" : "Add Project"}
+  />
+)}
 
       {!showForm && (
         <Kanban
