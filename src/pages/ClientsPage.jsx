@@ -1,11 +1,9 @@
-// External Libraries
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
 // MUI Libraries
 import { Box, Button, Grid, Typography } from "@mui/material";
 // Internal Libraries / Components
-import { API_URL } from "../api/config";
 import { AppContext } from "../context/AppContext";
 import Alerts from "../components/Mui/Modals/Alerts";
 import ClientCard from "../components/Mui/Cards/ClientCard";
@@ -15,13 +13,12 @@ import ClientForm from "../components/Mui/Forms/ClientForm";
 
 function ClientsPage() {
   const {
+    API_URL,
     clients,
     showForm,
     setShowForm,
     isEditing,
     setIsEditing,
-    errorMessage,
-    setErrorMessage,
     fetchData,
   } = useContext(AppContext);
 
@@ -34,6 +31,7 @@ function ClientsPage() {
 
   const [clientToEdit, setClientToEdit] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
 

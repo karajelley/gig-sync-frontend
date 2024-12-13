@@ -8,7 +8,7 @@ import { Button, Box, Grid, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 // Internal Libraries / Components
-import Alert from "../components/Mui/Modals/Alerts";
+import Alerts from "../components/Mui/Modals/Alerts";
 import ClientForm from "../components/Mui/Forms/ClientForm";
 import ConfirmationDialog from "../components/Mui/Modals/ConfirmationDialog";
 
@@ -144,8 +144,8 @@ function ClientDetailsPage() {
   return (
     <Box sx={{ padding: "100px 20px 20px 140px", overflow: "hidden" }}>
       {/* Alerts */}
-      {successMessage && <Alert severity="success">{successMessage}</Alert>}
-      {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+      {successMessage && <Alerts severity="success">{successMessage}</Alerts>}
+      {errorMessage && <Alerts severity="error">{errorMessage}</Alerts>}
   
       <Box sx={{ mb: 4 }}>
         <Typography variant="h3" gutterBottom>

@@ -25,6 +25,15 @@ function Dashboard() {
     totalBudget: 0,
     totalExpenses: 0,
   });
+  
+  // State to hold recent activities
+const [recentActivities, setRecentActivities] = useState([]);
+
+// Function to get recent activities from local storage
+const getRecentActivities = () => {
+  const activities = localStorage.getItem("recentActivities");
+  return activities ? JSON.parse(activities) : [];
+};
 
   const projectStatusData = [
     {
@@ -43,12 +52,12 @@ function Dashboard() {
 
   useEffect(() => {
     const fetchInitialData = async () => {
+      setRecentActivities(activities);
       setLoading(true);
       try {
         await fetchData();
         setIsFetched(true); 
       } catch (error) {
-        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
@@ -289,43 +298,35 @@ function Dashboard() {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <List
-                sx={{
-                  maxHeight: "200px",
-                  overflowY: "auto",
-                }}
-              >
-                {projects.slice(0, 5).map((project) => (
-                  <ListItem
-                    key={project._id}
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      borderBottom: "1px solid #e0e0e0",
-                      padding: "8px 0",
-                    }}
-                  >
-                    <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                      {project.title}
-                    </Typography>
-                    <Chip
-                      label={project.status}
-                      sx={{
-                        backgroundColor:
-                          project.status === "Completed"
-                            ? "#2D9B6F"
-                            : project.status === "In Progress"
-                            ? "#0E1BD4"
-                            : project.status === "To Do"
-                            ? "#D40ED4"
-                            : "#F44336",
-                        color: "white",
-                        fontWeight: "bold",
-                      }}
-                    />
-                  </ListItem>
-                ))}
-              </List>
+            <List
+  sx={{
+    maxHeight: "200px",
+    overflowY: "auto",
+  }}
+>
+  {recentActivities.length > 0 ? (
+    recentActivities.map((activity, index) => (
+      <ListItem
+        key={index}
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          borderBottom: "1px solid #e0e0e0",
+          padding: "8px 0",
+        }}
+      >
+        <Typography variant="body1" sx={{ fontWeight: 500 }}>
+          {activity.action} {activity.type}: {activity.name}
+        </Typography>
+        <Typography variant="body2" sx={{ color: "text.secondary" }}>
+          {new Date(activity.timestamp).toLocaleString()}
+        </Typography>
+      </ListItem>
+    ))
+  ) : (
+    <Typography>No recent activities to show</Typography>
+  )}
+</List>
             </AccordionDetails>
           </Accordion>
         </Grid>

@@ -8,25 +8,32 @@ import axios from "axios";
 import Alerts from "../components/Mui/Modals/Alerts";
 import Kanban from "../components/Mui/Kanban";
 import ProjectForm from "../components/Mui/Forms/ProjectForm";
+import { use } from "react";
 // Internal Libraries / Components
-import { API_URL } from "../api/config";
 
 
 
 function ProjectsPage() {
 
   const {
-    projects,
+    API_URL,
     clients,
-    errorMessage,
-    successMessage,
     fetchData,
-    showForm,
+    projects,
     setProjects,
-    setShowForm,
-    setSuccessMessage,
-    setErrorMessage
+    showForm,
+    setShowForm
   } = useContext(AppContext);
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [projectToEdit, setProjectToEdit] = useState(null);
+  const [successMessage, setSuccessMessage] =useState("")
+  const [errorMessage, setErrorMessage] =useState("")
+
+  const navigate = useNavigate();
+
+  const storedToken = localStorage.getItem("authToken");
+
 
   const [newProject, setNewProject] = useState({
     title: "",
@@ -35,14 +42,6 @@ function ProjectsPage() {
     status: "In Progress",
     client: "",
   });
-
-  const [isEditing, setIsEditing] = useState(false);
-  const [projectToEdit, setProjectToEdit] = useState(null);
-
-  const navigate = useNavigate();
-
-  const storedToken = localStorage.getItem("authToken");
-
 
   useEffect(() => {
     setShowForm(false);
@@ -143,7 +142,7 @@ function ProjectsPage() {
         <Alerts errorMessage={errorMessage} successMessage={successMessage} />
 
         <Button
-          variant="contained"
+          variant={showForm ? 'outlined' : 'contained'}
           color="primary"
           onClick={() => {
             setShowForm((prev) => !prev);
@@ -159,7 +158,7 @@ function ProjectsPage() {
           }}
           sx={{ mb: 4 }}
         >
-          {showForm ? "Hide Form" : "Create Project"}
+          {showForm ? "Cancel" : "Create Project"}
         </Button>
       </Box>
       {showForm &&

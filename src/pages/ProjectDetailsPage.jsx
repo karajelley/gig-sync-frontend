@@ -18,7 +18,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 // Internal Libraries / Components
-import Alerts from "../components/Mui/Modals/Alerts";
+import Alert from "../components/Mui/Modals/Alerts";
 import ConfirmationDialog from "../components/Mui/Modals/ConfirmationDialog";
 import ProjectForm from "../components/Mui/Forms/ProjectForm";
 import ExpenseForm from "../components/Mui/Forms/ExpenseForm";
@@ -208,8 +208,8 @@ function ProjectDetailsPage() {
 
     return (
         <Box sx={{ padding: "100px 20px 20px 140px" }}>
-            {successMessage && <Alerts severity="success">{successMessage}</Alerts>}
-            {errorMessage && <Alerts severity="error">{errorMessage}</Alerts>}
+            {successMessage && <Alert severity="success">{successMessage}</Alert>}
+            {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
 
             {isEditing ? (
                 <>
