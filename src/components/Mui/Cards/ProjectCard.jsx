@@ -21,15 +21,20 @@ function ProjectCard({ project, handleProjectEdit }) {
   };
   const { handleDetailsClick } = useContext(AppContext);
 
-
+  
   return (
-    <Box sx={{ minWidth: 275, margin: 2, position: "relative" }}>
-     <Box sx={{ minWidth: 275, margin: 2, position: "relative" }}>
+    <Box sx={{ minWidth: 350, margin: 2, position: "relative" }}>
   <Card
     variant="outlined"
     sx={{
-      position: "relative",
       borderRadius: 4,
+      boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+      padding: "16px",
+      transition: "transform 0.2s ease-in-out", 
+      "&:hover": {
+        transform: "scale(1.03)", 
+      },
+      position: "relative",
     }}
   >
     {/* Status Indicator */}
@@ -38,19 +43,19 @@ function ProjectCard({ project, handleProjectEdit }) {
         width: 12,
         height: 12,
         borderRadius: "50%",
-        backgroundColor: statusColors[project.status] || "gray", // Default color if status is unknown
+        backgroundColor: statusColors[project.status] || "gray", 
         position: "absolute",
         top: 10,
         right: 10,
       }}
     />
 
-    {/* Display the content */}
     <CardContent>
       <Typography
         variant="h5"
         component="div"
         sx={{
+          fontWeight: "bold",
           whiteSpace: "nowrap",
           overflow: "hidden",
           textOverflow: "ellipsis",
@@ -58,33 +63,49 @@ function ProjectCard({ project, handleProjectEdit }) {
       >
         {project.title || "Untitled Project"}
       </Typography>
-      <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
-        Status: {project.status || "Unknown"}
-      </Typography>
-      <Typography variant="body2">
-        Budget: ${project.budget || "N/A"}
-      </Typography>
-      <Typography variant="body2">
+      <Typography
+        variant="subtitle2"
+        sx={{
+          color: "text.secondary",
+          mb: 2,
+          fontStyle: project.client?.name ? "normal" : "italic",
+        }}
+      >
         Client: {project.client?.name || "No client assigned"}
       </Typography>
+      <Typography variant="body2" sx={{ mb: 1 }}>
+        Budget: ${project.budget || "N/A"}
+      </Typography>
+      <Typography variant="body2">Status: {project.status || "Unknown"}</Typography>
     </CardContent>
 
-    {/* Call functions to perform on click */}
-    <CardActions>
+    <CardActions
+      sx={{
+        display: "flex",
+        justifyContent: "flex-end", 
+        pt: 0,
+      }}
+    >
       <Button
         onClick={() => handleProjectEdit(project)}
         size="small"
-        aria-label="Edit Project"
+        color="secondary"
+        sx={{ textTransform: "capitalize", fontWeight: "bold" }}
       >
         Edit Project
       </Button>
-      <Button size="small" onClick={() => handleDetailsClick(project._id)}>
+      <Button
+        size="small"
+        onClick={() => handleDetailsClick(project._id)}
+        color="secondary"
+        sx={{ textTransform: "capitalize", fontWeight: "bold" }}
+      >
         View Details
       </Button>
     </CardActions>
   </Card>
 </Box>
-    </Box>
+
   );
 }
 

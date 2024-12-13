@@ -1,7 +1,7 @@
 // External Libraries 
 import React from "react";
 // MUI Libraries
-import { Button, Box, Grid2, MenuItem, TextField } from "@mui/material";
+import { Button, Box, Grid2, MenuItem, TextField, Typography} from "@mui/material";
 // Internal Libraries / Components
 
 
@@ -17,6 +17,9 @@ function ProjectForm({
 
   return (
     <Box sx={{ padding: 3, marginBottom: 4 }}>
+        <Typography variant="h6" gutterBottom>
+      {buttonLabel === "Add Project" ? "Add New Project" : "Edit Project"}
+    </Typography>
       <form onSubmit={handleFormSubmit}>
         <Grid2 container spacing={2} direction="column">
           <Grid2 item xs={12}>
@@ -89,9 +92,14 @@ function ProjectForm({
             </TextField>
           </Grid2>
           <Grid2 item xs={12}>
-            <Button type="submit" variant="contained" color="primary" fullWidth>
+            <Box sx={{
+            display: "flex",
+            justifyContent:"flex-end",
+          }} >
+            <Button type="submit" variant="contained" color="primary">
               {buttonLabel}
             </Button>
+            </Box>
           </Grid2>
         </Grid2>
       </form>

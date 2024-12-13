@@ -42,7 +42,6 @@ function LoginPage() {
     axios
       .post(`${API_URL}/auth/login`, requestBody)
       .then((response) => {
-        console.log("Login successful:", response.data);
         storeToken(response.data.authToken);
         return authenticateUser();
       })

@@ -1,8 +1,20 @@
 import { useEffect, useContext, useState } from "react";
-import { Accordion, AccordionSummary, AccordionDetails, Box, Card, CardContent, Chip, Grid, List, ListItem, Typography } from "@mui/material";
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Box,
+  Card,
+  CardContent,
+  Chip,
+  Grid,
+  List,
+  ListItem,
+  Typography,
+} from "@mui/material";
 import { ExpandMore } from "@mui/icons-material";
 import { AppContext } from "../context/AppContext";
-import { PieChart, Pie, Cell, Legend, Tooltip } from "recharts";
+import { Cell, Legend, PieChart, Pie, Tooltip } from "recharts";
 import { BarChart } from "@mui/x-charts/BarChart";
 
 function Dashboard() {
@@ -29,12 +41,12 @@ function Dashboard() {
     },
   ];
 
-   useEffect(() => {
+  useEffect(() => {
     const fetchInitialData = async () => {
       setLoading(true);
       try {
         await fetchData();
-        setIsFetched(true); // Indicate data has been fetched
+        setIsFetched(true); 
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -90,13 +102,14 @@ function Dashboard() {
             }}
           >
             <CardContent
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center", 
-              textAlign: "center",
-            }}>
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
               <Typography variant="h6">Total Projects</Typography>
               <Typography variant="h4">{projects.length}</Typography>
             </CardContent>
@@ -111,13 +124,14 @@ function Dashboard() {
             }}
           >
             <CardContent
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center", 
-              textAlign: "center", 
-            }}>
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
               <Typography variant="h6">Total Clients</Typography>
               <Typography variant="h4">{clients.length}</Typography>
             </CardContent>
@@ -132,13 +146,14 @@ function Dashboard() {
             }}
           >
             <CardContent
-               sx={{
+              sx={{
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
-                alignItems: "center", 
-                textAlign: "center", 
-              }}>
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
               <Typography variant="h6">Completed Projects</Typography>
               <Typography variant="h4">
                 {projects.filter((p) => p.status === "Completed").length}
@@ -155,13 +170,14 @@ function Dashboard() {
             }}
           >
             <CardContent
-               sx={{
+              sx={{
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
-                alignItems: "center", 
-                textAlign: "center", 
-              }}>
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
               <Typography variant="h6">Most Recent Client</Typography>
               <Typography variant="h4">
                 {clients.length > 0 ? clients[clients.length - 1].name : "N/A"}
@@ -180,9 +196,9 @@ function Dashboard() {
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
-              alignItems: "center", 
-              textAlign: "center", 
-              height: "100%", 
+              alignItems: "center",
+              textAlign: "center",
+              height: "100%",
               borderRadius: 3,
             }}
           >
@@ -219,9 +235,9 @@ function Dashboard() {
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
-              alignItems: "center", 
-              textAlign: "center", 
-              height: "100%", 
+              alignItems: "center",
+              textAlign: "center",
+              height: "100%",
               borderRadius: 3,
               boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
               padding: 2,
@@ -229,7 +245,7 @@ function Dashboard() {
           >
             <CardContent>
               <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2 }}>
-                Budget vs. Expenses
+                Budget and Expenses comparison
               </Typography>
               <BarChart
                 xAxis={[{ scaleType: "band", data: ["Finance"] }]}
@@ -252,68 +268,67 @@ function Dashboard() {
           </Card>
         </Grid>
 
-   {/* Recent Activity - Accordion */}
-<Grid item xs={12} md={6}>
-  <Accordion
-    sx={{
-      borderRadius: "16px",
-      boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-      overflow: "hidden",
-    }}
-  >
-    <AccordionSummary
-      expandIcon={<ExpandMore />}
-      sx={{
-        backgroundColor: "#f5f5f5",
-        fontWeight: "bold",
-      }}
-    >
-      <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-        Recent Activity
-      </Typography>
-    </AccordionSummary>
-    <AccordionDetails>
-      <List
-        sx={{
-          maxHeight: "200px",
-          overflowY: "auto",
-        }}
-      >
-        {projects.slice(0, 5).map((project) => (
-          <ListItem
-            key={project._id}
+        {/* Recent Activity - Accordion */}
+        <Grid item xs={12} md={6}>
+          <Accordion
             sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              borderBottom: "1px solid #e0e0e0",
-              padding: "8px 0",
+              borderRadius: "16px",
+              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+              overflow: "hidden",
             }}
           >
-            <Typography variant="body1" sx={{ fontWeight: 500 }}>
-              {project.title}
-            </Typography>
-            <Chip
-              label={project.status}
+            <AccordionSummary
+              expandIcon={<ExpandMore />}
               sx={{
-                backgroundColor:
-                project.status === "Completed"
-                ? "#2D9B6F" 
-                : project.status === "In Progress"
-                ? "#0E1BD4" 
-                : project.status === "To Do"
-                ? "#D40ED4" 
-                : "#F44336",
-                color: "white",
+                backgroundColor: "#f5f5f5",
                 fontWeight: "bold",
               }}
-            />
-          </ListItem>
-        ))}
-      </List>
-    </AccordionDetails>
-  </Accordion>
-</Grid>
-
+            >
+              <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                Recent Activity
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <List
+                sx={{
+                  maxHeight: "200px",
+                  overflowY: "auto",
+                }}
+              >
+                {projects.slice(0, 5).map((project) => (
+                  <ListItem
+                    key={project._id}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      borderBottom: "1px solid #e0e0e0",
+                      padding: "8px 0",
+                    }}
+                  >
+                    <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                      {project.title}
+                    </Typography>
+                    <Chip
+                      label={project.status}
+                      sx={{
+                        backgroundColor:
+                          project.status === "Completed"
+                            ? "#2D9B6F"
+                            : project.status === "In Progress"
+                            ? "#0E1BD4"
+                            : project.status === "To Do"
+                            ? "#D40ED4"
+                            : "#F44336",
+                        color: "white",
+                        fontWeight: "bold",
+                      }}
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            </AccordionDetails>
+          </Accordion>
+        </Grid>
       </Grid>
     </Box>
   );

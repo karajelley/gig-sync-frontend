@@ -46,6 +46,13 @@ function ProjectsPage() {
     fetchData();
   }, [fetchData]);
 
+  useEffect(() => {
+    return () => {
+      setShowForm(false);
+      setIsEditing(false);
+    };
+  }, []);
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -114,9 +121,6 @@ function ProjectsPage() {
     setIsEditing(true);
     setShowForm(true);
   };
-  
-  useEffect(() => {
-  }, [projects]);
 
 
   return (

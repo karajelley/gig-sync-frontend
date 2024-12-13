@@ -28,6 +28,8 @@ function ProjectDetailsPage() {
   const [openDialog, setOpenDialog] = useState(false);
   const [showExpenseForm, setShowExpenseForm] = useState(false);
   const [expenses, setExpenses] = useState([]);
+  const [showForm, setShowForm] = useState(false);
+
 
   const {
     API_URL,
@@ -155,6 +157,15 @@ function ProjectDetailsPage() {
     }
   };
 
+  useEffect(() => {
+    return () => {
+      setIsEditing(false); // Reset editing state
+      setShowForm(false); // Reset form visibility
+      setSuccessMessage(""); // Clear success messages
+      setErrorMessage(""); // Clear error messages
+    };
+  }, [setIsEditing, setShowForm]);
+
   if (!project) {
     return (
       <Box
@@ -202,6 +213,16 @@ function ProjectDetailsPage() {
 
       {isEditing ? (
         <>
+          <Box sx={{ mb: 4 }}>
+        <Typography variant="h3" gutterBottom>
+          Project
+        </Typography>
+      </Box>
+      <Box sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginRight: "25px",
+            }}>
           <Button
             variant="outlined"
             color="primary"
@@ -209,6 +230,7 @@ function ProjectDetailsPage() {
             sx={{ mb: 2 }}
           >Cancel          
           </Button>
+          </Box>
           <ProjectForm
             projectData={newProject}
             handleInputChange={(e) => {
@@ -267,15 +289,6 @@ function ProjectDetailsPage() {
               >
                 Edit
               </Button>
-              <Button
-                variant="outlined"
-                color="error"
-                startIcon={<DeleteIcon />}
-                onClick={() => setOpenDialog(true)}
-                sx={{ ml: 2 }}
-              >
-                Delete
-              </Button>
             </Box>
           </Box>
 
@@ -300,10 +313,12 @@ function ProjectDetailsPage() {
                   marginLeft: 0,
                   padding: 2,
                   border: "1px solid #ccc",
-                  borderRadius: 2, // Rounded corners
-                  boxShadow: 3, // Add a subtle shadow
+                  borderRadius: 2, 
+                  boxShadow: 3, 
                 }}
               >
+
+                {/* expenses section */}
                 <ExpenseForm
                   onAddExpense={handleAddExpense}
                   onCancel={() => setShowExpenseForm(false)}
@@ -344,6 +359,23 @@ function ProjectDetailsPage() {
                 No expenses available for this project.
               </Typography>
             )}
+                <Box sx={{ mt: 4 }}>
+
+              <Typography variant="h6" gutterBottom>
+                Delete Client
+              </Typography>
+              <Typography variant="body2" sx={{ mb: 2 }} gutterBottom>
+                ⚠️ This will delete the client and all projects associated with them. This action cannot be undone.
+              </Typography>
+              <Button
+                variant="outlined"
+                color="error"
+                startIcon={<DeleteIcon />}
+                onClick={handleDeleteClick}
+              >
+                Delete
+              </Button>
+            </Box>
           </Box>
         </>
       )}

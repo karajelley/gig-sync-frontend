@@ -145,7 +145,6 @@ function Navbar() {
             <MenuIcon />
           </IconButton>
 
-          {/* Application Title/Logo */}
           <Box sx={{ flexGrow: 1 }}>
             <img
               src={logo}
@@ -155,7 +154,7 @@ function Navbar() {
           </Box>
 
 
-          {/* User Greeting and Avatar */}
+          {/*  Greeting and Avatar */}
           <Box sx={{ display: "flex", alignItems: "center", padding: "0 16px" }}>
             {user && <Typography sx={{ fontWeight: 600}}>Welcome, {user.name}</Typography>}
             {user && <AvatarMenu user={user} onLogout={logOutUser} onNavigate={navigate} />}
@@ -169,7 +168,7 @@ function Navbar() {
             {theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </DrawerHeader>
-        {/* Drawer Navigation Items */}
+        
         <List>
           {NAV_ITEMS.map((item) => (
             <ListItem key={item.text} disablePadding sx={{ display: "block" }}>
