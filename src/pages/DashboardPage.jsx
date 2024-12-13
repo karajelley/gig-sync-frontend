@@ -26,32 +26,6 @@ function Dashboard() {
     totalExpenses: 0,
   });
 
-  // State to hold recent activities
-  const [recentActivities, setRecentActivities] = useState([]);
-
-  const addRecentActivity = (type, action, name) => {
-    const newActivity = {
-      type,
-      action,
-      name,
-      timestamp: new Date().toISOString(),
-    };
-
-    const activities = getRecentActivities();
-    console.log("Before adding new activity:", activities); // Log current activities
-    activities.unshift(newActivity);
-    if (activities.length > 10) activities.pop(); // Keep only 10 activities
-
-    localStorage.setItem("recentActivities", JSON.stringify(activities));
-    console.log("After adding new activity:", activities); // Log updated activities
-  };
-
-  // Function to get recent activities from local storage
-  const getRecentActivities = () => {
-    const activities = localStorage.getItem("recentActivities");
-    return activities ? JSON.parse(activities) : [];
-  };
-
   const projectStatusData = [
     {
       name: "To Do",
@@ -69,30 +43,18 @@ function Dashboard() {
 
   useEffect(() => {
     const fetchInitialData = async () => {
-      console.log("Fetching initial data..."); // Log when the function starts
       setLoading(true);
       try {
-        const activities = getRecentActivities(); // Fetch activities from local storage
-        console.log("Activities fetched from local storage:", activities); // Log activities
-
-        setRecentActivities(activities); // Set activities in state
-        console.log("Set recent activities in state:", activities);
-
-        await fetchData(); // Fetch additional data
-        console.log("Fetched additional data successfully");
-
+        await fetchData();
         setIsFetched(true);
-        console.log("Set isFetched to true");
       } catch (error) {
-        console.error("Error fetching data:", error); // Log any errors
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
-        console.log("Set loading to false"); // Log when loading state is set
       }
     };
 
     if (!isFetched) {
-      console.log("isFetched is false, calling fetchInitialData");
       fetchInitialData();
     }
   }, [fetchData, isFetched]);
@@ -121,11 +83,6 @@ function Dashboard() {
     }
   }, [projects]);
 
-  addRecentActivity("Project", "Added", projects.title); // Use the actual project title
-
-  // After editing a client
-  addRecentActivity("Client", "Edited", clients.name);
-
   if (loading) {
     return <Typography>Loading...</Typography>;
   }
@@ -137,109 +94,108 @@ function Dashboard() {
       <Grid container spacing={3}>
         {/* Summary Cards */}
         <Grid item xs={12} sm={6} md={3}>
-  <Card
-    sx={{
-      borderRadius: 3,
-      boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-      padding: 2,
-      backgroundColor: "#E3F2FD", // Light Blue
-      color: "#1E88E5", // Blue text
-    }}
-  >
-    <CardContent
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        textAlign: "center",
-      }}
-    >
-      <Typography variant="h6">Total Projects</Typography>
-      <Typography variant="h4">{projects.length}</Typography>
-    </CardContent>
-  </Card>
-</Grid>
+          <Card
+            sx={{
+              borderRadius: 3,
+              boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+              padding: 2,
+              backgroundColor: "#E3F2FD", // Light Blue
+              color: "#1E88E5", // Blue text
+            }}
+          >
+            <CardContent
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              <Typography variant="h6">Total Projects</Typography>
+              <Typography variant="h4">{projects.length}</Typography>
+            </CardContent>
+          </Card>
+        </Grid>
 
-<Grid item xs={12} sm={6} md={3}>
-  <Card
-    sx={{
-      borderRadius: 3,
-      boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-      padding: 2,
-      backgroundColor: "#FFEBEE", // Light Red
-      color: "#D32F2F", // Red text
-    }}
-  >
-    <CardContent
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        textAlign: "center",
-      }}
-    >
-      <Typography variant="h6">Total Clients</Typography>
-      <Typography variant="h4">{clients.length}</Typography>
-    </CardContent>
-  </Card>
-</Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card
+            sx={{
+              borderRadius: 3,
+              boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+              padding: 2,
+              backgroundColor: "#FFEBEE", // Light Red
+              color: "#D32F2F", // Red text
+            }}
+          >
+            <CardContent
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              <Typography variant="h6">Total Clients</Typography>
+              <Typography variant="h4">{clients.length}</Typography>
+            </CardContent>
+          </Card>
+        </Grid>
 
-<Grid item xs={12} sm={6} md={3}>
-  <Card
-    sx={{
-      borderRadius: 3,
-      boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-      padding: 2,
-      backgroundColor: "#E8F5E9", // Light Green
-      color: "#388E3C", // Green text
-    }}
-  >
-    <CardContent
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        textAlign: "center",
-      }}
-    >
-      <Typography variant="h6">Completed Projects</Typography>
-      <Typography variant="h4">
-        {projects.filter((p) => p.status === "Completed").length}
-      </Typography>
-    </CardContent>
-  </Card>
-</Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card
+            sx={{
+              borderRadius: 3,
+              boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+              padding: 2,
+              backgroundColor: "#E8F5E9", // Light Green
+              color: "#388E3C", // Green text
+            }}
+          >
+            <CardContent
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              <Typography variant="h6">Completed Projects</Typography>
+              <Typography variant="h4">
+                {projects.filter((p) => p.status === "Completed").length}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
 
-<Grid item xs={12} sm={6} md={3}>
-  <Card
-    sx={{
-      borderRadius: 3,
-      boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-      padding: 2,
-      backgroundColor: "#FFF8E1", // Light Yellow
-      color: "#FBC02D", // Yellow text
-    }}
-  >
-    <CardContent
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        textAlign: "center",
-      }}
-    >
-      <Typography variant="h6">Most Recent Client</Typography>
-      <Typography variant="h4">
-        {clients.length > 0 ? clients[clients.length - 1].name : "N/A"}
-      </Typography>
-    </CardContent>
-  </Card>
-</Grid>
-
+        <Grid item xs={12} sm={6} md={3}>
+          <Card
+            sx={{
+              borderRadius: 3,
+              boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+              padding: 2,
+              backgroundColor: "#FFF8E1", // Light Yellow
+              color: "#FBC02D", // Yellow text
+            }}
+          >
+            <CardContent
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              <Typography variant="h6">Most Recent Client</Typography>
+              <Typography variant="h4">
+                {clients.length > 0 ? clients[clients.length - 1].name : "N/A"}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
 
         {/* Pie Chart - Projects by Status */}
         <Grid item xs={12} md={6}>

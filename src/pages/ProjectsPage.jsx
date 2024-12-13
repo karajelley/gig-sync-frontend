@@ -1,4 +1,4 @@
-// External Libraries 
+// External Libraries
 import { AppContext } from "../context/AppContext";
 import { Box, Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -11,10 +11,7 @@ import ProjectForm from "../components/Mui/Forms/ProjectForm";
 import { use } from "react";
 // Internal Libraries / Components
 
-
-
 function ProjectsPage() {
-
   const {
     API_URL,
     clients,
@@ -22,18 +19,17 @@ function ProjectsPage() {
     projects,
     setProjects,
     showForm,
-    setShowForm
+    setShowForm,
   } = useContext(AppContext);
 
   const [isEditing, setIsEditing] = useState(false);
   const [projectToEdit, setProjectToEdit] = useState(null);
-  const [successMessage, setSuccessMessage] =useState("")
-  const [errorMessage, setErrorMessage] =useState("")
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
 
   const storedToken = localStorage.getItem("authToken");
-
 
   const [newProject, setNewProject] = useState({
     title: "",
@@ -49,7 +45,6 @@ function ProjectsPage() {
     fetchData();
   }, [fetchData]);
 
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewProject((prevProject) => ({
@@ -57,7 +52,6 @@ function ProjectsPage() {
       [name]: value,
     }));
   };
-
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -99,11 +93,11 @@ function ProjectsPage() {
       });
     } catch (error) {
       setErrorMessage(
-        error.response?.data?.message || "An error occurred while saving the project."
+        error.response?.data?.message ||
+          "An error occurred while saving the project."
       );
     }
   };
-
 
   const handleProjectEdit = (project) => {
     setNewProject({
@@ -142,7 +136,7 @@ function ProjectsPage() {
         <Alerts errorMessage={errorMessage} successMessage={successMessage} />
 
         <Button
-          variant={showForm ? 'outlined' : 'contained'}
+          variant={showForm ? "outlined" : "contained"}
           color="primary"
           onClick={() => {
             setShowForm((prev) => !prev);
@@ -184,4 +178,5 @@ function ProjectsPage() {
       )}
     </Box>
   );
-}; export default ProjectsPage;
+}
+export default ProjectsPage;

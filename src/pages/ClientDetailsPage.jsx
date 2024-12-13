@@ -180,6 +180,9 @@ function ClientDetailsPage() {
               clientData={newClient}
               handleInputChange={handleInputChange}
               handleFormSubmit={handleEditClient}
+              successMessage={successMessage} 
+              errorMessage={errorMessage}  
+              
               buttonLabel="Update Client"
               sx={{
                 display: "flex",
