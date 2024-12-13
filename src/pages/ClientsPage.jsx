@@ -41,6 +41,8 @@ function ClientsPage() {
 
 
   useEffect(() => {
+    setShowForm(false);
+    setIsEditing(false);
     fetchData();
   }, [fetchData]);
 

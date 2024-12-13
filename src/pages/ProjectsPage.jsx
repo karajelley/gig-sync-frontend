@@ -45,6 +45,8 @@ function ProjectsPage() {
 
 
   useEffect(() => {
+    setShowForm(false);
+    setIsEditing(false);
     fetchData();
   }, [fetchData]);
 
@@ -116,10 +118,6 @@ function ProjectsPage() {
     setIsEditing(true);
     setShowForm(true);
   };
-  
-  useEffect(() => {
-  }, [projects]);
-
 
   return (
     <Box

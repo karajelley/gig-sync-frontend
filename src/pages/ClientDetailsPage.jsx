@@ -142,7 +142,7 @@ function ClientDetailsPage() {
   }
 
   return (
-    <Box sx={{ padding: "100px 76px 20px 140px", overflow: "hidden" }}>
+    <Box sx={{ padding: "100px 20px 20px 140px", overflow: "hidden" }}>
       {/* Alerts */}
       {successMessage && <Alert severity="success">{successMessage}</Alert>}
       {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
@@ -219,11 +219,9 @@ function ClientDetailsPage() {
                 color="primary"
                 startIcon={<EditIcon />}
                 onClick={() => setIsEditing(true)}
-                sx={{
-                  position: "relative",
-                  top: 0,
-                  right: 0,
-                  zIndex: 10,
+                sx={{ mb:2,
+                  bottom: "120px"
+
                 }}
               >
                 Edit

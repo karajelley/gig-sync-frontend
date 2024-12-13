@@ -279,7 +279,6 @@ function ProjectDetailsPage() {
                             </Typography>
                         </Box>
 
-                        {/* Edit and Delete buttons */}
                         <Box>
                             <Button
                                 variant="contained"
@@ -318,7 +317,6 @@ function ProjectDetailsPage() {
                                 }}
                             >
 
-                                {/* expenses section */}
                                 <ExpenseForm
                                     onAddExpense={handleAddExpense}
                                     onCancel={() => setShowExpenseForm(false)}
