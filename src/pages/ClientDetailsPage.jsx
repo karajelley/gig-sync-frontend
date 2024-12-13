@@ -201,6 +201,9 @@ function ClientDetailsPage() {
               }}
             >
               <Box>
+              <Typography variant="h5" color="text.secondary">
+                  {client.name}
+                </Typography>
                 <Typography variant="subtitle1" color="text.secondary">
                   Email: {client.email}
                 </Typography>

@@ -1,10 +1,11 @@
 // External Libraries
 import axios from "axios";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
 // MUI Libraries
 import { Box, Button, Grid, Typography } from "@mui/material";
 // Internal Libraries / Components
+import { API_URL } from "../api/config";
 import { AppContext } from "../context/AppContext";
 import Alerts from "../components/Mui/Modals/Alerts";
 import ClientCard from "../components/Mui/Cards/ClientCard";
@@ -14,12 +15,13 @@ import ClientForm from "../components/Mui/Forms/ClientForm";
 
 function ClientsPage() {
   const {
-    API_URL,
     clients,
     showForm,
     setShowForm,
     isEditing,
     setIsEditing,
+    errorMessage,
+    setErrorMessage,
     fetchData,
   } = useContext(AppContext);
 
@@ -32,9 +34,6 @@ function ClientsPage() {
 
   const [clientToEdit, setClientToEdit] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-
-
 
   const navigate = useNavigate();
 
@@ -116,8 +115,9 @@ function ClientsPage() {
   return (
     <Box
       sx={{
-        marginTop: "60px",
-        marginLeft: "80px",
+        marginTop: "100px",
+        marginLeft: "140px",
+        marginRight: "76px",
         transition: "margin-left 0.3s",
         padding: 2,
       }}
@@ -130,13 +130,13 @@ function ClientsPage() {
           mb: 4,
         }}
       >
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h3" gutterBottom>
           Clients
         </Typography>
         <Alerts errorMessage={errorMessage} successMessage={successMessage} />
 
         <Button
-          variant="contained"
+          variant={showForm ? 'outlined' : 'contained'}
           color="primary"
           onClick={() => {
             setShowForm((prev) => !prev);
@@ -146,7 +146,7 @@ function ClientsPage() {
           }}
           sx={{ mb: 4 }}
         >
-          {showForm ? "Hide Form" : "Create Client"}
+          {showForm ? "Cancel" : "Create Client"}
         </Button>
       </Box>
 
@@ -161,7 +161,7 @@ function ClientsPage() {
       )}
 
       {!showForm && (
-        <Grid container spacing={2}>
+        <Grid container spacing={4}>
           {clients.map((client) => (
             <Grid key={client._id} item xs={12} sm={6} md={4}>
               <ClientCard client={client}

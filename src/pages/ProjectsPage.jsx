@@ -9,31 +9,25 @@ import Alerts from "../components/Mui/Modals/Alerts";
 import Kanban from "../components/Mui/Kanban";
 import ProjectForm from "../components/Mui/Forms/ProjectForm";
 // Internal Libraries / Components
+import { API_URL } from "../api/config";
 
 
 
 function ProjectsPage() {
 
   const {
-    API_URL,
     projects,
     clients,
+    errorMessage,
+    successMessage,
     fetchData,
     showForm,
     setProjects,
     setShowForm,
-  
+    setSuccessMessage,
+    setErrorMessage
   } = useContext(AppContext);
 
-  
-  const [isEditing, setIsEditing] = useState(false);
-  const [projectToEdit, setProjectToEdit] = useState(null);
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  
-  const navigate = useNavigate();
-  const storedToken = localStorage.getItem("authToken");
-  
   const [newProject, setNewProject] = useState({
     title: "",
     description: "",
@@ -41,17 +35,18 @@ function ProjectsPage() {
     status: "In Progress",
     client: "",
   });
-  
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [projectToEdit, setProjectToEdit] = useState(null);
+
+  const navigate = useNavigate();
+
+  const storedToken = localStorage.getItem("authToken");
+
+
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-
-  useEffect(() => {
-    return () => {
-      setShowForm(false);
-      setIsEditing(false);
-    };
-  }, []);
 
 
   const handleInputChange = (e) => {
@@ -121,15 +116,19 @@ function ProjectsPage() {
     setIsEditing(true);
     setShowForm(true);
   };
+  
+  useEffect(() => {
+  }, [projects]);
 
 
   return (
     <Box
       sx={{
-        marginTop: "60px",
-        marginLeft: 8,
+        marginTop: "100px",
+        marginLeft: "140px",
+        marginRight: "76px",
         transition: "margin-left 0.3s",
-        padding: 2.0,
+        padding: 2,
       }}
     >
       <Box
@@ -140,7 +139,7 @@ function ProjectsPage() {
           mb: 4,
         }}
       >
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h3" gutterBottom>
           Projects
         </Typography>
         <Alerts errorMessage={errorMessage} successMessage={successMessage} />
@@ -165,6 +164,8 @@ function ProjectsPage() {
           {showForm ? "Hide Form" : "Create Project"}
         </Button>
       </Box>
+      {showForm &&
+        console.log("Form Props:", { projectData: newProject, clients })}
       {showForm && (
         <ProjectForm
           clients={clients}
