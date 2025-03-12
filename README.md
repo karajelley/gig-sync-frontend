@@ -1,6 +1,7 @@
 # Gig Sync Frontend
 
 [Try it out!](https://gigsync.netlify.app/)
+
 GigSync is a Service Project Management CMS platform designed to help freelancers and gig workers manage their projects and clients. The frontend application is the user interface for GigSync, providing seamless interaction with the backend API for an intuitive and efficient user experience.
 
 ---
