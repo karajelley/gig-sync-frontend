@@ -1,5 +1,6 @@
 # Gig Sync Frontend
 
+[Try it out!]([https://karajelley.github.io/sugar-swoop/](https://gigsync.netlify.app/))
 GigSync is a Service Project Management CMS platform designed to help freelancers and gig workers manage their projects and clients. The frontend application is the user interface for GigSync, providing seamless interaction with the backend API for an intuitive and efficient user experience.
 
 ---
@@ -17,7 +18,7 @@ GigSync is a Service Project Management CMS platform designed to help freelancer
 
 - **React.js**: Frontend library for building user interfaces.
 - **Axios**: HTTP client for seamless communication with the backend.
-- **MUI*: Design framework for styling.
+- **MUI**: Design framework for styling.
 - **MERN Stack**: Integrated with Node.js and MongoDB for full-stack development.
 
 ---
